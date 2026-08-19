@@ -8,6 +8,7 @@ import 'alarm_service.dart';
 import 'login_screen.dart';
 import 'add_dependent_screen.dart';
 import 'premium_screen.dart';
+import 'health_report_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final VoidCallback onProfileUpdated;
@@ -487,6 +488,28 @@ child: Column(
                         ],
                       ],
                     ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Health Reports
+                  Text(
+                    'Health Reports',
+                    style: GoogleFonts.inter(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF718096),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  _buildSettingsItem(
+                    Icons.assessment_outlined,
+                    'Health Reports',
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const HealthReportScreen()),
+                      );
+                    },
                   ),
                   const SizedBox(height: 24),
 
