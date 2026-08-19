@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="eveningSun" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF5E62" />
+      <stop offset="100%" stop-color="#FF9966" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <!-- Horizon Line -->
+    <line x1="15" y1="68" x2="85" y2="68" stroke="#8E2DE2" stroke-width="4" stroke-linecap="round" />
+    <!-- Setting Sun -->
+    <path d="M 30 68 A 20 20 0 0 1 70 68 Z" fill="url(#eveningSun)" />
+    <!-- Water / Horizon Wave Reflection -->
+    <line x1="25" y1="76" x2="75" y2="76" stroke="#8E2DE2" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+    <line x1="35" y1="83" x2="65" y2="83" stroke="#8E2DE2" stroke-width="3" stroke-linecap="round" opacity="0.4" />
+    <!-- Downward Arrow Indicator -->
+    <path d="M 50 36 L 44 30 M 50 36 L 56 30 M 50 36 L 50 22" stroke="#FF5E62" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>

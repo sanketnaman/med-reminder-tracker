@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="dropGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00B4DB" />
+      <stop offset="100%" stop-color="#0083B0" />
+    </linearGradient>
+    <linearGradient id="pipetteGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF5E62" />
+      <stop offset="100%" stop-color="#FF9966" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <!-- Big Droplet -->
+    <path d="M 50 35 C 50 35 72 60 72 72 A 22 22 0 0 1 28 72 C 28 60 50 35 50 35 Z" fill="url(#dropGrad)" />
+    <!-- Inner Water Reflection -->
+    <path d="M 42 60 A 12 12 0 0 0 60 72" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+    <!-- Small Top Droplet -->
+    <path d="M 50 14 C 50 14 58 24 58 28 A 8 8 0 0 1 42 28 C 42 24 50 14 50 14 Z" fill="#00B4DB" opacity="0.8" />
+  </g>
+</svg>

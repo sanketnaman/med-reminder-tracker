@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="otherGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#DA22FF" />
+      <stop offset="100%" stop-color="#9733EE" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <!-- Squircle Background -->
+    <rect x="15" y="15" width="70" height="70" rx="22" fill="url(#otherGrad)" />
+    <!-- Medical Cross -->
+    <path d="M 42 30 H 58 V 42 H 70 V 58 H 58 V 70 H 42 V 58 H 30 V 42 H 42 Z" fill="#FFFFFF" />
+  </g>
+</svg>

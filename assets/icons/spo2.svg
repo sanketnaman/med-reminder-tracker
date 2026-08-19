@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="spo2Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F2FE" />
+      <stop offset="100%" stop-color="#4FACFE" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <!-- Oxygenated Blood Drop Base -->
+    <path d="M 50 18 C 50 18 78 50 78 65 A 28 28 0 0 1 22 65 C 22 50 50 18 50 18 Z" fill="url(#spo2Grad)" />
+    
+    <!-- "O2" Text inside the drop -->
+    <!-- Letter 'O' -->
+    <circle cx="43" cy="62" r="10" fill="none" stroke="#FFFFFF" stroke-width="3.5" />
+    
+    <!-- Number '2' Subscript -->
+    <path d="M 58 64 C 58 62 60 60 62 60 C 64 60 65 61 65 63 C 65 65 63 67 58 71 H 66" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    
+    <!-- Glossy Highlight Drop Arc -->
+    <path d="M 32 52 A 20 20 0 0 1 50 28" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+    
+    <!-- Oxygen Pulse Sparkle -->
+    <circle cx="68" cy="36" r="3" fill="#FFFFFF" opacity="0.9" />
+    <circle cx="75" cy="45" r="1.8" fill="#FFFFFF" opacity="0.7" />
+  </g>
+</svg>

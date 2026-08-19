@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <!-- Background Circle for High Contrast on White Themes -->
+    <linearGradient id="nightBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1A1B4B" />
+      <stop offset="100%" stop-color="#2E1A47" />
+    </linearGradient>
+
+    <!-- Glowing Moon Gradient -->
+    <linearGradient id="moonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#80E0FF" />
+      <stop offset="60%" stop-color="#4A80F0" />
+      <stop offset="100%" stop-color="#8E2DE2" />
+    </linearGradient>
+
+    <!-- Star Glow Gradient -->
+    <linearGradient id="starGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE066" />
+      <stop offset="100%" stop-color="#FF9900" />
+    </linearGradient>
+
+    <!-- Soft Drop Shadow for Depth -->
+    <filter id="nightShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#0F0C20" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Container Base (Ensures crisp visibility on light/white UI) -->
+  <circle cx="50" cy="50" r="42" fill="url(#nightBg)" filter="url(#nightShadow)" />
+
+  <g>
+    <!-- Vibrant Crescent Moon -->
+    <path d="M 60 26 A 24 24 0 1 1 30 68 A 20 20 0 0 0 60 26 Z" fill="url(#moonGrad)" />
+    
+    <!-- Moon Inner Highlight for 3D Effect -->
+    <path d="M 38 40 A 16 16 0 0 0 52 62" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+
+    <!-- Large Twinkling Gold Star -->
+    <path d="M 66 30 Q 66 38 74 38 Q 66 38 66 46 Q 66 38 58 38 Q 66 38 66 30 Z" fill="url(#starGrad)" />
+
+    <!-- Medium Sparkle Star -->
+    <path d="M 38 22 Q 38 27 43 27 Q 38 27 38 32 Q 38 27 33 27 Q 38 27 38 22 Z" fill="#FFE066" opacity="0.9" />
+
+    <!-- Accent Dots / Stardust -->
+    <circle cx="72" cy="54" r="2" fill="#80E0FF" opacity="0.9" />
+    <circle cx="34" cy="62" r="1.5" fill="#FFE066" opacity="0.8" />
+    <circle cx="62" cy="66" r="2" fill="#FFFFFF" opacity="0.8" />
+  </g>
+</svg>

@@ -1,0 +1,933 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'database_helper.dart';
+import 'models.dart';
+import 'auth_service.dart';
+import 'alarm_service.dart';
+import 'login_screen.dart';
+import 'add_dependent_screen.dart';
+
+class ProfileScreen extends StatefulWidget {
+  final VoidCallback onProfileUpdated;
+  const ProfileScreen({super.key, required this.onProfileUpdated});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  UserSettings? _settings;
+  bool _isLoading = true;
+  bool _isPremium = false;
+  int _medicineCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSettings();
+  }
+
+  Future<void> _loadSettings() async {
+    final s = await DatabaseHelper.instance.getUserSettings();
+    final isPremium = await DatabaseHelper.instance.isPremium();
+    final medicineCount = await DatabaseHelper.instance.getMedicineCount(s.name);
+    if (mounted) {
+      setState(() {
+        _settings = s;
+        _isPremium = isPremium;
+        _medicineCount = medicineCount;
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _updateSetting(Function(UserSettings) modifier) async {
+    if (_settings != null) {
+      modifier(_settings!);
+      await DatabaseHelper.instance.saveUserSettings(_settings!);
+      _loadSettings();
+      widget.onProfileUpdated();
+    }
+  }
+
+  void _showEditProfileDialog() {
+    if (_settings == null) return;
+    final nameCtrl = TextEditingController(text: _settings!.name);
+    final emailCtrl = TextEditingController(text: _settings!.email);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(
+          'Edit Profile',
+          style: GoogleFonts.inter(fontWeight: FontWeight.bold),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameCtrl,
+              decoration: const InputDecoration(labelText: 'Name'),
+            ),
+            TextField(
+              controller: emailCtrl,
+              decoration: const InputDecoration(labelText: 'Email'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (nameCtrl.text.trim().isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Name cannot be empty')),
+                );
+                return;
+              }
+              _updateSetting((s) {
+                s.name = nameCtrl.text.trim();
+                s.email = emailCtrl.text.trim();
+              });
+              Navigator.pop(context);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF5B8DEF),
+            ),
+            child: const Text('Save', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showNotificationSettings() {
+    if (_settings == null) return;
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Notification Settings',
+                    style: GoogleFonts.inter(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: const Color(0xFF202733),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  _buildModalSwitch(
+                    'Medication Reminders',
+                    _settings!.medicineReminder,
+                    (val) {
+                      setModalState(() => _settings!.medicineReminder = val);
+                      _updateSetting((s) => s.medicineReminder = val);
+                    },
+                  ),
+                  _buildModalSwitch(
+                    'Missed Dose Alerts',
+                    _settings!.missedDose,
+                    (val) {
+                      setModalState(() => _settings!.missedDose = val);
+                      _updateSetting((s) => s.missedDose = val);
+                    },
+                  ),
+                  _buildModalSwitch(
+                    'Refill Reminders',
+                    _settings!.refillReminder,
+                    (val) {
+                      setModalState(() => _settings!.refillReminder = val);
+                      _updateSetting((s) => s.refillReminder = val);
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await AlarmService.requestPermissions();
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Permissions checked/updated')),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF5B8DEF),
+                      foregroundColor: Colors.white,
+                      minimumSize: const Size(double.infinity, 40),
+                    ),
+                    child: Text(
+                      'Check/Update Permissions',
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildModalSwitch(String label, bool value, Function(bool) onChanged) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: GoogleFonts.inter(
+              fontWeight: FontWeight.w600,
+              fontSize: 15,
+              color: const Color(0xFF202733),
+            ),
+          ),
+          Switch(
+            value: value,
+            activeColor: const Color(0xFF5B8DEF),
+            onChanged: onChanged,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showLanguageSelector() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(
+          'Select Language',
+          style: GoogleFonts.inter(fontWeight: FontWeight.bold),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: const Text('English'),
+              trailing: _settings?.language == 'English'
+                  ? const Icon(Icons.check, color: Color(0xFF5B8DEF))
+                  : null,
+              onTap: () {
+                _updateSetting((s) => s.language = 'English');
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text('Hindi (हिन्दी)'),
+              trailing: _settings?.language == 'Hindi'
+                  ? const Icon(Icons.check, color: Color(0xFF5B8DEF))
+                  : null,
+              onTap: () {
+                _updateSetting((s) => s.language = 'Hindi');
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showLogoutConfirmation() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(
+          'Log Out',
+          style: GoogleFonts.inter(fontWeight: FontWeight.bold),
+        ),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: [
+              Text(
+                'Are you sure you want to log out? Your progress will be saved.',
+                style: GoogleFonts.inter(
+                  color: Color(0xFF718096),
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              await AuthService.signOut();
+              if (context.mounted) {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (_) => const LoginScreen(),
+                  ),
+                  (_) => false,
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFE85D75),
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Log Out'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    final s = _settings!;
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF3F6FF),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Top Header Card with User Card (incorporates soft blue color pattern)
+            _buildProfileHeaderCard(s),
+            const SizedBox(height: 20),
+
+            // Settings List Groups
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                  Text(
+                    'General',
+                    style: GoogleFonts.inter(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF718096),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  _buildSettingsContainer([
+                    _buildSettingsItem(
+                      Icons.person_outline,
+                      'Edit Profile',
+                      _showEditProfileDialog,
+                    ),
+                    _buildSettingsItem(
+                      Icons.lock_outline,
+                      'Change Password',
+                      () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Change Password workflow opened.'),
+                          ),
+                        );
+                      },
+                    ),
+                    _buildSettingsItem(
+                      Icons.notifications_none_outlined,
+                      'Notifications',
+                      _showNotificationSettings,
+                    ),
+                    _buildSettingsItem(
+                      Icons.language_outlined,
+                      'Language (${s.language})',
+                      _showLanguageSelector,
+                    ),
+                  ]),
+                  const SizedBox(height: 24),
+
+                  _buildDependentsSection(),
+                  const SizedBox(height: 24),
+
+                  Text(
+                    'Subscription',
+                    style: GoogleFonts.inter(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF718096),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: _isPremium
+                          ? const Color(0xFF5B8DEF).withOpacity(0.1)
+                          : Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      border: _isPremium
+                          ? Border.all(color: const Color(0xFF5B8DEF).withOpacity(0.3))
+                          : null,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.03),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: _isPremium
+                                    ? const Color(0xFF5B8DEF).withOpacity(0.15)
+                                    : const Color(0xFFF3F6FF),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Icon(
+                                _isPremium ? Icons.workspace_premium : Icons.lock_outline,
+                                color: _isPremium ? const Color(0xFF5B8DEF) : const Color(0xFF718096),
+                                size: 20,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _isPremium ? 'Doseza Premium' : 'Free Plan',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      color: const Color(0xFF202733),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    _isPremium
+                                        ? 'Unlimited medicines & vitals'
+                                        : '$_medicineCount of ${DatabaseHelper.freeMedicineLimit} medicines used',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 12,
+                                      color: const Color(0xFF718096),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Switch(
+                              value: _isPremium,
+                              activeColor: const Color(0xFF5B8DEF),
+                              onChanged: (value) async {
+                                await DatabaseHelper.instance.setPremium(value);
+                                _loadSettings();
+                                widget.onProfileUpdated();
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(value ? 'Premium activated!' : 'Switched to Free plan'),
+                                      backgroundColor: const Color(0xFF35B779),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                        if (!_isPremium) ...[
+                          const SizedBox(height: 12),
+                          const Divider(height: 1),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Upgrade to Premium:',
+                            style: GoogleFonts.inter(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF718096),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          _buildPremiumFeature('Unlimited medicines'),
+                          _buildPremiumFeature('Daily vitals tracking'),
+                          _buildPremiumFeature('Advanced analytics'),
+                        ],
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  Text(
+                    'Preferences',
+                    style: GoogleFonts.inter(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF718096),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  _buildSettingsContainer([
+                    _buildSettingsItem(
+                      Icons.description_outlined,
+                      'Legal and Policies',
+                      () {
+                        _showPolicyDialog();
+                      },
+                    ),
+                  ]),
+                  const SizedBox(height: 32),
+
+                  // Log out button
+                  ListTile(
+                    onTap: _showLogoutConfirmation,
+                    leading: const Icon(
+                      Icons.logout_rounded,
+                      color: Color(0xFFE85D75),
+                    ),
+                    title: Text(
+                      'Logout',
+                      style: GoogleFonts.inter(
+                        color: const Color(0xFFE85D75),
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileHeaderCard(UserSettings s) {
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFF5B8DEF), Color(0xFF7BA7F7)],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        ),
+      ),
+      padding: const EdgeInsets.only(top: 60, bottom: 30, left: 24, right: 24),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.03),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new,
+                    size: 16,
+                    color: Color(0xFF5B8DEF),
+                  ),
+                  onPressed: () {},
+                ),
+              ),
+              const SizedBox(width: 16),
+              Text(
+                'My Profile',
+                style: GoogleFonts.inter(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 30),
+          Row(
+            children: [
+              // User Avatar
+              CircleAvatar(
+                radius: 35,
+                backgroundColor: Colors.white.withOpacity(0.2),
+                child: const Icon(Icons.person, size: 40, color: Colors.white),
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      s.name,
+                      style: GoogleFonts.inter(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      s.email,
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        color: Colors.white.withOpacity(0.85),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSettingsContainer(List<Widget> children) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.01),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(children: children),
+    );
+  }
+
+  Widget _buildSettingsItem(IconData icon, String title, VoidCallback onTap) {
+    return Column(
+      children: [
+        ListTile(
+          onTap: onTap,
+          leading: Icon(icon, color: const Color(0xFF718096), size: 22),
+          title: Text(
+            title,
+            style: GoogleFonts.inter(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: const Color(0xFF202733),
+            ),
+          ),
+          trailing: const Icon(
+            Icons.arrow_forward_ios,
+            size: 14,
+            color: Color(0xFF718096),
+          ),
+        ),
+        // Divider
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Divider(height: 1, color: Colors.grey.withOpacity(0.1)),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDependentsSection() {
+    return FutureBuilder<List<Dependent>>(
+      future: DatabaseHelper.instance.getPatients(),
+      builder: (context, snapshot) {
+        final patients = snapshot.data ?? [];
+        final dependents = patients.where((p) => !p.isSelf).toList();
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  'My Dependents',
+                  style: GoogleFonts.inter(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: const Color(0xFF718096),
+                  ),
+                ),
+                const Spacer(),
+                if (!_isPremium)
+                  Text(
+                    '${dependents.length}/2',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF718096),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.03),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  if (dependents.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Center(
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.people_outline,
+                              size: 40,
+                              color: const Color(0xFF718096).withValues(alpha: 0.4),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'No dependents added yet',
+                              style: GoogleFonts.inter(
+                                fontSize: 14,
+                                color: const Color(0xFF718096),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  else
+                    ...dependents.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final dep = entry.value;
+                      return Column(
+                        children: [
+                          ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: const Color(0xFF5B8DEF),
+                              child: Text(
+                                dep.name.isEmpty ? '?' : dep.name[0].toUpperCase(),
+                                style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            title: Text(
+                              dep.name,
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w700,
+                                color: const Color(0xFF202733),
+                              ),
+                            ),
+                            subtitle: Text(
+                              dep.displayLabel,
+                              style: GoogleFonts.inter(
+                                fontSize: 12,
+                                color: const Color(0xFF718096),
+                              ),
+                            ),
+                            trailing: const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 14,
+                              color: Color(0xFF718096),
+                            ),
+                            onTap: () async {
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => AddDependentScreen(
+                                    dependentToEdit: dep,
+                                  ),
+                                ),
+                              );
+                              if (result == true) setState(() {});
+                            },
+                          ),
+                          if (index < dependents.length - 1)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Divider(height: 1, color: Colors.grey.withValues(alpha: 0.1)),
+                            ),
+                        ],
+                      );
+                    }),
+                  // Add dependent button
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          color: Colors.grey.withValues(alpha: 0.1),
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.add_circle_outline,
+                        color: Color(0xFF5B8DEF),
+                      ),
+                      title: Text(
+                        'Add Dependent',
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF5B8DEF),
+                        ),
+                      ),
+                      onTap: () async {
+                        final canAdd = await DatabaseHelper.instance.canAddDependent();
+                        if (!canAdd) {
+                          _showDependentLimitPrompt();
+                          return;
+                        }
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const AddDependentScreen(),
+                          ),
+                        );
+                        if (result == true) setState(() {});
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showDependentLimitPrompt() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(
+          "You've reached the Free limit",
+          style: GoogleFonts.inter(fontWeight: FontWeight.w800),
+        ),
+        content: Text(
+          'Free plan includes:\n• Your profile\n• Up to 2 dependents\n\nUpgrade to Doseza Premium to add unlimited dependents.',
+          style: GoogleFonts.inter(fontSize: 14, height: 1.5),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.inter(color: const Color(0xFF718096)),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.pop(ctx);
+              await DatabaseHelper.instance.setPremium(true);
+              _loadSettings();
+              widget.onProfileUpdated();
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Premium activated!'),
+                    backgroundColor: Color(0xFF35B779),
+                  ),
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF5B8DEF),
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Upgrade to Premium'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showPolicyDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(
+          'Legal & Privacy Policy',
+          style: GoogleFonts.inter(fontWeight: FontWeight.bold),
+        ),
+        content: SingleChildScrollView(
+          child: Text(
+            'This application is a local medication reminder assistant. It does not provide medical diagnostics, medical advice, or therapeutic decisions. All user records are stored strictly offline on your physical device. In case of doubts, consult a certified healthcare professional before making any dosage changes.',
+            style: GoogleFonts.inter(
+              color: const Color(0xFF718096),
+              height: 1.4,
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPremiumFeature(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.check_circle,
+            size: 16,
+            color: Color(0xFF35B779),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            text,
+            style: GoogleFonts.inter(
+              fontSize: 13,
+              color: const Color(0xFF718096),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
