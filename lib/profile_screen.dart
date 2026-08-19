@@ -7,6 +7,7 @@ import 'auth_service.dart';
 import 'alarm_service.dart';
 import 'login_screen.dart';
 import 'add_dependent_screen.dart';
+import 'premium_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final VoidCallback onProfileUpdated;
@@ -440,16 +441,28 @@ child: Column(
                               value: _isPremium,
                               activeColor: const Color(0xFF5B8DEF),
                               onChanged: (value) async {
-                                await DatabaseHelper.instance.setPremium(value);
-                                _loadSettings();
-                                widget.onProfileUpdated();
-                                if (mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(value ? 'Premium activated!' : 'Switched to Free plan'),
-                                      backgroundColor: const Color(0xFF35B779),
-                                    ),
-                                  );
+                                if (value) {
+                                  // Opening premium screen to upgrade
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (_) => const PremiumScreen()),
+                                  ).then((_) {
+                                    _loadSettings();
+                                    widget.onProfileUpdated();
+                                  });
+                                } else {
+                                  // Downgrade to free
+                                  await DatabaseHelper.instance.setPremium(false);
+                                  _loadSettings();
+                                  widget.onProfileUpdated();
+                                  if (mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Switched to Free plan'),
+                                        backgroundColor: Color(0xFF35B779),
+                                      ),
+                                    );
+                                  }
                                 }
                               },
                             ),
@@ -834,50 +847,13 @@ child: Column(
   }
 
   void _showDependentLimitPrompt() {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text(
-          "You've reached the Free limit",
-          style: GoogleFonts.inter(fontWeight: FontWeight.w800),
-        ),
-        content: Text(
-          'Free plan includes:\n• Your profile\n• Up to 2 dependents\n\nUpgrade to Doseza Premium to add unlimited dependents.',
-          style: GoogleFonts.inter(fontSize: 14, height: 1.5),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(
-              'Cancel',
-              style: GoogleFonts.inter(color: const Color(0xFF718096)),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              Navigator.pop(ctx);
-              await DatabaseHelper.instance.setPremium(true);
-              _loadSettings();
-              widget.onProfileUpdated();
-              if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Premium activated!'),
-                    backgroundColor: Color(0xFF35B779),
-                  ),
-                );
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF5B8DEF),
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Upgrade to Premium'),
-          ),
-        ],
-      ),
-    );
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const PremiumScreen()),
+    ).then((_) {
+      _loadSettings();
+      widget.onProfileUpdated();
+    });
   }
 
   void _showPolicyDialog() {

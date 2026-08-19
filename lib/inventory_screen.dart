@@ -4,6 +4,7 @@ import 'database_helper.dart';
 import 'models.dart';
 import 'add_edit_medicine_screen.dart';
 import 'medicine_icon.dart';
+import 'premium_screen.dart';
 
 class InventoryScreen extends StatefulWidget {
   final VoidCallback onRefreshHome;
@@ -442,18 +443,14 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     action: SnackBarAction(
                       label: 'Upgrade',
                       textColor: Colors.white,
-                      onPressed: () async {
-                        await DatabaseHelper.instance.setPremium(true);
-                        if (mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Premium activated!'),
-                              backgroundColor: Color(0xFF35B779),
-                            ),
-                          );
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const PremiumScreen()),
+                        ).then((_) {
                           _loadMedicines();
                           widget.onRefreshHome();
-                        }
+                        });
                       },
                     ),
                   ),

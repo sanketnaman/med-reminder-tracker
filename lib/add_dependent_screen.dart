@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'database_helper.dart';
 import 'models.dart';
+import 'premium_screen.dart';
 
 class AddDependentScreen extends StatefulWidget {
   final Dependent? dependentToEdit;
@@ -87,47 +88,9 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
   }
 
   void _showPremiumPrompt() {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text(
-          "You've reached the Free limit",
-          style: GoogleFonts.inter(fontWeight: FontWeight.w800),
-        ),
-        content: Text(
-          'Free plan includes:\n• Your profile\n• Up to 2 dependents\n\nUpgrade to Doseza Premium to add unlimited dependents.',
-          style: GoogleFonts.inter(fontSize: 14, height: 1.5),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(
-              'Cancel',
-              style: GoogleFonts.inter(color: const Color(0xFF718096)),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              Navigator.pop(ctx);
-              await DatabaseHelper.instance.setPremium(true);
-              if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Premium activated!'),
-                    backgroundColor: Color(0xFF35B779),
-                  ),
-                );
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF5B8DEF),
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Upgrade to Premium'),
-          ),
-        ],
-      ),
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const PremiumScreen()),
     );
   }
 

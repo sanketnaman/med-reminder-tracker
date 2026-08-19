@@ -6,6 +6,7 @@ import 'database_helper.dart';
 import 'models.dart';
 import 'alarm_service.dart';
 import 'add_edit_medicine_screen.dart';
+import 'premium_screen.dart';
 
 class TodayPlanScreen extends StatefulWidget {
   final VoidCallback onRefreshHome;
@@ -275,16 +276,11 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
                       action: SnackBarAction(
                         label: 'Upgrade',
                         textColor: Colors.white,
-                        onPressed: () async {
-                          await DatabaseHelper.instance.setPremium(true);
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Premium activated!'),
-                                backgroundColor: Color(0xFF35B779),
-                              ),
-                            );
-                          }
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const PremiumScreen()),
+                          );
                         },
                       ),
                     ),

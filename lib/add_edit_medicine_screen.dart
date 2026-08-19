@@ -7,6 +7,7 @@ import 'models.dart';
 import 'alarm_service.dart';
 import 'medicine_icon.dart';
 import 'medicine_catalog_service.dart';
+import 'premium_screen.dart';
 
 class AddEditMedicineScreen extends StatefulWidget {
   final Medicine? medicineToEdit;
@@ -266,16 +267,11 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
             action: SnackBarAction(
               label: 'Upgrade',
               textColor: Colors.white,
-              onPressed: () async {
-                await DatabaseHelper.instance.setPremium(true);
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Premium activated!'),
-                      backgroundColor: Color(0xFF35B779),
-                    ),
-                  );
-                }
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const PremiumScreen()),
+                );
               },
             ),
           ),
