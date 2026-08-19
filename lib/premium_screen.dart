@@ -302,6 +302,11 @@ class _PremiumScreenState extends State<PremiumScreen> {
         'desc': 'Never forget an upcoming appointment.',
       },
       {
+        'icon': 'assets/icons/Other.svg',
+        'title': 'Health reports',
+        'desc': 'Generate doctor-ready PDF reports with vitals and adherence.',
+      },
+      {
         'icon': 'assets/icons/morning.svg',
         'title': 'Advanced insights',
         'desc': 'Understand your medication adherence over time.',
