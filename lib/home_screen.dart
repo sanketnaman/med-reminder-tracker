@@ -144,6 +144,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
   }
 
+  String _getTimeGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Morning';
+    if (hour < 17) return 'Afternoon';
+    if (hour < 21) return 'Evening';
+    return 'Night';
+  }
+
   void _onDateSelected(DateTime date) {
     setState(() {
       _selectedDate = date;
@@ -462,7 +470,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               child: SmoothSwitch(
                                 key: ValueKey(_activePatientId),
                                 child: Text(
-                                  'Good Morning, $name',
+                                  'Good ${_getTimeGreeting()}, $name',
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.inter(
                                     fontSize: 20,
