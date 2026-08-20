@@ -269,6 +269,11 @@ class UserSettings {
   bool sound;
   bool vibration;
   bool isPremium;
+  int reminderAdvanceMinutes; // 0, 5, or 10
+  int snoozeDurationMinutes; // 5, 10, or 15
+  String profileFor; // Myself, My Parent, My Spouse, My Child, Someone else
+  int age;
+  String gender;
 
   UserSettings({
     required this.name,
@@ -284,7 +289,14 @@ class UserSettings {
     required this.sound,
     required this.vibration,
     this.isPremium = false,
+    this.reminderAdvanceMinutes = 0,
+    this.snoozeDurationMinutes = 10,
+    this.profileFor = 'Myself',
+    this.age = 0,
+    this.gender = '',
   });
+
+  bool get isProfileComplete => name.isNotEmpty && age > 0 && gender.isNotEmpty;
 
   Map<String, dynamic> toMap() {
     return {
@@ -301,16 +313,21 @@ class UserSettings {
       'sound': sound,
       'vibration': vibration,
       'isPremium': isPremium,
+      'reminderAdvanceMinutes': reminderAdvanceMinutes,
+      'snoozeDurationMinutes': snoozeDurationMinutes,
+      'profileFor': profileFor,
+      'age': age,
+      'gender': gender,
     };
   }
 
   factory UserSettings.fromMap(Map<String, dynamic> map) {
     return UserSettings(
-      name: map['name'] ?? 'Sanket',
-      email: map['email'] ?? 'sanket@example.com',
-      phone: map['phone'] ?? '+91 98765 43210',
+      name: map['name'] ?? '',
+      email: map['email'] ?? '',
+      phone: map['phone'] ?? '',
       profilePhoto: map['profilePhoto'] ?? '',
-      timezone: map['timezone'] ?? 'GMT+5:30',
+      timezone: map['timezone'] ?? '',
       language: map['language'] ?? 'English',
       medicineReminder: map['medicineReminder'] ?? true,
       missedDose: map['missedDose'] ?? true,
@@ -319,16 +336,21 @@ class UserSettings {
       sound: map['sound'] ?? true,
       vibration: map['vibration'] ?? true,
       isPremium: map['isPremium'] ?? false,
+      reminderAdvanceMinutes: map['reminderAdvanceMinutes'] ?? 0,
+      snoozeDurationMinutes: map['snoozeDurationMinutes'] ?? 10,
+      profileFor: map['profileFor'] ?? 'Myself',
+      age: map['age'] ?? 0,
+      gender: map['gender'] ?? '',
     );
   }
 
   factory UserSettings.defaultSettings() {
     return UserSettings(
-      name: 'Sanket',
-      email: 'sanket@example.com',
-      phone: '+91 98765 43210',
+      name: '',
+      email: '',
+      phone: '',
       profilePhoto: '',
-      timezone: 'GMT+5:30',
+      timezone: '',
       language: 'English',
       medicineReminder: true,
       missedDose: true,
@@ -336,7 +358,6 @@ class UserSettings {
       dailySummary: true,
       sound: true,
       vibration: true,
-      isPremium: false,
     );
   }
 

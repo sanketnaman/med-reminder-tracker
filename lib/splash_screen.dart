@@ -2,9 +2,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'onboarding_screen.dart';
 import 'login_screen.dart';
+import 'home_screen.dart';
 import 'database_helper.dart';
 import 'alarm_service.dart';
 import 'auth_service.dart';
+import 'animation_utils.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -32,13 +34,22 @@ class _SplashScreenState extends State<SplashScreen> {
       debugPrint('Splash initialization error: $e');
     }
 
-    Timer(const Duration(milliseconds: 1800), () {
+    Timer(const Duration(milliseconds: 1800), () async {
       if (mounted) {
         final isLoggedIn = AuthService.isLoggedIn;
+        Widget destination;
+
+        if (!isLoggedIn) {
+          destination = const LoginScreen();
+        } else {
+          final settings = await DatabaseHelper.instance.getUserSettings();
+          final hasCompleteProfile = settings.name.isNotEmpty && settings.age > 0 && settings.gender.isNotEmpty;
+          destination = hasCompleteProfile ? const HomeScreen() : const OnboardingScreen();
+        }
+
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                isLoggedIn ? const OnboardingScreen() : const LoginScreen(),
+            pageBuilder: (context, animation, secondaryAnimation) => destination,
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
                   return FadeTransition(opacity: animation, child: child);
@@ -94,47 +105,58 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Custom Pill Logo
-                Container(
-                  width: 90,
-                  height: 90,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF5B8DEF).withOpacity(0.15),
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
+                // Custom Pill Logo — fade + scale in
+                FadeScaleIn(
+                  duration: const Duration(milliseconds: 500),
+                  child: Container(
+                    width: 90,
+                    height: 90,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF5B8DEF).withOpacity(0.15),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: CustomPaint(
+                        size: const Size(50, 50),
+                        painter: PillLogoPainter(),
                       ),
-                    ],
-                  ),
-                  child: Center(
-                    child: CustomPaint(
-                      size: const Size(50, 50),
-                      painter: PillLogoPainter(),
                     ),
                   ),
                 ),
                 const SizedBox(height: 24),
-                // App Name
-                const Text(
-                  'Doseza',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w800,
-                    color: Color(0xFF202733),
-                    letterSpacing: -0.5,
+                // App Name — staggered fade in
+                FadeSlideIn(
+                  delay: const Duration(milliseconds: 200),
+                  offset: 8,
+                  child: const Text(
+                    'Doseza',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF202733),
+                      letterSpacing: -0.5,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),
-                // Tagline
-                const Text(
-                  'Never miss a dose.',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xFF718096),
-                    fontWeight: FontWeight.w500,
+                // Tagline — staggered fade in
+                FadeSlideIn(
+                  delay: const Duration(milliseconds: 350),
+                  offset: 8,
+                  child: const Text(
+                    'Never miss a dose.',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF718096),
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ],

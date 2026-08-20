@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'database_helper.dart';
+import 'animation_utils.dart';
 
 class PremiumScreen extends StatefulWidget {
   const PremiumScreen({super.key});
@@ -332,11 +333,15 @@ class _PremiumScreenState extends State<PremiumScreen> {
             ),
           ),
           const SizedBox(height: 14),
-          ...benefits.map((b) => _buildBenefitTile(
-                b['icon']!,
-                b['title']!,
-                b['desc']!,
-              )),
+          ...benefits.asMap().entries.map((entry) => FadeSlideIn(
+            delay: Duration(milliseconds: 80 * entry.key),
+            offset: 10,
+            child: _buildBenefitTile(
+              entry.value['icon']!,
+              entry.value['title']!,
+              entry.value['desc']!,
+            ),
+          )),
         ],
       ),
     );
@@ -677,25 +682,27 @@ class _PremiumScreenState extends State<PremiumScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Primary CTA
-          SizedBox(
-            width: double.infinity,
-            height: 54,
-            child: ElevatedButton(
-              onPressed: _isLoading ? null : _handlePurchase,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF5B8DEF),
-                foregroundColor: Colors.white,
-                disabledBackgroundColor: const Color(0xFF5B8DEF).withOpacity(0.6),
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+          // Primary CTA with press feedback
+          AnimatedOpacityOnTap(
+            onTap: _isLoading ? null : _handlePurchase,
+            child: SizedBox(
+              width: double.infinity,
+              height: 54,
+              child: ElevatedButton(
+                onPressed: _isLoading ? null : _handlePurchase,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF5B8DEF),
+                  foregroundColor: Colors.white,
+                  disabledBackgroundColor: const Color(0xFF5B8DEF).withOpacity(0.6),
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
-              ),
-              child: _isLoading
-                  ? const SizedBox(
-                      width: 22,
-                      height: 22,
+                child: _isLoading
+                    ? const SizedBox(
+                        width: 22,
+                        height: 22,
                       child: CircularProgressIndicator(
                         strokeWidth: 2.5,
                         color: Colors.white,
@@ -711,6 +718,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                       ),
                     ),
             ),
+          ),
           ),
           const SizedBox(height: 10),
           // Restore purchases

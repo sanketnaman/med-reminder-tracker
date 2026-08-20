@@ -7,6 +7,7 @@ import 'models.dart';
 import 'alarm_service.dart';
 import 'add_edit_medicine_screen.dart';
 import 'premium_screen.dart';
+import 'animation_utils.dart';
 
 class TodayPlanScreen extends StatefulWidget {
   final VoidCallback onRefreshHome;
@@ -25,6 +26,7 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
   List<DoseRecord> _records = [];
   bool _isLoading = true;
   Timer? _timer;
+  String? _justTakenId;
 
   @override
   void initState() {
@@ -57,10 +59,16 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
   }
 
   void _markAsTaken(DoseRecord record) async {
+    setState(() => _justTakenId = record.id);
     record.status = 'taken';
     record.takenAt = DateTime.now();
     await DatabaseHelper.instance.updateDoseRecord(record);
     await AlarmService.cancel(record.id);
+
+    // Brief delay so the user sees the success animation
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    if (mounted) setState(() => _justTakenId = null);
     _loadTodayPlan();
     widget.onRefreshHome();
     if (mounted) {
@@ -218,7 +226,11 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
                                   itemCount: _records.length,
                                   itemBuilder: (context, index) {
                                     final rec = _records[index];
-                                    return _buildPlanItem(rec);
+                                    return FadeSlideIn(
+                                      delay: Duration(milliseconds: 60 * index),
+                                      offset: 10,
+                                      child: _buildPlanItem(rec),
+                                    );
                                   },
                                 ),
                         ],
@@ -402,35 +414,12 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
             ),
           ),
           const SizedBox(width: 16),
-          // Circular Progress
-          SizedBox(
-            width: 90,
-            height: 90,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                SizedBox(
-                  width: 80,
-                  height: 80,
-                  child: CircularProgressIndicator(
-                    value: percent / 100,
-                    strokeWidth: 8,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      Color(0xFF20C9D8),
-                    ),
-                    backgroundColor: Colors.white.withOpacity(0.2),
-                  ),
-                ),
-                Text(
-                  '$percent%',
-                  style: GoogleFonts.inter(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
+          // Animated Circular Progress
+          AnimatedCircularProgress(
+            percent: percent.toDouble(),
+            size: 90,
+            strokeWidth: 8,
+            duration: const Duration(milliseconds: 700),
           ),
         ],
       ),
@@ -573,35 +562,56 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
                     color: const Color(0xFF35B779).withOpacity(0.12),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Text(
-                    'Taken',
-                    style: GoogleFonts.inter(
-                      color: const Color(0xFF35B779),
-                      fontWeight: FontWeight.w700,
-                      fontSize: 13,
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AnimatedCheckmark(
+                        show: _justTakenId == record.id,
+                        size: 16,
+                      ),
+                      if (_justTakenId != record.id) ...[
+                        const Icon(
+                          Icons.check_circle,
+                          size: 16,
+                          color: Color(0xFF35B779),
+                        ),
+                        const SizedBox(width: 4),
+                      ] else
+                        const SizedBox(width: 4),
+                      Text(
+                        'Taken',
+                        style: GoogleFonts.inter(
+                          color: const Color(0xFF35B779),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
                   ),
                 )
               else ...[
-                ElevatedButton(
-                  onPressed: () => _markAsTaken(record),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF5B8DEF),
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
+                AnimatedOpacityOnTap(
+                  onTap: () => _markAsTaken(record),
+                  child: ElevatedButton(
+                    onPressed: () => _markAsTaken(record),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF5B8DEF),
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  child: Text(
-                    'Taken',
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 13,
+                    child: Text(
+                      'Taken',
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 13,
+                      ),
                     ),
                   ),
                 ),

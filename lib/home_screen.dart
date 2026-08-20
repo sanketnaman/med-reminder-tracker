@@ -18,6 +18,7 @@ import 'alarm_service.dart';
 import 'appointments_screen.dart';
 import 'next_medicine_helper.dart';
 import 'add_dependent_screen.dart';
+import 'animation_utils.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -426,7 +427,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       return const Center(child: CircularProgressIndicator());
     }
 
-    final name = _activePatient?.name ?? _settings?.name ?? 'Sanket';
+    final name = _activePatient?.name ?? _settings?.name ?? '';
     final formattedDate = DateFormat('EEEE, MMMM dd').format(_selectedDate);
 
     // Doses calculation
@@ -443,7 +444,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Morning Greeting Header
-            Row(
+            FadeSlideIn(
+              delay: Duration.zero,
+              offset: 10,
+              child: Row(
               children: [
                 Flexible(
                   child: GestureDetector(
@@ -455,14 +459,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Flexible(
-                              child: Text(
-                                'Good Morning, $name',
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.inter(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w800,
-                                  color: const Color(0xFF202733),
-                                  letterSpacing: -0.5,
+                              child: SmoothSwitch(
+                                key: ValueKey(_activePatientId),
+                                child: Text(
+                                  'Good Morning, $name',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w800,
+                                    color: const Color(0xFF202733),
+                                    letterSpacing: -0.5,
+                                  ),
                                 ),
                               ),
                             ),
@@ -547,23 +554,40 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
               ],
             ),
+            ),
             const SizedBox(height: 20),
 
             // Today's Medication Progress Card
-            _buildProgressCard(totalDose, takenDose, progressPercent),
+            FadeSlideIn(
+              delay: const Duration(milliseconds: 100),
+              offset: 10,
+              child: _buildProgressCard(totalDose, takenDose, progressPercent),
+            ),
             const SizedBox(height: 24),
 
             // Horizontal Date picker
-            _buildHorizontalCalendar(),
+            FadeSlideIn(
+              delay: const Duration(milliseconds: 180),
+              offset: 10,
+              child: _buildHorizontalCalendar(),
+            ),
             const SizedBox(height: 24),
 
             // Doctor Appointment Card (Premium Feature)
-            _buildDoctorAppointmentCard(),
+            FadeSlideIn(
+              delay: const Duration(milliseconds: 260),
+              offset: 10,
+              child: _buildDoctorAppointmentCard(),
+            ),
             const SizedBox(height: 24),
 
             // Next Medicine Card
             if (_nextMedicine != null) ...[
-              _buildNextMedicineCard(),
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 340),
+                offset: 10,
+                child: _buildNextMedicineCard(),
+              ),
               const SizedBox(height: 24),
             ],
 
@@ -609,7 +633,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       ],
                     ),
                   ),
-                  ...records.map((record) => _buildTimelineCard(record)),
+                  ...records.map((record) => FadeSlideIn(
+                    delay: const Duration(milliseconds: 420),
+                    offset: 8,
+                    child: _buildTimelineCard(record),
+                  )),
                   const SizedBox(height: 8),
                 ];
               }),
@@ -743,8 +771,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               const SizedBox(width: 32),
               _buildProgressStat('Taken', '$taken'),
               const Spacer(),
-              Text(
-                '$percent%',
+              AnimatedCount(
+                value: percent,
+                suffix: '%',
+                duration: const Duration(milliseconds: 500),
                 style: GoogleFonts.inter(
                   fontSize: 28,
                   fontWeight: FontWeight.w800,
@@ -754,48 +784,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             ],
           ),
           const SizedBox(height: 16),
-          // Progress bar
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: SizedBox(
-              height: 18,
-              child: Stack(
-                children: [
-                  // Track
-                  Container(
-                    width: double.infinity,
-                    height: 18,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  // Fill
-                  FractionallySizedBox(
-                    widthFactor: percent / 100,
-                    child: Container(
-                      height: 18,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            _progressColor(percent),
-                            _progressColor(percent).withOpacity(0.85),
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: _progressColor(percent).withOpacity(0.4),
-                            blurRadius: 6,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          // Animated Progress bar
+          AnimatedProgressBar(
+            percent: percent.toDouble(),
+            height: 18,
+            duration: const Duration(milliseconds: 600),
           ),
           const SizedBox(height: 16),
           GestureDetector(
@@ -832,14 +825,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         ],
       ),
     );
-  }
-
-  Color _progressColor(int percent) {
-    if (percent <= 20) return const Color(0xFFA7E8F0);       // Light Cyan
-    if (percent <= 40) return const Color(0xFF76DCE8);       // Cyan
-    if (percent <= 60) return const Color(0xFF5FA8FF);       // Doseza Blue
-    if (percent <= 80) return const Color(0xFF4F8EF7);       // Strong Blue
-    return const Color(0xFFFFFFFF);                           // White
   }
 
   Widget _buildProgressStat(String label, String value) {

@@ -28,7 +28,7 @@ class DatabaseHelper {
     await savePatients([
       Dependent(
         id: 'default_patient',
-        name: 'Sanket',
+        name: '',
         relation: 'Self',
         createdAt: DateTime.now(),
       ),
@@ -248,7 +248,7 @@ class DatabaseHelper {
     if (raw == null) {
       final fallback = Dependent(
         id: 'default_patient',
-        name: 'Sanket',
+        name: '',
         relation: 'Self',
         createdAt: DateTime.now(),
       );
@@ -947,7 +947,7 @@ class DatabaseHelper {
     if (!hasSelf) {
       patients.insert(0, Dependent(
         id: 'default_patient',
-        name: 'Sanket',
+        name: '',
         relation: 'Self',
         createdAt: DateTime.now(),
       ));
