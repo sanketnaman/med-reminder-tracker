@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'database_helper.dart';
 import 'models.dart';
+import 'animation_utils.dart';
 
 class VitalsScreen extends StatefulWidget {
   final String patientId;
@@ -54,16 +55,20 @@ class _VitalsScreenState extends State<VitalsScreen> {
               onRefresh: _loadVitals,
               child: CustomScrollView(
                 slivers: [
-                  SliverToBoxAdapter(child: _buildSummarySection()),
-                  SliverToBoxAdapter(child: _buildHistoryHeader()),
+                  SliverToBoxAdapter(child: FadeSlideIn(delay: Duration.zero, offset: 10, child: _buildSummarySection())),
+                  SliverToBoxAdapter(child: FadeSlideIn(delay: const Duration(milliseconds: 120), offset: 10, child: _buildHistoryHeader())),
                   _groupedReadings.isEmpty
-                      ? SliverToBoxAdapter(child: _buildEmptyState())
+                      ? SliverToBoxAdapter(child: FadeSlideIn(delay: const Duration(milliseconds: 200), offset: 10, child: _buildEmptyState()))
                       : SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
                               final dateKey = _groupedReadings.keys.elementAt(index);
                               final readings = _groupedReadings[dateKey]!;
-                              return _buildDateGroup(dateKey, readings);
+                              return FadeSlideIn(
+                                delay: Duration(milliseconds: 200 + 80 * index),
+                                offset: 10,
+                                child: _buildDateGroup(dateKey, readings),
+                              );
                             },
                             childCount: _groupedReadings.length,
                           ),
@@ -190,17 +195,10 @@ class _VitalsScreenState extends State<VitalsScreen> {
           Row(
             mainAxisAlignment: fullWidth ? MainAxisAlignment.start : MainAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: SvgPicture.asset(
-                  svgAssetPath,
-                  width: 20,
-                  height: 20,
-                ),
+              SvgPicture.asset(
+                svgAssetPath,
+                width: 44,
+                height: 44,
               ),
               if (fullWidth) ...[
                 const SizedBox(width: 12),
@@ -384,19 +382,11 @@ class _VitalsScreenState extends State<VitalsScreen> {
       ),
       child: Row(
         children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: SvgPicture.asset(
+            SvgPicture.asset(
               svgAssetPath,
-              width: 20,
-              height: 20,
+              width: 32,
+              height: 32,
             ),
-          ),
           const SizedBox(width: 14),
           Expanded(
             child: Column(

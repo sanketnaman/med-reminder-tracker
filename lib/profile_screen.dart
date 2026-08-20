@@ -9,6 +9,7 @@ import 'login_screen.dart';
 import 'add_dependent_screen.dart';
 import 'premium_screen.dart';
 import 'health_report_screen.dart';
+import 'animation_utils.dart';
 
 class ProfileScreen extends StatefulWidget {
   final VoidCallback onProfileUpdated;
@@ -57,53 +58,205 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (_settings == null) return;
     final nameCtrl = TextEditingController(text: _settings!.name);
     final emailCtrl = TextEditingController(text: _settings!.email);
+    final formKey = GlobalKey<FormState>();
 
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text(
-          'Edit Profile',
-          style: GoogleFonts.inter(fontWeight: FontWeight.bold),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: nameCtrl,
-              decoration: const InputDecoration(labelText: 'Name'),
-            ),
-            TextField(
-              controller: emailCtrl,
-              decoration: const InputDecoration(labelText: 'Email'),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setSheetState) => Container(
+          padding: EdgeInsets.fromLTRB(
+            24,
+            24,
+            24,
+            MediaQuery.of(context).viewInsets.bottom + 24,
           ),
-          ElevatedButton(
-            onPressed: () async {
-              if (nameCtrl.text.trim().isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Name cannot be empty')),
-                );
-                return;
-              }
-              _updateSetting((s) {
-                s.name = nameCtrl.text.trim();
-                s.email = emailCtrl.text.trim();
-              });
-              Navigator.pop(context);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF5B8DEF),
-            ),
-            child: const Text('Save', style: TextStyle(color: Colors.white)),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
           ),
-        ],
+          child: Form(
+            key: formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Drag handle
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE2E8F0),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Photo + name header
+                  Center(
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 36,
+                          backgroundColor: const Color(0xFF5B8DEF).withOpacity(0.1),
+                          backgroundImage: _settings!.profilePhoto.isNotEmpty
+                              ? NetworkImage(_settings!.profilePhoto)
+                              : null,
+                          child: _settings!.profilePhoto.isEmpty
+                              ? const Icon(Icons.person, size: 38, color: Color(0xFF5B8DEF))
+                              : null,
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Edit Profile',
+                          style: GoogleFonts.inter(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFF202733),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Name field
+                  Text(
+                    'Name',
+                    style: GoogleFonts.inter(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF718096),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  TextFormField(
+                    controller: nameCtrl,
+                    style: GoogleFonts.inter(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF202733),
+                    ),
+                    decoration: InputDecoration(
+                      hintText: 'Enter your name',
+                      hintStyle: GoogleFonts.inter(color: const Color(0xFFA0AEC0)),
+                      filled: true,
+                      fillColor: const Color(0xFFF3F6FF),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Color(0xFF5B8DEF), width: 1.5),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    ),
+                    validator: (val) {
+                      if (val == null || val.trim().isEmpty) return 'Name cannot be empty';
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Email field (read-only if from Google)
+                  Text(
+                    'Email',
+                    style: GoogleFonts.inter(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF718096),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  TextFormField(
+                    controller: emailCtrl,
+                    readOnly: AuthService.currentUser != null,
+                    style: GoogleFonts.inter(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF202733),
+                    ),
+                    decoration: InputDecoration(
+                      hintText: 'Enter your email',
+                      hintStyle: GoogleFonts.inter(color: const Color(0xFFA0AEC0)),
+                      filled: true,
+                      fillColor: const Color(0xFFF3F6FF),
+                      prefixIcon: AuthService.currentUser != null
+                          ? const Icon(Icons.lock_outline, size: 18, color: Color(0xFFA0AEC0))
+                          : null,
+                      suffixText: AuthService.currentUser != null ? 'Google' : null,
+                      suffixStyle: GoogleFonts.inter(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF35B779),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Color(0xFF5B8DEF), width: 1.5),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  if (AuthService.currentUser != null)
+                    Text(
+                      'Email is linked to your Google account and cannot be changed.',
+                      style: GoogleFonts.inter(
+                        fontSize: 11,
+                        color: const Color(0xFFA0AEC0),
+                      ),
+                    ),
+                  const SizedBox(height: 24),
+
+                  // Save button
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (!formKey.currentState!.validate()) return;
+                        _updateSetting((s) {
+                          s.name = nameCtrl.text.trim();
+                          s.email = emailCtrl.text.trim();
+                        });
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Profile updated!'),
+                            backgroundColor: Color(0xFF35B779),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF5B8DEF),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      child: Text(
+                        'Save Changes',
+                        style: GoogleFonts.inter(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -315,7 +468,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           children: [
             // Top Header Card with User Card (incorporates soft blue color pattern)
-            _buildProfileHeaderCard(s),
+            FadeSlideIn(delay: Duration.zero, offset: 10, child: _buildProfileHeaderCard(s)),
             const SizedBox(height: 20),
 
             // Settings List Groups
@@ -324,58 +477,73 @@ class _ProfileScreenState extends State<ProfileScreen> {
 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                  Text(
-                    'General',
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xFF718096),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 100),
+                    offset: 8,
+                    child: Text(
+                      'General',
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFF718096),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
-                  _buildSettingsContainer([
-                    _buildSettingsItem(
-                      Icons.person_outline,
-                      'Edit Profile',
-                      _showEditProfileDialog,
-                    ),
-                    _buildSettingsItem(
-                      Icons.lock_outline,
-                      'Change Password',
-                      () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Change Password workflow opened.'),
-                          ),
-                        );
-                      },
-                    ),
-                    _buildSettingsItem(
-                      Icons.notifications_none_outlined,
-                      'Notifications',
-                      _showNotificationSettings,
-                    ),
-                    _buildSettingsItem(
-                      Icons.language_outlined,
-                      'Language (${s.language})',
-                      _showLanguageSelector,
-                    ),
-                  ]),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 140),
+                    offset: 8,
+                    child: _buildSettingsContainer([
+                      _buildSettingsItem(
+                        Icons.person_outline,
+                        'Edit Profile',
+                        _showEditProfileDialog,
+                      ),
+                      _buildSettingsItem(
+                        Icons.lock_outline,
+                        'Change Password',
+                        () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Change Password workflow opened.'),
+                            ),
+                          );
+                        },
+                      ),
+                      _buildSettingsItem(
+                        Icons.notifications_none_outlined,
+                        'Notifications',
+                        _showNotificationSettings,
+                      ),
+                      _buildSettingsItem(
+                        Icons.language_outlined,
+                        'Language (${s.language})',
+                        _showLanguageSelector,
+                      ),
+                    ]),
+                  ),
                   const SizedBox(height: 24),
 
-                  _buildDependentsSection(),
+                  FadeSlideIn(delay: const Duration(milliseconds: 200), offset: 8, child: _buildDependentsSection()),
                   const SizedBox(height: 24),
 
-                  Text(
-                    'Subscription',
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xFF718096),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 260),
+                    offset: 8,
+                    child: Text(
+                      'Subscription',
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFF718096),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Container(
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 300),
+                    offset: 8,
+                    child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: _isPremium
@@ -418,7 +586,7 @@ child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    _isPremium ? 'Doseza Premium' : 'Free Plan',
+                                    _isPremium ? 'Mediaro Premium' : 'Free Plan',
                                     style: GoogleFonts.inter(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700,
@@ -489,62 +657,83 @@ child: Column(
                       ],
                     ),
                   ),
+                  ),
                   const SizedBox(height: 24),
 
                   // Health Reports
-                  Text(
-                    'Health Reports',
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xFF718096),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 360),
+                    offset: 8,
+                    child: Text(
+                      'Health Reports',
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFF718096),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12),
-                  _buildSettingsItem(
-                    Icons.assessment_outlined,
-                    'Health Reports',
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const HealthReportScreen()),
-                      );
-                    },
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 400),
+                    offset: 8,
+                    child: _buildSettingsItem(
+                      Icons.assessment_outlined,
+                      'Health Reports',
+                      () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const HealthReportScreen()),
+                        );
+                      },
+                    ),
                   ),
                   const SizedBox(height: 24),
 
-                  Text(
-                    'Preferences',
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xFF718096),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 420),
+                    offset: 8,
+                    child: Text(
+                      'Preferences',
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFF718096),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
-                  _buildSettingsContainer([
-                    _buildSettingsItem(
-                      Icons.description_outlined,
-                      'Legal and Policies',
-                      () {
-                        _showPolicyDialog();
-                      },
-                    ),
-                  ]),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 460),
+                    offset: 8,
+                    child: _buildSettingsContainer([
+                      _buildSettingsItem(
+                        Icons.description_outlined,
+                        'Legal and Policies',
+                        () {
+                          _showPolicyDialog();
+                        },
+                      ),
+                    ]),
+                  ),
                   const SizedBox(height: 32),
 
                   // Log out button
-                  ListTile(
-                    onTap: _showLogoutConfirmation,
-                    leading: const Icon(
-                      Icons.logout_rounded,
-                      color: Color(0xFFE85D75),
-                    ),
-                    title: Text(
-                      'Logout',
-                      style: GoogleFonts.inter(
-                        color: const Color(0xFFE85D75),
-                        fontWeight: FontWeight.w700,
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 500),
+                    offset: 8,
+                    child: ListTile(
+                      onTap: _showLogoutConfirmation,
+                      leading: const Icon(
+                        Icons.logout_rounded,
+                        color: Color(0xFFE85D75),
+                      ),
+                      title: Text(
+                        'Logout',
+                        style: GoogleFonts.inter(
+                          color: const Color(0xFFE85D75),
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ),
@@ -616,7 +805,12 @@ child: Column(
               CircleAvatar(
                 radius: 35,
                 backgroundColor: Colors.white.withOpacity(0.2),
-                child: const Icon(Icons.person, size: 40, color: Colors.white),
+                backgroundImage: s.profilePhoto.isNotEmpty
+                    ? NetworkImage(s.profilePhoto)
+                    : null,
+                child: s.profilePhoto.isEmpty
+                    ? const Icon(Icons.person, size: 40, color: Colors.white)
+                    : null,
               ),
               const SizedBox(width: 20),
               Expanded(

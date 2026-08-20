@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'database_helper.dart';
 import 'premium_screen.dart';
 import 'generate_report_screen.dart';
+import 'animation_utils.dart';
 
 class HealthReportScreen extends StatefulWidget {
   const HealthReportScreen({super.key});
@@ -39,7 +40,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
   Future<List<ReportHistoryItem>> _loadReportHistory() async {
     final dir = await getApplicationDocumentsDirectory();
     final files = dir.listSync().whereType<File>().where((f) =>
-        f.path.contains('Doseza_Health_Report') && f.path.endsWith('.pdf')
+        f.path.contains('Mediaro_Health_Report') && f.path.endsWith('.pdf')
     ).toList();
     files.sort((a, b) => b.path.compareTo(a.path));
     return files.take(10).map((f) {
@@ -75,37 +76,45 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
       child: Column(
         children: [
           const Spacer(flex: 2),
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: const Color(0xFF5B8DEF).withOpacity(0.1),
-              shape: BoxShape.circle,
+          FadeSlideIn(
+            delay: Duration.zero,
+            offset: 12,
+            child: Column(
+              children: [
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF5B8DEF).withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.assessment_outlined, size: 40, color: Color(0xFF5B8DEF)),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Health Reports',
+                  style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: const Color(0xFF202733)),
+                ),
+                const SizedBox(height: 4),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF5A623).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    'PRO',
+                    style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w800, color: const Color(0xFFF5A623)),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Generate doctor-ready reports from your medication and vitals history.',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.inter(fontSize: 14, color: const Color(0xFF718096), height: 1.5),
+                ),
+              ],
             ),
-            child: const Icon(Icons.assessment_outlined, size: 40, color: Color(0xFF5B8DEF)),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'Health Reports',
-            style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: const Color(0xFF202733)),
-          ),
-          const SizedBox(height: 4),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF5A623).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Text(
-              'PRO',
-              style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w800, color: const Color(0xFFF5A623)),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Generate doctor-ready reports from your medication and vitals history.',
-            textAlign: TextAlign.center,
-            style: GoogleFonts.inter(fontSize: 14, color: const Color(0xFF718096), height: 1.5),
           ),
           const Spacer(flex: 2),
           SizedBox(
@@ -168,22 +177,26 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(40),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.description_outlined, size: 60, color: const Color(0xFF5B8DEF).withOpacity(0.3)),
-            const SizedBox(height: 16),
-            Text(
-              'No reports yet',
-              style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: const Color(0xFF202733)),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              'Generate your first health report to share with your doctor.',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.inter(fontSize: 13, color: const Color(0xFF718096)),
-            ),
-          ],
+        child: FadeSlideIn(
+          delay: Duration.zero,
+          offset: 12,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.description_outlined, size: 60, color: const Color(0xFF5B8DEF).withOpacity(0.3)),
+              const SizedBox(height: 16),
+              Text(
+                'No reports yet',
+                style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: const Color(0xFF202733)),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Generate your first health report to share with your doctor.',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.inter(fontSize: 13, color: const Color(0xFF718096)),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -195,13 +208,17 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
       itemCount: _recentReports.length,
       itemBuilder: (context, index) {
         final report = _recentReports[index];
-        return _buildReportTile(report);
+        return FadeSlideIn(
+          delay: Duration(milliseconds: 80 * index),
+          offset: 10,
+          child: _buildReportTile(report),
+        );
       },
     );
   }
 
   Widget _buildReportTile(ReportHistoryItem report) {
-    // Parse filename: Doseza_Health_Report_<Name>_<Start>_to_<End>.pdf
+    // Parse filename: Mediaro_Health_Report_<Name>_<Start>_to_<End>.pdf
     final parts = report.fileName.replaceAll('.pdf', '').split('_');
     String profileName = 'Unknown';
     String dateRange = '';

@@ -252,7 +252,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Doseza Premium',
+                  'Mediaro Premium',
                   style: GoogleFonts.inter(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -315,7 +315,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
       {
         'icon': 'assets/icons/night.svg',
         'title': 'Ad-free experience',
-        'desc': 'Use Doseza without advertisements.',
+        'desc': 'Use Mediaro without advertisements.',
       },
     ];
 

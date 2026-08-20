@@ -27,7 +27,7 @@ class ReportConfig {
 }
 
 class PdfReportGenerator {
-  static const _dosezaBlue = PdfColor.fromInt(0xFF5B8DEF);
+  static const _mediaroBlue = PdfColor.fromInt(0xFF5B8DEF);
   static const _lightGray = PdfColor.fromInt(0xFFF3F6FF);
   static const _darkText = PdfColor.fromInt(0xFF202733);
   static const _grayText = PdfColor.fromInt(0xFF718096);
@@ -93,7 +93,7 @@ class PdfReportGenerator {
     );
 
     final fileName = _sanitizeFileName(
-      'Doseza_Health_Report_${patient.name}_${_dateFileFmt.format(config.fromDate)}_to_${_dateFileFmt.format(config.toDate)}.pdf',
+      'Mediaro_Health_Report_${patient.name}_${_dateFileFmt.format(config.fromDate)}_to_${_dateFileFmt.format(config.toDate)}.pdf',
     );
 
     final dir = await getApplicationDocumentsDirectory();
@@ -120,7 +120,7 @@ class PdfReportGenerator {
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
                   pw.Text('DOSEZA', style: pw.TextStyle(
-                    font: fontBold, fontSize: 22, color: _dosezaBlue,
+                    font: fontBold, fontSize: 22, color: _mediaroBlue,
                   )),
                   pw.SizedBox(height: 2),
                   pw.Text('Health & Medication Report', style: pw.TextStyle(
@@ -131,7 +131,7 @@ class PdfReportGenerator {
               pw.Container(
                 padding: const pw.EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: pw.BoxDecoration(
-                  color: _dosezaBlue,
+                  color: _mediaroBlue,
                   borderRadius: pw.BorderRadius.circular(4),
                 ),
                 child: pw.Text('CONFIDENTIAL', style: pw.TextStyle(
@@ -141,7 +141,7 @@ class PdfReportGenerator {
             ],
           ),
           pw.SizedBox(height: 12),
-          pw.Container(height: 1, color: _dosezaBlue),
+          pw.Container(height: 1, color: _mediaroBlue),
           pw.SizedBox(height: 12),
           pw.Text('Patient Information', style: pw.TextStyle(
             font: fontBold, fontSize: 13, color: _darkText,
@@ -198,7 +198,7 @@ class PdfReportGenerator {
       pw.SizedBox(height: 8),
       pw.TableHelper.fromTextArray(
         headerStyle: pw.TextStyle(font: fontBold, fontSize: 8, color: _white),
-        headerDecoration: const pw.BoxDecoration(color: _dosezaBlue),
+        headerDecoration: const pw.BoxDecoration(color: _mediaroBlue),
         headerAlignment: pw.Alignment.centerLeft,
         cellStyle: pw.TextStyle(font: font, fontSize: 8, color: _darkText),
         cellAlignment: pw.Alignment.centerLeft,
@@ -279,7 +279,7 @@ class PdfReportGenerator {
       pw.SizedBox(height: 6),
       pw.TableHelper.fromTextArray(
         headerStyle: pw.TextStyle(font: fontBold, fontSize: 8, color: _white),
-        headerDecoration: const pw.BoxDecoration(color: _dosezaBlue),
+        headerDecoration: const pw.BoxDecoration(color: _mediaroBlue),
         cellStyle: pw.TextStyle(font: font, fontSize: 8, color: _darkText),
         cellHeight: 22,
         headerHeight: 26,
@@ -324,7 +324,7 @@ class PdfReportGenerator {
         ),
         child: pw.Column(
           children: [
-            pw.Text(value, style: pw.TextStyle(font: fontBold, fontSize: 14, color: _dosezaBlue)),
+            pw.Text(value, style: pw.TextStyle(font: fontBold, fontSize: 14, color: _mediaroBlue)),
             pw.SizedBox(height: 2),
             pw.Text(label, style: pw.TextStyle(font: font, fontSize: 7, color: _grayText)),
           ],
@@ -379,7 +379,7 @@ class PdfReportGenerator {
                 style: pw.TextStyle(font: fontBold, fontSize: 8, color: _red)),
             ),
             pw.Text('$pct%',
-              style: pw.TextStyle(font: fontBold, fontSize: 8, color: _dosezaBlue)),
+              style: pw.TextStyle(font: fontBold, fontSize: 8, color: _mediaroBlue)),
           ],
         ),
       );
@@ -475,7 +475,7 @@ class PdfReportGenerator {
   static pw.Widget _buildVitalTable(List<Map<String, String>> data, pw.Font font, pw.Font fontBold) {
     return pw.TableHelper.fromTextArray(
       headerStyle: pw.TextStyle(font: fontBold, fontSize: 8, color: _white),
-      headerDecoration: const pw.BoxDecoration(color: _dosezaBlue),
+      headerDecoration: const pw.BoxDecoration(color: _mediaroBlue),
       cellStyle: pw.TextStyle(font: font, fontSize: 8, color: _darkText),
       cellHeight: 20,
       headerHeight: 24,
@@ -503,7 +503,7 @@ class PdfReportGenerator {
       pw.SizedBox(height: 8),
       pw.TableHelper.fromTextArray(
         headerStyle: pw.TextStyle(font: fontBold, fontSize: 8, color: _white),
-        headerDecoration: const pw.BoxDecoration(color: _dosezaBlue),
+        headerDecoration: const pw.BoxDecoration(color: _mediaroBlue),
         cellStyle: pw.TextStyle(font: font, fontSize: 8, color: _darkText),
         cellHeight: 24,
         headerHeight: 26,
@@ -529,7 +529,7 @@ class PdfReportGenerator {
           pw.Container(height: 0.5, color: _lightGray),
           pw.SizedBox(height: 8),
           pw.Text(
-            'This report summarizes information recorded by the user in Doseza. It is intended to assist discussion with a healthcare professional and does not constitute a medical diagnosis or treatment recommendation.',
+            'This report summarizes information recorded by the user in Mediaro. It is intended to assist discussion with a healthcare professional and does not constitute a medical diagnosis or treatment recommendation.',
             style: pw.TextStyle(font: font, fontSize: 7, color: _grayText, lineSpacing: 10),
           ),
         ],
@@ -546,7 +546,7 @@ class PdfReportGenerator {
         borderRadius: pw.BorderRadius.circular(4),
       ),
       child: pw.Text(title, style: pw.TextStyle(
-        font: fontBold, fontSize: 11, color: _dosezaBlue,
+        font: fontBold, fontSize: 11, color: _mediaroBlue,
       )),
     );
   }
@@ -557,7 +557,7 @@ class PdfReportGenerator {
       child: pw.Row(
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
         children: [
-          pw.Text('Doseza — Health & Medication Report',
+          pw.Text('Mediaro — Health & Medication Report',
             style: pw.TextStyle(font: font, fontSize: 7, color: _grayText)),
           pw.Text('Page ${context.pageNumber} of ${context.pagesCount}',
             style: pw.TextStyle(font: font, fontSize: 7, color: _grayText)),

@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <application
-        android:label="doseza"
+        android:label="Mediaro"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

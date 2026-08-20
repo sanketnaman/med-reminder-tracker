@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'models.dart';
+import 'auth_service.dart';
 
 class DatabaseHelper {
   static const String _keyMedicines = 'doseza_medicines';
@@ -16,9 +17,17 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   DatabaseHelper._init();
 
+  // ==================== User-scoped keys ====================
+
+  String _storageKey(String base) {
+    final uid = AuthService.currentUser?.uid;
+    if (uid == null || uid.isEmpty) return base;
+    return '${base}_$uid';
+  }
+
   Future<void> initializeDataIfNeeded() async {
     final prefs = await SharedPreferences.getInstance();
-    final hasInit = prefs.getBool(_keyHasInitialized) ?? false;
+    final hasInit = prefs.getBool(_storageKey(_keyHasInitialized)) ?? false;
     if (!hasInit) {
       await _seedInitialData(prefs);
     }
@@ -224,12 +233,12 @@ class DatabaseHelper {
 
     await saveDoseRecords(defaultRecords);
     await saveUserSettings(UserSettings.defaultSettings());
-    await prefs.setBool(_keyHasInitialized, true);
+    await prefs.setBool(_storageKey(_keyHasInitialized), true);
   }
 
   Future<List<Medicine>> getMedicines() async {
     final prefs = await SharedPreferences.getInstance();
-    final jsonStr = prefs.getString(_keyMedicines);
+    final jsonStr = prefs.getString(_storageKey(_keyMedicines));
     if (jsonStr == null) return [];
     final List<dynamic> decoded = json.decode(jsonStr);
     return decoded.map((item) => Medicine.fromMap(item)).toList();
@@ -244,7 +253,7 @@ class DatabaseHelper {
 
   Future<List<Dependent>> getPatients() async {
     final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString(_keyPatients);
+    final raw = prefs.getString(_storageKey(_keyPatients));
     if (raw == null) {
       final fallback = Dependent(
         id: 'default_patient',
@@ -264,7 +273,7 @@ class DatabaseHelper {
   Future<void> savePatients(List<Dependent> patients) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(
-      _keyPatients,
+      _storageKey(_keyPatients),
       json.encode(patients.map((patient) => patient.toMap()).toList()),
     );
   }
@@ -342,18 +351,18 @@ class DatabaseHelper {
 
   Future<String> getActivePatientId() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_keyActivePatient) ?? 'default_patient';
+    return prefs.getString(_storageKey(_keyActivePatient)) ?? 'default_patient';
   }
 
   Future<void> setActivePatientId(String patientId) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keyActivePatient, patientId);
+    await prefs.setString(_storageKey(_keyActivePatient), patientId);
   }
 
   Future<void> saveMedicines(List<Medicine> medicines) async {
     final prefs = await SharedPreferences.getInstance();
     final jsonStr = json.encode(medicines.map((m) => m.toMap()).toList());
-    await prefs.setString(_keyMedicines, jsonStr);
+    await prefs.setString(_storageKey(_keyMedicines), jsonStr);
   }
 
   Future<void> addMedicine(Medicine medicine) async {
@@ -400,7 +409,7 @@ class DatabaseHelper {
 
   Future<List<DoseRecord>> getDoseRecords() async {
     final prefs = await SharedPreferences.getInstance();
-    final jsonStr = prefs.getString(_keyRecords);
+    final jsonStr = prefs.getString(_storageKey(_keyRecords));
     if (jsonStr == null) return [];
     final List<dynamic> decoded = json.decode(jsonStr);
     return decoded.map((item) => DoseRecord.fromMap(item)).toList();
@@ -417,7 +426,7 @@ class DatabaseHelper {
   Future<void> saveDoseRecords(List<DoseRecord> records) async {
     final prefs = await SharedPreferences.getInstance();
     final jsonStr = json.encode(records.map((r) => r.toMap()).toList());
-    await prefs.setString(_keyRecords, jsonStr);
+    await prefs.setString(_storageKey(_keyRecords), jsonStr);
   }
 
   Future<void> addDoseRecord(DoseRecord record) async {
@@ -461,14 +470,14 @@ class DatabaseHelper {
 
   Future<UserSettings> getUserSettings() async {
     final prefs = await SharedPreferences.getInstance();
-    final jsonStr = prefs.getString(_keySettings);
+    final jsonStr = prefs.getString(_storageKey(_keySettings));
     if (jsonStr == null) return UserSettings.defaultSettings();
     return UserSettings.fromJson(jsonStr);
   }
 
   Future<void> saveUserSettings(UserSettings settings) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keySettings, settings.toJson());
+    await prefs.setString(_storageKey(_keySettings), settings.toJson());
   }
 
   // Generates dose records for the given date if they do not exist
@@ -684,7 +693,7 @@ class DatabaseHelper {
 
   Future<List<InventoryTransaction>> getInventoryTransactions() async {
     final prefs = await SharedPreferences.getInstance();
-    final jsonStr = prefs.getString(_keyInventoryTransactions);
+    final jsonStr = prefs.getString(_storageKey(_keyInventoryTransactions));
     if (jsonStr == null) return [];
     final List<dynamic> decoded = json.decode(jsonStr);
     return decoded.map((item) => InventoryTransaction.fromMap(item)).toList();
@@ -693,7 +702,7 @@ class DatabaseHelper {
   Future<void> saveInventoryTransactions(List<InventoryTransaction> transactions) async {
     final prefs = await SharedPreferences.getInstance();
     final jsonStr = json.encode(transactions.map((t) => t.toMap()).toList());
-    await prefs.setString(_keyInventoryTransactions, jsonStr);
+    await prefs.setString(_storageKey(_keyInventoryTransactions), jsonStr);
   }
 
   Future<void> addInventoryTransaction(InventoryTransaction transaction) async {
@@ -797,7 +806,7 @@ class DatabaseHelper {
 
   Future<List<VitalReading>> getVitalReadings() async {
     final prefs = await SharedPreferences.getInstance();
-    final jsonStr = prefs.getString(_keyVitals);
+    final jsonStr = prefs.getString(_storageKey(_keyVitals));
     if (jsonStr == null) return [];
     final List<dynamic> decoded = json.decode(jsonStr);
     return decoded.map((item) => VitalReading.fromMap(item)).toList();
@@ -806,7 +815,7 @@ class DatabaseHelper {
   Future<void> saveVitalReadings(List<VitalReading> readings) async {
     final prefs = await SharedPreferences.getInstance();
     final jsonStr = json.encode(readings.map((r) => r.toMap()).toList());
-    await prefs.setString(_keyVitals, jsonStr);
+    await prefs.setString(_storageKey(_keyVitals), jsonStr);
   }
 
   Future<void> addVitalReading(VitalReading reading) async {
@@ -881,7 +890,7 @@ class DatabaseHelper {
 
   Future<List<Appointment>> getAppointments() async {
     final prefs = await SharedPreferences.getInstance();
-    final jsonStr = prefs.getString(_keyAppointments);
+    final jsonStr = prefs.getString(_storageKey(_keyAppointments));
     if (jsonStr == null) return [];
     final List<dynamic> decoded = json.decode(jsonStr);
     return decoded.map((item) => Appointment.fromMap(item)).toList();
@@ -890,7 +899,7 @@ class DatabaseHelper {
   Future<void> saveAppointments(List<Appointment> appointments) async {
     final prefs = await SharedPreferences.getInstance();
     final jsonStr = json.encode(appointments.map((a) => a.toMap()).toList());
-    await prefs.setString(_keyAppointments, jsonStr);
+    await prefs.setString(_storageKey(_keyAppointments), jsonStr);
   }
 
   Future<void> addAppointment(Appointment appointment) async {
@@ -938,7 +947,7 @@ class DatabaseHelper {
 
   Future<void> migrateExistingData() async {
     final prefs = await SharedPreferences.getInstance();
-    final hasMigrated = prefs.getBool('doseza_profile_migrated') ?? false;
+    final hasMigrated = prefs.getBool(_storageKey('doseza_profile_migrated')) ?? false;
     if (hasMigrated) return;
 
     // Ensure self profile exists
@@ -1026,7 +1035,7 @@ class DatabaseHelper {
     }
     if (changed) await saveAppointments(appointments);
 
-    await prefs.setBool('doseza_profile_migrated', true);
+    await prefs.setBool(_storageKey('doseza_profile_migrated'), true);
   }
 }
 

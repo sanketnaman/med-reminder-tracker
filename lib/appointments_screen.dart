@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'database_helper.dart';
 import 'models.dart';
 import 'alarm_service.dart';
+import 'animation_utils.dart';
 
 class AppointmentsScreen extends StatefulWidget {
   final String patientId;
@@ -42,12 +44,16 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
             ? const Center(child: CircularProgressIndicator())
             : CustomScrollView(
                 slivers: [
-                  SliverToBoxAdapter(child: _buildHeader()),
+                  SliverToBoxAdapter(child: FadeSlideIn(delay: Duration.zero, offset: 10, child: _buildHeader())),
                   _appointments.isEmpty
-                      ? SliverToBoxAdapter(child: _buildEmptyState())
+                      ? SliverToBoxAdapter(child: FadeSlideIn(delay: const Duration(milliseconds: 100), offset: 10, child: _buildEmptyState()))
                       : SliverList(
                           delegate: SliverChildBuilderDelegate(
-                            (context, index) => _buildAppointmentCard(_appointments[index]),
+                            (context, index) => FadeSlideIn(
+                              delay: Duration(milliseconds: 80 * index),
+                              offset: 10,
+                              child: _buildAppointmentCard(_appointments[index]),
+                            ),
                             childCount: _appointments.length,
                           ),
                         ),
@@ -175,18 +181,13 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
           children: [
             Row(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: isPast
-                        ? const Color(0xFF718096).withOpacity(0.1)
-                        : const Color(0xFF5B8DEF).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    Icons.person,
-                    color: isPast ? const Color(0xFF718096) : const Color(0xFF5B8DEF),
-                    size: 22,
+                SvgPicture.asset(
+                  'assets/icons/doctor_appointment.svg',
+                  width: 36,
+                  height: 36,
+                  colorFilter: ColorFilter.mode(
+                    isPast ? const Color(0xFF718096) : const Color(0xFF5B8DEF),
+                    BlendMode.srcIn,
                   ),
                 ),
                 const SizedBox(width: 12),

@@ -931,19 +931,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       child: Row(
         children: [
           // Medicine Type Icon
-          Container(
-            width: 52,
-            height: 52,
-            decoration: BoxDecoration(
-              color: MedicineIcon.getColorForType(record.medicineType).withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: MedicineIcon(
-                medicineType: record.medicineType,
-                size: 28,
-              ),
-            ),
+          MedicineIcon(
+            medicineType: record.medicineType,
+            size: 52,
           ),
           const SizedBox(width: 14),
 
@@ -1329,24 +1319,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   ),
                 ),
               ),
-              if (info.isGrouped) ...[
-                const SizedBox(width: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF20C9D8).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    '+${info.groupCount - 1} more',
-                    style: GoogleFonts.inter(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xFF20C9D8),
-                    ),
-                  ),
-                ),
-              ],
               const Spacer(),
               Text(
                 timeStr,
@@ -1364,16 +1336,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           Row(
             children: [
               // Medicine icon
-              Container(
-                width: 52,
-                height: 52,
-                decoration: BoxDecoration(
-                  color: MedicineIcon.getColorForType(record.medicineType).withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: MedicineIcon(medicineType: record.medicineType, size: 28),
-                ),
+              MedicineIcon(
+                medicineType: record.medicineType,
+                size: 52,
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -1498,6 +1463,117 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               ),
             ],
           ),
+
+          // Grouped extra medicine mini-cards
+          if (info.isGrouped) ...[
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                Container(
+                  width: 4,
+                  height: 16,
+                  decoration: BoxDecoration(
+                    color: isDue ? const Color(0xFFF5A623) : const Color(0xFF5B8DEF),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  isDue ? 'OVERDUE' : 'ALSO SCHEDULED',
+                  style: GoogleFonts.inter(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    color: isDue ? const Color(0xFFF5A623) : const Color(0xFF5B8DEF),
+                    letterSpacing: 0.5,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                  decoration: BoxDecoration(
+                    color: isDue
+                        ? const Color(0xFFF5A623).withOpacity(0.1)
+                        : const Color(0xFF5B8DEF).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    '${info.groupCount - 1} more',
+                    style: GoogleFonts.inter(
+                      fontSize: 9,
+                      fontWeight: FontWeight.w700,
+                      color: isDue ? const Color(0xFFF5A623) : const Color(0xFF5B8DEF),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            ...info.sameTimeRecords.where((r) => r.id != record.id).map((r) {
+              return Container(
+                margin: const EdgeInsets.only(bottom: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                decoration: BoxDecoration(
+                  color: isDue
+                      ? const Color(0xFFF5A623).withOpacity(0.04)
+                      : const Color(0xFF5B8DEF).withOpacity(0.04),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: isDue
+                        ? const Color(0xFFF5A623).withOpacity(0.12)
+                        : const Color(0xFF5B8DEF).withOpacity(0.12),
+                    width: 1,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    MedicineIcon(medicineType: r.medicineType, size: 32),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            r.medicineName,
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF202733),
+                            ),
+                          ),
+                          const SizedBox(height: 1),
+                          Text(
+                            '${r.dosage.toInt()} ${r.dosageUnit}',
+                            style: GoogleFonts.inter(
+                              fontSize: 11,
+                              color: const Color(0xFF718096),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => _markAsTaken(r),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF35B779),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          'Take',
+                          style: GoogleFonts.inter(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ],
         ],
       ),
     );
@@ -1533,19 +1609,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         ),
         child: Row(
           children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: _isPremium
-                    ? const Color(0xFF20C9D8).withOpacity(0.1)
-                    : const Color(0xFFF3F6FF),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: SvgPicture.asset(
-                'assets/icons/doctor_appointment.svg',
-                width: 22,
-                height: 22,
-              ),
+            SvgPicture.asset(
+              'assets/icons/doctor_appointment.svg',
+              width: 36,
+              height: 36,
             ),
             const SizedBox(width: 14),
             Expanded(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'auth_service.dart';
 import 'onboarding_screen.dart';
+import 'database_helper.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -19,6 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       final user = await AuthService.signInWithGoogle();
       if (user != null && mounted) {
+        await DatabaseHelper.instance.initializeDataIfNeeded();
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const OnboardingScreen()),
         );
@@ -88,8 +90,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // Logo
                   Container(
-                    width: 90,
-                    height: 90,
+                    width: 100,
+                    height: 100,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(24),
@@ -101,10 +103,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
-                    child: Center(
-                      child: CustomPaint(
-                        size: const Size(50, 50),
-                        painter: _PillLogoPainter(),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(24),
+                      child: Image.asset(
+                        'assets/images/logo.jpg',
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Center(
+                          child: CustomPaint(
+                            size: const Size(50, 50),
+                            painter: _PillLogoPainter(),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -112,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // App name
                   Text(
-                    'Doseza',
+                    'Mediaro',
                     style: GoogleFonts.inter(
                       fontSize: 34,
                       fontWeight: FontWeight.w800,

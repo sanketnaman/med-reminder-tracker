@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// Reusable animation widgets and helpers for Doseza.
+/// Reusable animation widgets and helpers for Mediaro.
 /// All animations are subtle, calm, and professional — suitable for a healthcare app.
 
 // ─── FadeSlideIn ──────────────────────────────────────────────

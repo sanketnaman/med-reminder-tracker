@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+import 'package:intl/intl.dart';
 import 'database_helper.dart';
 import 'models.dart';
 import 'alarm_service.dart';
+import 'medicine_icon.dart';
 
 class AlarmScreen extends StatefulWidget {
   final DoseRecord record;
@@ -15,32 +17,70 @@ class AlarmScreen extends StatefulWidget {
 }
 
 class _AlarmScreenState extends State<AlarmScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _opacityAnimation;
+    with TickerProviderStateMixin {
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
+  late AnimationController _ringController;
+  late Animation<double> _ringAnimation;
+  late AnimationController _cardController;
+  late Animation<Offset> _cardSlide;
+  late Animation<double> _cardFade;
+  late AnimationController _btnController;
+  late Animation<double> _btnScale;
 
   @override
   void initState() {
     super.initState();
 
-    // Keep screen on and show over lock screen
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       systemNavigationBarColor: Colors.transparent,
     ));
 
-    // Setup flashing red animation
-    _animationController = AnimationController(
+    // Bell pulse animation
+    _pulseController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 1800),
     )..repeat(reverse: true);
-
-    _opacityAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.08).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
     );
 
-    // Play native alarm ringtone loop
+    // Concentric ring expand animation
+    _ringController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2400),
+    )..repeat();
+    _ringAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _ringController, curve: Curves.easeOut),
+    );
+
+    // Card slide-in
+    _cardController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+    _cardSlide = Tween<Offset>(
+      begin: const Offset(0, 0.15),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _cardController, curve: Curves.easeOutCubic));
+    _cardFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _cardController, curve: Curves.easeOut),
+    );
+    _cardController.forward();
+
+    // Button press scale
+    _btnController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 120),
+      lowerBound: 0.0,
+      upperBound: 1.0,
+    );
+    _btnScale = Tween<double>(begin: 1.0, end: 0.95).animate(
+      CurvedAnimation(parent: _btnController, curve: Curves.easeInOut),
+    );
+
     _playAlarmSound();
   }
 
@@ -59,7 +99,10 @@ class _AlarmScreenState extends State<AlarmScreen>
   @override
   void dispose() {
     _stopAlarmSound();
-    _animationController.dispose();
+    _pulseController.dispose();
+    _ringController.dispose();
+    _cardController.dispose();
+    _btnController.dispose();
     super.dispose();
   }
 
@@ -142,206 +185,541 @@ class _AlarmScreenState extends State<AlarmScreen>
 
   @override
   Widget build(BuildContext context) {
+    final record = widget.record;
+    final timeStr = DateFormat('hh:mm a').format(record.scheduledAt);
+    final dateStr = DateFormat('dd MMMM, yyyy').format(DateTime.now());
+
     return PopScope(
       canPop: false,
       child: Scaffold(
-      body: AnimatedBuilder(
-        animation: _opacityAnimation,
-        builder: (context, child) {
-          return Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  const Color(0xFFE85D75).withOpacity(_opacityAnimation.value),
-                  const Color(0xFFB3263E).withOpacity(_opacityAnimation.value),
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFFD92F4F),
+                Color(0xFFE94B64),
+                Color(0xFFF06B7D),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
             ),
-            child: child,
-          );
-        },
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24.0,
-              vertical: 40.0,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Flashing Bell Icon
-                Container(
-                  width: 90,
-                  height: 90,
+          ),
+          child: Stack(
+            children: [
+              // Subtle radial glow
+              Positioned(
+                top: -120,
+                left: 0,
+                right: 0,
+                height: 400,
+                child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
                     shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.notifications_active,
-                    size: 48,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 32),
-
-                // Alarm text
-                Text(
-                  'MEDICINE REMINDER',
-                  style: GoogleFonts.inter(
-                    color: Colors.white.withOpacity(0.8),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 2,
-                  ),
-                ),
-                const SizedBox(height: 12),
-
-                // Medicine Name
-                Text(
-                  widget.record.medicineName,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.inter(
-                    color: Colors.white,
-                    fontSize: 36,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: -0.5,
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Dosage & Instructions card
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.25),
-                      width: 1.5,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        '${widget.record.dosage.toInt()} ${widget.record.dosageUnit}',
-                        style: GoogleFonts.inter(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        widget.record.mealRelation,
-                        style: GoogleFonts.inter(
-                          color: Colors.white.withOpacity(0.9),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      if (widget.record.notes != null &&
-                          widget.record.notes!.isNotEmpty) ...[
-                        const SizedBox(height: 12),
-                        Text(
-                          'Note: ${widget.record.notes}',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.inter(
-                            color: Colors.white.withOpacity(0.8),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
+                    gradient: RadialGradient(
+                      colors: [
+                        Colors.white.withOpacity(0.08),
+                        Colors.white.withOpacity(0.0),
                       ],
-                    ],
-                  ),
-                ),
-                const Spacer(),
-
-                // Action Buttons: Taken / Skip / Snooze
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _onTaken,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFFB3263E),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 18),
-                      elevation: 0,
-                    ),
-                    child: Text(
-                      'I Take It',
-                      style: GoogleFonts.inter(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                      ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
+              ),
+              Positioned(
+                bottom: -60,
+                left: -80,
+                right: -80,
+                height: 260,
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: [
+                        Colors.black.withOpacity(0.06),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
 
-                Row(
+              // Main content
+              SafeArea(
+                child: Column(
                   children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: _onSkip,
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Colors.white, width: 2),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                    // Top bar: logo + close
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Image.asset(
+                                'assets/images/logo_transparent.png',
+                                width: 32,
+                                height: 32,
+                                errorBuilder: (ctx, e, s) => Container(
+                                  width: 32,
+                                  height: 32,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Icon(
+                                    Icons.medical_services,
+                                    color: Colors.white,
+                                    size: 18,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Mediaro',
+                                style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                        ),
-                        child: Text(
-                          'Skip',
-                          style: GoogleFonts.inter(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
+                          GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.12),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Icon(
+                                Icons.close_rounded,
+                                color: Colors.white.withOpacity(0.8),
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const Spacer(flex: 2),
+
+                    // Bell with concentric rings
+                    SizedBox(
+                      width: 160,
+                      height: 160,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          // Expanding rings
+                          AnimatedBuilder(
+                            animation: _ringAnimation,
+                            builder: (context, _) {
+                              return CustomPaint(
+                                size: const Size(160, 160),
+                                painter: _ConcentricRingPainter(
+                                  progress: _ringAnimation.value,
+                                  color: Colors.white,
+                                ),
+                              );
+                            },
+                          ),
+                          // Bell icon with pulse
+                          AnimatedBuilder(
+                            animation: _pulseAnimation,
+                            builder: (context, child) {
+                              return Transform.scale(
+                                scale: _pulseAnimation.value,
+                                child: child,
+                              );
+                            },
+                            child: Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white.withOpacity(0.15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.white.withOpacity(0.1),
+                                    blurRadius: 40,
+                                    spreadRadius: 10,
+                                  ),
+                                ],
+                              ),
+                              child: const Icon(
+                                Icons.notifications_active_rounded,
+                                size: 52,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 28),
+
+                    // Headline
+                    Text(
+                      'Time to Take Your Medicine!',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w800,
+                        height: 1.2,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "Don't forget to take your medicine on time.",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.inter(
+                        color: Colors.white.withOpacity(0.75),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+
+                    const SizedBox(height: 28),
+
+                    // Medicine info card
+                    SlideTransition(
+                      position: _cardSlide,
+                      child: FadeTransition(
+                        opacity: _cardFade,
+                        child: Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          padding: const EdgeInsets.all(22),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.13),
+                            borderRadius: BorderRadius.circular(24),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.2),
+                              width: 1.2,
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              // Medicine icon (large, no circle)
+                              MedicineIcon(
+                                medicineType: record.medicineType,
+                                size: 64,
+                              ),
+                              const SizedBox(height: 16),
+
+                              // Meal relation pill
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 14,
+                                  vertical: 5,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.18),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Text(
+                                  record.mealRelation.toUpperCase(),
+                                  style: GoogleFonts.inter(
+                                    color: Colors.white,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: 1.2,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 14),
+
+                              // Medicine name
+                              Text(
+                                record.medicineName,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+
+                              // Dosage & time
+                              Text(
+                                '${record.dosage.toInt()} ${record.dosageUnit}  •  $timeStr',
+                                style: GoogleFonts.inter(
+                                  color: Colors.white.withOpacity(0.8),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+
+                              // Notes
+                              if (record.notes != null &&
+                                  record.notes!.isNotEmpty) ...[
+                                const SizedBox(height: 14),
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.08),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.info_outline_rounded,
+                                        color: Colors.white.withOpacity(0.6),
+                                        size: 14,
+                                      ),
+                                      const SizedBox(width: 6),
+                                      Flexible(
+                                        child: Text(
+                                          record.notes!,
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.inter(
+                                            color: Colors.white.withOpacity(0.7),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+
+                              const SizedBox(height: 16),
+
+                              // Divider
+                              Container(
+                                height: 1,
+                                color: Colors.white.withOpacity(0.12),
+                              ),
+
+                              const SizedBox(height: 14),
+
+                              // Date + consistency
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.calendar_today_rounded,
+                                    color: Colors.white.withOpacity(0.5),
+                                    size: 13,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    dateStr,
+                                    style: GoogleFonts.inter(
+                                      color: Colors.white.withOpacity(0.6),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Icon(
+                                    Icons.check_circle_outline_rounded,
+                                    color: Colors.white.withOpacity(0.5),
+                                    size: 13,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    'Stay Consistent',
+                                    style: GoogleFonts.inter(
+                                      color: Colors.white.withOpacity(0.6),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: _onSnooze,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white.withOpacity(0.25),
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                        ),
-                        child: Text(
-                          'Snooze (10m)',
-                          style: GoogleFonts.inter(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
+
+                    const Spacer(flex: 3),
+
+                    // Primary action: I Take It
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: GestureDetector(
+                        onTapDown: (_) => _btnController.forward(),
+                        onTapUp: (_) {
+                          _btnController.reverse();
+                          _onTaken();
+                        },
+                        onTapCancel: () => _btnController.reverse(),
+                        child: AnimatedBuilder(
+                          animation: _btnScale,
+                          builder: (context, child) {
+                            return Transform.scale(
+                              scale: _btnScale.value,
+                              child: child,
+                            );
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(vertical: 18),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.12),
+                                  blurRadius: 20,
+                                  offset: const Offset(0, 8),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.check_rounded,
+                                  color: Color(0xFFD92F4F),
+                                  size: 22,
+                                ),
+                                const SizedBox(width: 10),
+                                Text(
+                                  'I Take It',
+                                  style: GoogleFonts.inter(
+                                    color: const Color(0xFFD92F4F),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
+                    ),
+
+                    const SizedBox(height: 14),
+
+                    // Secondary actions: Skip + Snooze
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: _onSkip,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 15),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.15),
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: Colors.white.withOpacity(0.2),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.skip_next_rounded,
+                                      color: Colors.white.withOpacity(0.9),
+                                      size: 18,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      'Skip',
+                                      style: GoogleFonts.inter(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: _onSnooze,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 15),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.15),
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: Colors.white.withOpacity(0.2),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.snooze_rounded,
+                                      color: Colors.white.withOpacity(0.9),
+                                      size: 18,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      'Snooze (10m)',
+                                      style: GoogleFonts.inter(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(
+                      height: MediaQuery.of(context).padding.bottom + 20,
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
-      ),
     );
   }
+}
+
+class _ConcentricRingPainter extends CustomPainter {
+  final double progress;
+  final Color color;
+
+  _ConcentricRingPainter({required this.progress, required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final maxRadius = size.width / 2;
+
+    for (int i = 0; i < 3; i++) {
+      final p = (progress + i * 0.33).clamp(0.0, 1.0);
+      final radius = maxRadius * (0.5 + p * 0.5);
+      final opacity = (1.0 - p) * 0.25;
+      final paint = Paint()
+        ..color = color.withOpacity(opacity)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.5;
+      canvas.drawCircle(center, radius, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _ConcentricRingPainter old) =>
+      old.progress != progress;
 }

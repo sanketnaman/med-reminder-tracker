@@ -430,7 +430,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Top Custom Pill Graphic illustration (matching Doseza's style)
+                // Top Custom Pill Graphic illustration (matching Mediaro's style)
                 Center(
                   child: Container(
                     width: 110,

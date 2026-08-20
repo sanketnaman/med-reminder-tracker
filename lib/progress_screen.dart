@@ -4,6 +4,7 @@ import 'database_helper.dart';
 import 'models.dart';
 import 'today_plan_screen.dart';
 import 'add_edit_medicine_screen.dart';
+import 'animation_utils.dart';
 
 class ProgressScreen extends StatefulWidget {
   final String patientId;
@@ -184,27 +185,35 @@ class _ProgressScreenState extends State<ProgressScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Progress Card (matching top portion of provided design)
-                          _buildOverallProgressCard(),
+                          FadeSlideIn(delay: Duration.zero, offset: 10, child: _buildOverallProgressCard()),
                           const SizedBox(height: 24),
 
                           // Medication Performance List
-                          Text(
-                            'Medication Performance',
-                            style: GoogleFonts.inter(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w800,
-                              color: const Color(0xFF202733),
+                          FadeSlideIn(
+                            delay: const Duration(milliseconds: 120),
+                            offset: 10,
+                            child: Text(
+                              'Medication Performance',
+                              style: GoogleFonts.inter(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                                color: const Color(0xFF202733),
+                              ),
                             ),
                           ),
                           const SizedBox(height: 12),
 
                           _medRecords.isEmpty
-                              ? _buildEmptyState()
+                              ? FadeSlideIn(delay: const Duration(milliseconds: 200), offset: 10, child: _buildEmptyState())
                               : Column(
-                                  children: _medRecords.entries.map((entry) {
-                                    return _buildPerformanceCard(
-                                      entry.key,
-                                      entry.value,
+                                  children: _medRecords.entries.toList().asMap().entries.map((entry) {
+                                    return FadeSlideIn(
+                                      delay: Duration(milliseconds: 200 + 80 * entry.key),
+                                      offset: 10,
+                                      child: _buildPerformanceCard(
+                                        entry.value.key,
+                                        entry.value.value,
+                                      ),
                                     );
                                   }).toList(),
                                 ),
@@ -331,32 +340,27 @@ class _ProgressScreenState extends State<ProgressScreen> {
             ),
           ),
           const SizedBox(width: 16),
-          // Circular Progress
-          SizedBox(
-            width: 90,
-            height: 90,
-            child: Stack(
-              alignment: Alignment.center,
+          // Animated Progress bar + percentage
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                SizedBox(
-                  width: 80,
-                  height: 80,
-                  child: CircularProgressIndicator(
-                    value: _adherencePercent / 100,
-                    strokeWidth: 8,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      Color(0xFF20C9D8),
-                    ),
-                    backgroundColor: Colors.white.withOpacity(0.2),
-                  ),
-                ),
-                Text(
-                  '$_adherencePercent%',
+                AnimatedCount(
+                  value: _adherencePercent,
+                  suffix: '%',
+                  duration: const Duration(milliseconds: 600),
                   style: GoogleFonts.inter(
-                    fontSize: 18,
+                    fontSize: 28,
                     fontWeight: FontWeight.w800,
                     color: Colors.white,
                   ),
+                ),
+                const SizedBox(height: 8),
+                AnimatedProgressBar(
+                  percent: _adherencePercent.toDouble(),
+                  height: 10,
+                  duration: const Duration(milliseconds: 700),
                 ),
               ],
             ),
@@ -445,17 +449,11 @@ class _ProgressScreenState extends State<ProgressScreen> {
             ),
           ),
           const SizedBox(height: 12),
-          // Progress bar
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: LinearProgressIndicator(
-              value: ratio,
-              minHeight: 8,
-              backgroundColor: const Color(0xFFF3F6FF),
-              valueColor: const AlwaysStoppedAnimation<Color>(
-                Color(0xFF5B8DEF),
-              ),
-            ),
+          // Animated Progress bar
+          AnimatedProgressBar(
+            percent: completion.toDouble(),
+            height: 8,
+            duration: const Duration(milliseconds: 500),
           ),
         ],
       ),

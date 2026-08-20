@@ -8,16 +8,16 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await AlarmService.initialise();
-  runApp(const DosezaApp());
+  runApp(const MediaroApp());
 }
 
-class DosezaApp extends StatelessWidget {
-  const DosezaApp({super.key});
+class MediaroApp extends StatelessWidget {
+  const MediaroApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Doseza',
+      title: 'Mediaro',
       debugShowCheckedModeBanner: false,
       navigatorKey: appNavigatorKey,
       theme: ThemeData(

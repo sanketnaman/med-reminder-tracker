@@ -258,7 +258,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ),
         const SizedBox(height: 8),
         Text(
-          "Let's personalize your Doseza experience.",
+          "Let's personalize your Mediaro experience.",
           style: GoogleFonts.inter(
             fontSize: 15,
             color: const Color(0xFF718096),
@@ -907,7 +907,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     )
                   : Text(
-                      'Continue to Doseza',
+                      'Continue to Mediaro',
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,

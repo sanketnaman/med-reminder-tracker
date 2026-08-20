@@ -108,27 +108,34 @@ class _SplashScreenState extends State<SplashScreen> {
                 // Custom Pill Logo — fade + scale in
                 FadeScaleIn(
                   duration: const Duration(milliseconds: 500),
-                  child: Container(
-                    width: 90,
-                    height: 90,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFF5B8DEF).withOpacity(0.15),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF5B8DEF).withOpacity(0.15),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(24),
+                        child: Image.asset(
+                          'assets/images/logo.jpg',
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Center(
+                            child: CustomPaint(
+                              size: const Size(50, 50),
+                              painter: PillLogoPainter(),
+                            ),
+                          ),
                         ),
-                      ],
-                    ),
-                    child: Center(
-                      child: CustomPaint(
-                        size: const Size(50, 50),
-                        painter: PillLogoPainter(),
                       ),
                     ),
-                  ),
                 ),
                 const SizedBox(height: 24),
                 // App Name — staggered fade in
@@ -136,7 +143,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   delay: const Duration(milliseconds: 200),
                   offset: 8,
                   child: const Text(
-                    'Doseza',
+                    'Mediaro',
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w800,

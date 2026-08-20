@@ -5,6 +5,7 @@ import 'models.dart';
 import 'add_edit_medicine_screen.dart';
 import 'medicine_icon.dart';
 import 'premium_screen.dart';
+import 'animation_utils.dart';
 
 class InventoryScreen extends StatefulWidget {
   final VoidCallback onRefreshHome;
@@ -301,7 +302,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header
-            Padding(
+            FadeSlideIn(
+              delay: Duration.zero,
+              offset: 10,
+              child: Padding(
               padding: const EdgeInsets.only(
                 left: 20.0,
                 right: 20.0,
@@ -343,9 +347,13 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 ],
               ),
             ),
+            ),
 
             // Banner
-            Padding(
+            FadeSlideIn(
+              delay: const Duration(milliseconds: 80),
+              offset: 10,
+              child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20.0,
                 vertical: 8.0,
@@ -382,6 +390,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 ),
               ),
             ),
+            ),
 
             // List of medicines in stock
             Expanded(
@@ -397,7 +406,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       itemCount: _medicines.length,
                       itemBuilder: (context, index) {
                         final med = _medicines[index];
-                        return _buildInventoryCard(med);
+                        return FadeSlideIn(
+                          delay: Duration(milliseconds: 160 + 80 * index),
+                          offset: 10,
+                          child: _buildInventoryCard(med),
+                        );
                       },
                     ),
             ),
@@ -555,19 +568,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // Medicine Icon
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: MedicineIcon.getColorForType(med.type).withOpacity(0.12),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: MedicineIcon(
-                  medicineType: med.type,
-                  size: 28,
-                ),
-              ),
+            MedicineIcon(
+              medicineType: med.type,
+              size: 52,
             ),
             const SizedBox(width: 12),
             Expanded(
