@@ -21,6 +21,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   UserSettings? _settings;
+  Dependent? _selfPatient;
   bool _isLoading = true;
   bool _isPremium = false;
   int _medicineCount = 0;
@@ -35,9 +36,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final s = await DatabaseHelper.instance.getUserSettings();
     final isPremium = await DatabaseHelper.instance.isPremium();
     final medicineCount = await DatabaseHelper.instance.getMedicineCount(s.name);
+    final patients = await DatabaseHelper.instance.getPatients();
+    final selfPatient = patients.where((p) => p.isSelf).isNotEmpty
+        ? patients.firstWhere((p) => p.isSelf)
+        : null;
     if (mounted) {
       setState(() {
         _settings = s;
+        _selfPatient = selfPatient;
         _isPremium = isPremium;
         _medicineCount = medicineCount;
         _isLoading = false;
@@ -215,6 +221,82 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         color: const Color(0xFFA0AEC0),
                       ),
                     ),
+                  const SizedBox(height: 20),
+
+                  // Cardiac Post-Surgery toggle
+                  Text(
+                    'Cardiac Post-Surgery Patient',
+                    style: GoogleFonts.inter(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF718096),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF3F6FF),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.favorite,
+                          size: 20,
+                          color: _selfPatient?.isCardiacPostSurgery == true
+                              ? const Color(0xFFE85D75)
+                              : const Color(0xFFA0AEC0),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Enable Spirometer & Walk Test vitals',
+                                style: GoogleFonts.inter(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: const Color(0xFF202733),
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                'For cardiac post-surgery patients',
+                                style: GoogleFonts.inter(
+                                  fontSize: 11,
+                                  color: const Color(0xFFA0AEC0),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Switch(
+                          value: _selfPatient?.isCardiacPostSurgery ?? false,
+                          onChanged: (val) async {
+                            if (_selfPatient != null) {
+                              final updated = Dependent(
+                                id: _selfPatient!.id,
+                                name: _selfPatient!.name,
+                                relation: _selfPatient!.relation,
+                                age: _selfPatient!.age,
+                                gender: _selfPatient!.gender,
+                                profilePhoto: _selfPatient!.profilePhoto,
+                                isCardiacPostSurgery: val,
+                                createdAt: _selfPatient!.createdAt,
+                              );
+                              await DatabaseHelper.instance.updatePatient(updated);
+                              setSheetState(() {
+                                _selfPatient = updated;
+                              });
+                            }
+                          },
+                          activeColor: const Color(0xFFE85D75),
+                        ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 24),
 
                   // Save button
