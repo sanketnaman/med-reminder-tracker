@@ -13,7 +13,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'premium_screen.dart';
 import 'medicine_icon.dart';
 import 'vitals_screen.dart';
-import 'alarm_screen.dart';
 import 'alarm_service.dart';
 import 'appointments_screen.dart';
 import 'next_medicine_helper.dart';
@@ -77,43 +76,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         _nextMedicine = nextMedicine;
       });
     }
-  }
-
-  void _triggerTestAlarm() {
-    final mockRecord = _todayRecords.isNotEmpty
-        ? _todayRecords.first
-        : DoseRecord(
-            id: 'mock_alarm',
-            medicineId: 'med1',
-            medicineName: 'Metformin',
-            medicineType: 'Capsule',
-            dosage: 1.0,
-            dosageUnit: 'Capsule',
-            mealRelation: 'Before Breakfast',
-            scheduledAt: DateTime.now(),
-            status: 'scheduled',
-            notes: 'Take with warm water',
-          );
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-          'Simulating alarm... Lock screen or background app now. Alarm fires in 5 seconds with system sound!',
-        ),
-        duration: Duration(seconds: 4),
-      ),
-    );
-
-    Future.delayed(const Duration(seconds: 5), () {
-      if (mounted) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AlarmScreen(record: mockRecord),
-          ),
-        ).then((_) => _loadDashboardData());
-      }
-    });
   }
 
   Future<void> _loadDashboardData() async {
@@ -457,6 +419,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               offset: 10,
               child: Row(
               children: [
+                Image.asset(
+                  'assets/images/logo_transparent.png',
+                  width: 40,
+                  height: 40,
+                  errorBuilder: (ctx, e, s) => const Icon(
+                    Icons.medical_services_rounded,
+                    size: 40,
+                    color: Color(0xFF5B8DEF),
+                  ),
+                ),
+                const SizedBox(width: 12),
                 Flexible(
                   child: GestureDetector(
                     onTap: _showPatientSwitcher,
@@ -505,38 +478,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
                 Row(
                   children: [
-                    GestureDetector(
-                      onTap: _triggerTestAlarm,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFE85D75).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.alarm_on,
-                              color: Color(0xFFE85D75),
-                              size: 16,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              'Test Alarm',
-                              style: GoogleFonts.inter(
-                                fontSize: 12,
-                                color: const Color(0xFFE85D75),
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
                     GestureDetector(
                       onTap: _showNotificationPanel,
                       child: Container(

@@ -18,6 +18,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
   Map<String, VitalReading> _latestVitals = {};
   Map<String, List<VitalReading>> _groupedReadings = {};
   bool _isLoading = true;
+  bool _isCardiacPostSurgery = false;
 
   @override
   void initState() {
@@ -37,9 +38,15 @@ class _VitalsScreenState extends State<VitalsScreen> {
       grouped.putIfAbsent(dateKey, () => []).add(r);
     }
 
+    final patients = await DatabaseHelper.instance.getPatients();
+    final patient = patients.where((p) => p.id == widget.patientId).isNotEmpty
+        ? patients.firstWhere((p) => p.id == widget.patientId)
+        : null;
+
     setState(() {
       _latestVitals = latest;
       _groupedReadings = grouped;
+      _isCardiacPostSurgery = patient?.isCardiacPostSurgery ?? false;
       _isLoading = false;
     });
   }
@@ -96,16 +103,31 @@ class _VitalsScreenState extends State<VitalsScreen> {
   Widget _buildSummarySection() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-      child: Column(
+          child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Today's Vitals",
-            style: GoogleFonts.inter(
-              fontSize: 20,
-              fontWeight: FontWeight.w800,
-              color: const Color(0xFF202733),
-            ),
+          Row(
+            children: [
+              Image.asset(
+                'assets/images/logo_transparent.png',
+                width: 28,
+                height: 28,
+                errorBuilder: (ctx, e, s) => const Icon(
+                  Icons.medical_services_rounded,
+                  size: 28,
+                  color: Color(0xFF5B8DEF),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                "Today's Vitals",
+                style: GoogleFonts.inter(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  color: const Color(0xFF202733),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 4),
           Text(
@@ -163,6 +185,34 @@ class _VitalsScreenState extends State<VitalsScreen> {
               ),
             ],
           ),
+          if (_isCardiacPostSurgery) ...[
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildVitalCard(
+                    'Spirometer',
+                    _latestVitals['spirometer']?.displayValue ?? '--',
+                    'L',
+                    const Color(0xFF35B779),
+                    null,
+                    fallbackIcon: Icons.air,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildVitalCard(
+                    'Walk Test',
+                    _latestVitals['walk']?.displayValue ?? '--',
+                    'steps',
+                    const Color(0xFF9B59B6),
+                    null,
+                    fallbackIcon: Icons.directions_walk,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ],
       ),
     );
@@ -173,8 +223,9 @@ class _VitalsScreenState extends State<VitalsScreen> {
     String value,
     String unit,
     Color color,
-    String svgAssetPath, {
+    String? svgAssetPath, {
     bool fullWidth = false,
+    IconData? fallbackIcon,
   }) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -195,11 +246,18 @@ class _VitalsScreenState extends State<VitalsScreen> {
           Row(
             mainAxisAlignment: fullWidth ? MainAxisAlignment.start : MainAxisAlignment.center,
             children: [
-              SvgPicture.asset(
-                svgAssetPath,
-                width: 44,
-                height: 44,
-              ),
+              if (svgAssetPath != null)
+                SvgPicture.asset(
+                  svgAssetPath,
+                  width: 44,
+                  height: 44,
+                )
+              else
+                Icon(
+                  fallbackIcon ?? Icons.medical_information,
+                  size: 44,
+                  color: color,
+                ),
               if (fullWidth) ...[
                 const SizedBox(width: 12),
                 Text(
@@ -343,7 +401,8 @@ class _VitalsScreenState extends State<VitalsScreen> {
 
   Widget _buildReadingTile(VitalReading reading) {
     Color color;
-    String svgAssetPath;
+    String? svgAssetPath;
+    IconData? fallbackIcon;
     switch (reading.type) {
       case 'blood_pressure':
         color = const Color(0xFFE85D75);
@@ -360,6 +419,14 @@ class _VitalsScreenState extends State<VitalsScreen> {
       case 'spo2':
         color = const Color(0xFF20C9D8);
         svgAssetPath = 'assets/icons/spo2.svg';
+        break;
+      case 'spirometer':
+        color = const Color(0xFF35B779);
+        fallbackIcon = Icons.air;
+        break;
+      case 'walk':
+        color = const Color(0xFF9B59B6);
+        fallbackIcon = Icons.directions_walk;
         break;
       default:
         color = const Color(0xFF718096);
@@ -382,10 +449,17 @@ class _VitalsScreenState extends State<VitalsScreen> {
       ),
       child: Row(
         children: [
+          if (svgAssetPath != null)
             SvgPicture.asset(
               svgAssetPath,
               width: 32,
               height: 32,
+            )
+          else
+            Icon(
+              fallbackIcon ?? Icons.medical_information,
+              size: 32,
+              color: color,
             ),
           const SizedBox(width: 14),
           Expanded(
@@ -460,11 +534,14 @@ class _VitalsScreenState extends State<VitalsScreen> {
 
   void _showAddReadingSheet() {
     String selectedType = 'blood_pressure';
+    String? selectedSugarSubType;
     final systolicController = TextEditingController();
     final diastolicController = TextEditingController();
     final sugarController = TextEditingController();
     final weightController = TextEditingController();
     final spo2Controller = TextEditingController();
+    final spirometerController = TextEditingController();
+    final walkController = TextEditingController();
     final now = DateTime.now();
 
     showModalBottomSheet(
@@ -517,12 +594,15 @@ class _VitalsScreenState extends State<VitalsScreen> {
                       const SizedBox(height: 12),
                       Row(
                         children: [
-                          _buildTypeChip('Blood Pressure', 'blood_pressure', selectedType, (val) {
+                          _buildTypeChip('BP', 'blood_pressure', selectedType, (val) {
                             setSheetState(() => selectedType = val);
                           }),
                           const SizedBox(width: 8),
-                          _buildTypeChip('Blood Sugar', 'blood_sugar', selectedType, (val) {
-                            setSheetState(() => selectedType = val);
+                          _buildTypeChip('Sugar', 'blood_sugar', selectedType, (val) {
+                            setSheetState(() {
+                              selectedType = val;
+                              selectedSugarSubType = null;
+                            });
                           }),
                           const SizedBox(width: 8),
                           _buildTypeChip('Weight', 'weight', selectedType, (val) {
@@ -534,6 +614,20 @@ class _VitalsScreenState extends State<VitalsScreen> {
                           }),
                         ],
                       ),
+                      if (_isCardiacPostSurgery) ...[
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            _buildTypeChip('Spirometer', 'spirometer', selectedType, (val) {
+                              setSheetState(() => selectedType = val);
+                            }),
+                            const SizedBox(width: 8),
+                            _buildTypeChip('Walk Test', 'walk', selectedType, (val) {
+                              setSheetState(() => selectedType = val);
+                            }),
+                          ],
+                        ),
+                      ],
                       const SizedBox(height: 24),
                       // Date & Time (auto-filled)
                       Container(
@@ -595,6 +689,27 @@ class _VitalsScreenState extends State<VitalsScreen> {
                       ],
                       if (selectedType == 'blood_sugar') ...[
                         Text(
+                          'When?',
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: const Color(0xFF202733),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            _buildTypeChip('Before Meal', 'before_meal', selectedSugarSubType ?? '', (val) {
+                              setSheetState(() => selectedSugarSubType = val);
+                            }),
+                            const SizedBox(width: 8),
+                            _buildTypeChip('After Meal', 'after_meal', selectedSugarSubType ?? '', (val) {
+                              setSheetState(() => selectedSugarSubType = val);
+                            }),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
                           'Blood Sugar (mg/dL)',
                           style: GoogleFonts.inter(
                             fontSize: 14,
@@ -629,17 +744,44 @@ class _VitalsScreenState extends State<VitalsScreen> {
                         const SizedBox(height: 8),
                         _buildInputField(spo2Controller, 'e.g. 98', TextInputType.number),
                       ],
+                      if (selectedType == 'spirometer') ...[
+                        Text(
+                          'Spirometer Reading (L)',
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: const Color(0xFF202733),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        _buildInputField(spirometerController, 'e.g. 2.5', TextInputType.number),
+                      ],
+                      if (selectedType == 'walk') ...[
+                        Text(
+                          'Walk Test (steps)',
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: const Color(0xFF202733),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        _buildInputField(walkController, 'e.g. 500', TextInputType.number),
+                      ],
                       const SizedBox(height: 24),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () => _saveReading(
                             selectedType,
+                            selectedSugarSubType,
                             systolicController,
                             diastolicController,
                             sugarController,
                             weightController,
                             spo2Controller,
+                            spirometerController,
+                            walkController,
                             now,
                           ),
                           style: ElevatedButton.styleFrom(
@@ -748,15 +890,19 @@ class _VitalsScreenState extends State<VitalsScreen> {
 
   void _saveReading(
     String type,
+    String? sugarSubType,
     TextEditingController systolicCtrl,
     TextEditingController diastolicCtrl,
     TextEditingController sugarCtrl,
     TextEditingController weightCtrl,
     TextEditingController spo2Ctrl,
+    TextEditingController spirometerCtrl,
+    TextEditingController walkCtrl,
     DateTime now,
   ) {
     double? systolic, diastolic, value;
     String unit;
+    String? subType;
 
     switch (type) {
       case 'blood_pressure':
@@ -775,6 +921,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
           return;
         }
         unit = 'mg/dL';
+        subType = sugarSubType;
         break;
       case 'weight':
         value = double.tryParse(weightCtrl.text);
@@ -792,6 +939,22 @@ class _VitalsScreenState extends State<VitalsScreen> {
         }
         unit = '%';
         break;
+      case 'spirometer':
+        value = double.tryParse(spirometerCtrl.text);
+        if (value == null) {
+          _showError('Please enter a Spirometer value');
+          return;
+        }
+        unit = 'L';
+        break;
+      case 'walk':
+        value = double.tryParse(walkCtrl.text);
+        if (value == null) {
+          _showError('Please enter a Walk Test value');
+          return;
+        }
+        unit = 'steps';
+        break;
       default:
         return;
     }
@@ -800,6 +963,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
       id: '${type}_${now.millisecondsSinceEpoch}',
       patientId: widget.patientId,
       type: type,
+      subType: subType,
       systolic: systolic,
       diastolic: diastolic,
       value: value,

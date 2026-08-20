@@ -766,28 +766,17 @@ child: Column(
         children: [
           Row(
             children: [
-              Container(
-                decoration: BoxDecoration(
+              Image.asset(
+                'assets/images/logo_transparent.png',
+                width: 28,
+                height: 28,
+                errorBuilder: (ctx, e, s) => const Icon(
+                  Icons.medical_services_rounded,
+                  size: 28,
                   color: Colors.white,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.03),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios_new,
-                    size: 16,
-                    color: Color(0xFF5B8DEF),
-                  ),
-                  onPressed: () {},
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 10),
               Text(
                 'My Profile',
                 style: GoogleFonts.inter(

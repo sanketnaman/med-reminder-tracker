@@ -85,11 +85,17 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
         children: [
           Row(
             children: [
-              IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+              Image.asset(
+                'assets/images/logo_transparent.png',
+                width: 28,
+                height: 28,
+                errorBuilder: (ctx, e, s) => const Icon(
+                  Icons.medical_services_rounded,
+                  size: 28,
+                  color: Color(0xFF5B8DEF),
+                ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 10),
               Text(
                 'Doctor Appointments',
                 style: GoogleFonts.inter(

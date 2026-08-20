@@ -18,6 +18,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
   late TextEditingController _ageController;
   String _selectedRelation = 'Father';
   String _selectedGender = 'Male';
+  bool _isCardiacPostSurgery = false;
   bool _isLoading = false;
 
   static const List<String> _relations = [
@@ -36,6 +37,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
     if (dep != null) {
       _selectedRelation = dep.relation;
       _selectedGender = dep.gender.isNotEmpty ? dep.gender : 'Male';
+      _isCardiacPostSurgery = dep.isCardiacPostSurgery;
     }
   }
 
@@ -71,6 +73,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
       relation: _selectedRelation,
       age: age,
       gender: _selectedGender,
+      isCardiacPostSurgery: _isCardiacPostSurgery,
       createdAt: isEdit
           ? widget.dependentToEdit!.createdAt
           : DateTime.now(),
@@ -296,6 +299,33 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(height: 32),
+
+                // Cardiac Post-Surgery question
+                _buildLabel('Cardiac Post-Surgery Patient?'),
+                _buildCard(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'This enables Spirometer and Walk Test vitals',
+                            style: GoogleFonts.inter(
+                              fontSize: 12,
+                              color: const Color(0xFF718096),
+                            ),
+                          ),
+                        ),
+                        Switch(
+                          value: _isCardiacPostSurgery,
+                          onChanged: (val) => setState(() => _isCardiacPostSurgery = val),
+                          activeColor: const Color(0xFFE85D75),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 32),
 

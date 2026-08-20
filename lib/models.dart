@@ -190,6 +190,7 @@ class Dependent {
   final int age;
   final String gender;
   final String profilePhoto;
+  final bool isCardiacPostSurgery;
   final DateTime createdAt;
 
   const Dependent({
@@ -199,6 +200,7 @@ class Dependent {
     this.age = 0,
     this.gender = '',
     this.profilePhoto = '',
+    this.isCardiacPostSurgery = false,
     required this.createdAt,
   });
 
@@ -239,6 +241,7 @@ class Dependent {
     'age': age,
     'gender': gender,
     'profilePhoto': profilePhoto,
+    'isCardiacPostSurgery': isCardiacPostSurgery,
     'createdAt': createdAt.toIso8601String(),
   };
 
@@ -249,6 +252,7 @@ class Dependent {
     age: map['age'] ?? 0,
     gender: map['gender'] ?? '',
     profilePhoto: map['profilePhoto'] ?? '',
+    isCardiacPostSurgery: map['isCardiacPostSurgery'] ?? false,
     createdAt: DateTime.tryParse(map['createdAt'] ?? '') ?? DateTime.now(),
   );
 }
@@ -370,11 +374,12 @@ class UserSettings {
 class VitalReading {
   final String id;
   final String patientId;
-  final String type; // 'blood_pressure', 'blood_sugar', 'weight'
+  final String type;
+  final String? subType; // 'before_meal' or 'after_meal' for blood_sugar
   final double? systolic;
   final double? diastolic;
   final double? value;
-  final String unit; // 'mmHg', 'mg/dL', 'kg'
+  final String unit;
   final DateTime recordedAt;
   final String? notes;
 
@@ -382,6 +387,7 @@ class VitalReading {
     required this.id,
     this.patientId = 'default_patient',
     required this.type,
+    this.subType,
     this.systolic,
     this.diastolic,
     this.value,
@@ -395,6 +401,7 @@ class VitalReading {
       'id': id,
       'patientId': patientId,
       'type': type,
+      'subType': subType,
       'systolic': systolic,
       'diastolic': diastolic,
       'value': value,
@@ -409,6 +416,7 @@ class VitalReading {
       id: map['id'] ?? '',
       patientId: map['patientId'] ?? 'default_patient',
       type: map['type'] ?? '',
+      subType: map['subType'],
       systolic: (map['systolic'] as num?)?.toDouble(),
       diastolic: (map['diastolic'] as num?)?.toDouble(),
       value: (map['value'] as num?)?.toDouble(),
@@ -433,6 +441,10 @@ class VitalReading {
         return '${value?.toStringAsFixed(1) ?? '0'}';
       case 'spo2':
         return '${value?.toInt() ?? 0}';
+      case 'spirometer':
+        return '${value?.toStringAsFixed(1) ?? '0'}';
+      case 'walk':
+        return '${value?.toInt() ?? 0}';
       default:
         return '';
     }
@@ -443,11 +455,16 @@ class VitalReading {
       case 'blood_pressure':
         return 'Blood Pressure';
       case 'blood_sugar':
-        return 'Blood Sugar';
+        final label = subType == 'after_meal' ? ' (After Meal)' : subType == 'before_meal' ? ' (Before Meal)' : '';
+        return 'Blood Sugar$label';
       case 'weight':
         return 'Weight';
       case 'spo2':
         return 'SPO2';
+      case 'spirometer':
+        return 'Spirometer';
+      case 'walk':
+        return 'Walk Test';
       default:
         return '';
     }

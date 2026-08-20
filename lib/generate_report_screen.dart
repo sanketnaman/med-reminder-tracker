@@ -59,13 +59,27 @@ class _GenerateReportScreenState extends State<GenerateReportScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: Color(0xFF202733)),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          'Generate Health Report',
-          style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w700, color: const Color(0xFF202733)),
+        leadingWidth: 16,
+        leading: const SizedBox.shrink(),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/images/logo_transparent.png',
+              width: 24,
+              height: 24,
+              errorBuilder: (ctx, e, s) => const Icon(
+                Icons.medical_services_rounded,
+                size: 24,
+                color: Color(0xFF5B8DEF),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              'Generate Health Report',
+              style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w700, color: const Color(0xFF202733)),
+            ),
+          ],
         ),
         centerTitle: true,
       ),

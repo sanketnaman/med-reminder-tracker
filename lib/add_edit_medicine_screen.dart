@@ -391,35 +391,31 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: Container(
-          margin: const EdgeInsets.only(left: 16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.03),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+        leadingWidth: 16,
+        leading: const SizedBox.shrink(),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/images/logo_transparent.png',
+              width: 24,
+              height: 24,
+              errorBuilder: (ctx, e, s) => const Icon(
+                Icons.medical_services_rounded,
+                size: 24,
+                color: Color(0xFF5B8DEF),
               ),
-            ],
-          ),
-          child: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios_new,
-              size: 16,
-              color: Color(0xFF202733),
             ),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ),
-        title: Text(
-          isEdit ? 'Edit Medicine' : 'Add Medicine',
-          style: GoogleFonts.inter(
-            color: const Color(0xFF202733),
-            fontWeight: FontWeight.w800,
-            fontSize: 20,
-          ),
+            const SizedBox(width: 8),
+            Text(
+              isEdit ? 'Edit Medicine' : 'Add Medicine',
+              style: GoogleFonts.inter(
+                color: const Color(0xFF202733),
+                fontWeight: FontWeight.w800,
+                fontSize: 20,
+              ),
+            ),
+          ],
         ),
       ),
       body: SafeArea(

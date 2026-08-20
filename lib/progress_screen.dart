@@ -93,28 +93,17 @@ class _ProgressScreenState extends State<ProgressScreen> {
               ),
               child: Row(
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.03),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.arrow_back_ios_new,
-                        size: 16,
-                        color: Color(0xFF202733),
-                      ),
-                      onPressed: () {},
+                  Image.asset(
+                    'assets/images/logo_transparent.png',
+                    width: 28,
+                    height: 28,
+                    errorBuilder: (ctx, e, s) => const Icon(
+                      Icons.medical_services_rounded,
+                      size: 28,
+                      color: Color(0xFF5B8DEF),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 10),
                   Text(
                     'Your Progress',
                     style: GoogleFonts.inter(
