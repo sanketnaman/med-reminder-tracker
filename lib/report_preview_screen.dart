@@ -6,6 +6,7 @@ import 'package:printing/printing.dart';
 import 'database_helper.dart';
 import 'models.dart';
 import 'pdf_report_generator.dart';
+import 'app_theme.dart';
 
 class ReportPreviewScreen extends StatefulWidget {
   final String patientId;
@@ -100,17 +101,17 @@ class _ReportPreviewScreenState extends State<ReportPreviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F6FF),
+      backgroundColor: AppTheme.bg,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppTheme.cardBg,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: Color(0xFF202733)),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: AppTheme.textPrimary),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           'Health Report',
-          style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w700, color: const Color(0xFF202733)),
+          style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w700, color: AppTheme.textPrimary),
         ),
         centerTitle: true,
       ),
@@ -217,7 +218,7 @@ class _ReportPreviewScreenState extends State<ReportPreviewScreen> {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 8, offset: const Offset(0, 2))],
       ),
@@ -237,10 +238,10 @@ class _ReportPreviewScreenState extends State<ReportPreviewScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: GoogleFonts.inter(fontSize: 13, color: const Color(0xFF718096))),
+                Text(title, style: GoogleFonts.inter(fontSize: 13, color: AppTheme.textSecondary)),
                 const SizedBox(height: 2),
-                Text(value, style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: const Color(0xFF202733))),
-                Text(subtitle, style: GoogleFonts.inter(fontSize: 11, color: const Color(0xFF718096))),
+                Text(value, style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: AppTheme.textPrimary)),
+                Text(subtitle, style: GoogleFonts.inter(fontSize: 11, color: AppTheme.textSecondary)),
               ],
             ),
           ),
@@ -256,7 +257,7 @@ class _ReportPreviewScreenState extends State<ReportPreviewScreen> {
         bottom: MediaQuery.of(context).padding.bottom + 16,
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -4))],
       ),
       child: SizedBox(
@@ -311,7 +312,7 @@ class _ReportPreviewScreenState extends State<ReportPreviewScreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
-                child: Text('Close', style: GoogleFonts.inter(color: const Color(0xFF718096))),
+                child: Text('Close', style: GoogleFonts.inter(color: AppTheme.textSecondary)),
               ),
               ElevatedButton.icon(
                 onPressed: () async {

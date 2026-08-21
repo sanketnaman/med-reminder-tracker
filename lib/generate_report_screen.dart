@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'database_helper.dart';
 import 'models.dart';
 import 'report_preview_screen.dart';
+import 'app_theme.dart';
 
 class GenerateReportScreen extends StatefulWidget {
   const GenerateReportScreen({super.key});
@@ -55,9 +56,9 @@ class _GenerateReportScreenState extends State<GenerateReportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F6FF),
+      backgroundColor: AppTheme.bg,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppTheme.cardBg,
         elevation: 0,
         leadingWidth: 16,
         leading: const SizedBox.shrink(),
@@ -77,7 +78,7 @@ class _GenerateReportScreenState extends State<GenerateReportScreen> {
             const SizedBox(width: 8),
             Text(
               'Generate Health Report',
-              style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w700, color: const Color(0xFF202733)),
+              style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w700, color: AppTheme.textPrimary),
             ),
           ],
         ),
@@ -113,8 +114,8 @@ class _GenerateReportScreenState extends State<GenerateReportScreen> {
           onChanged: (v) => setState(() => _selectedPatientId = v),
           activeColor: const Color(0xFF5B8DEF),
           contentPadding: EdgeInsets.zero,
-          title: Text(p.name, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: const Color(0xFF202733))),
-          subtitle: Text(p.relationLabel, style: GoogleFonts.inter(fontSize: 12, color: const Color(0xFF718096))),
+          title: Text(p.name, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
+          subtitle: Text(p.relationLabel, style: GoogleFonts.inter(fontSize: 12, color: AppTheme.textSecondary)),
         )).toList(),
       ),
     );
@@ -162,10 +163,10 @@ class _GenerateReportScreenState extends State<GenerateReportScreen> {
         margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF5B8DEF).withOpacity(0.06) : Colors.white,
+          color: isSelected ? const Color(0xFF5B8DEF).withOpacity(0.06) : AppTheme.cardBg,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: isSelected ? const Color(0xFF5B8DEF) : const Color(0xFFE2E8F0),
+            color: isSelected ? const Color(0xFF5B8DEF) : AppTheme.divider,
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -185,7 +186,7 @@ class _GenerateReportScreenState extends State<GenerateReportScreen> {
               child: isSelected ? const Icon(Icons.check, size: 12, color: Colors.white) : null,
             ),
             const SizedBox(width: 12),
-            Text(label, style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: const Color(0xFF202733))),
+            Text(label, style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
           ],
         ),
       ),
@@ -210,18 +211,18 @@ class _GenerateReportScreenState extends State<GenerateReportScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.cardBg,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: const Color(0xFFE2E8F0)),
+          border: Border.all(color: AppTheme.divider),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(label, style: GoogleFonts.inter(fontSize: 11, color: const Color(0xFF718096))),
+            Text(label, style: GoogleFonts.inter(fontSize: 11, color: AppTheme.textSecondary)),
             const SizedBox(height: 4),
             Text(
               date != null ? DateFormat('dd/MM/yyyy').format(date) : 'Select',
-              style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: const Color(0xFF202733)),
+              style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textPrimary),
             ),
           ],
         ),
@@ -249,7 +250,7 @@ class _GenerateReportScreenState extends State<GenerateReportScreen> {
       onChanged: onChanged,
       activeColor: const Color(0xFF5B8DEF),
       contentPadding: EdgeInsets.zero,
-      title: Text(label, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: const Color(0xFF202733))),
+      title: Text(label, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
     );
   }
 
@@ -258,14 +259,14 @@ class _GenerateReportScreenState extends State<GenerateReportScreen> {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 8, offset: const Offset(0, 2))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: const Color(0xFF202733))),
+          Text(title, style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: AppTheme.textPrimary)),
           const SizedBox(height: 12),
           child,
         ],

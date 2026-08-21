@@ -10,6 +10,7 @@ import 'add_dependent_screen.dart';
 import 'premium_screen.dart';
 import 'health_report_screen.dart';
 import 'animation_utils.dart';
+import 'app_theme.dart';
 import 'main.dart';
 
 class ProfileScreen extends StatefulWidget {

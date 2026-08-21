@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'database_helper.dart';
 import 'animation_utils.dart';
+import 'app_theme.dart';
 
 class PremiumScreen extends StatefulWidget {
   const PremiumScreen({super.key});
@@ -48,7 +49,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F6FF),
+      backgroundColor: AppTheme.bg,
       body: SafeArea(
         child: Column(
           children: [
@@ -93,7 +94,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppTheme.cardBg,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
@@ -103,10 +104,10 @@ class _PremiumScreenState extends State<PremiumScreen> {
                   ),
                 ],
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.arrow_back_ios_new_rounded,
                 size: 18,
-                color: Color(0xFF202733),
+                color: AppTheme.textPrimary,
               ),
             ),
           ),
@@ -221,7 +222,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -256,7 +257,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                   style: GoogleFonts.inter(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF202733),
+                    color: AppTheme.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -264,7 +265,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                   'Active — All features unlocked',
                   style: GoogleFonts.inter(
                     fontSize: 13,
-                    color: const Color(0xFF718096),
+                    color: AppTheme.textSecondary,
                   ),
                 ),
               ],
@@ -329,7 +330,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
             style: GoogleFonts.inter(
               fontSize: 18,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF202733),
+              color: AppTheme.textPrimary,
             ),
           ),
           const SizedBox(height: 14),
@@ -353,7 +354,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.cardBg,
           borderRadius: BorderRadius.circular(14),
           boxShadow: [
             BoxShadow(
@@ -390,7 +391,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     style: GoogleFonts.inter(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF202733),
+                      color: AppTheme.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -398,7 +399,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     desc,
                     style: GoogleFonts.inter(
                       fontSize: 12,
-                      color: const Color(0xFF718096),
+                      color: AppTheme.textSecondary,
                       height: 1.3,
                     ),
                   ),
@@ -422,7 +423,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
             style: GoogleFonts.inter(
               fontSize: 18,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF202733),
+              color: AppTheme.textPrimary,
             ),
           ),
           const SizedBox(height: 14),
@@ -469,10 +470,10 @@ class _PremiumScreenState extends State<PremiumScreen> {
         width: double.infinity,
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF5B8DEF).withOpacity(0.04) : Colors.white,
+          color: isSelected ? const Color(0xFF5B8DEF).withOpacity(0.04) : AppTheme.cardBg,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: isSelected ? const Color(0xFF5B8DEF) : const Color(0xFFE2E8F0),
+            color: isSelected ? const Color(0xFF5B8DEF) : AppTheme.divider,
             width: isSelected ? 2 : 1,
           ),
           boxShadow: [
@@ -515,7 +516,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                           fontSize: 13,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1,
-                          color: const Color(0xFF202733),
+                          color: AppTheme.textPrimary,
                         ),
                       ),
                       if (badge != null) ...[
@@ -548,7 +549,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                           style: GoogleFonts.inter(
                             fontSize: 22,
                             fontWeight: FontWeight.w800,
-                            color: const Color(0xFF202733),
+                            color: AppTheme.textPrimary,
                           ),
                         ),
                         TextSpan(
@@ -556,7 +557,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                           style: GoogleFonts.inter(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
-                            color: const Color(0xFF718096),
+                            color: AppTheme.textSecondary,
                           ),
                         ),
                       ],
@@ -568,7 +569,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                       subtext,
                       style: GoogleFonts.inter(
                         fontSize: 12,
-                        color: const Color(0xFF718096),
+                        color: AppTheme.textSecondary,
                       ),
                     ),
                   ],
@@ -607,7 +608,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
             textAlign: TextAlign.center,
             style: GoogleFonts.inter(
               fontSize: 12,
-              color: const Color(0xFF718096),
+              color: AppTheme.textSecondary,
               height: 1.5,
             ),
           ),
@@ -630,7 +631,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                 '  ·  ',
                 style: GoogleFonts.inter(
                   fontSize: 11,
-                  color: const Color(0xFF718096),
+                  color: AppTheme.textSecondary,
                 ),
               ),
               GestureDetector(
@@ -652,7 +653,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
             textAlign: TextAlign.center,
             style: GoogleFonts.inter(
               fontSize: 10,
-              color: const Color(0xFFA0AEC0),
+              color: AppTheme.textMuted,
               height: 1.4,
             ),
           ),
@@ -670,7 +671,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
         bottom: MediaQuery.of(context).padding.bottom + 16,
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -742,7 +743,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               style: GoogleFonts.inter(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
-                color: const Color(0xFF718096),
+                color: AppTheme.textSecondary,
               ),
             ),
           ),

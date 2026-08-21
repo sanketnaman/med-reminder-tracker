@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'database_helper.dart';
 import 'premium_screen.dart';
 import 'generate_report_screen.dart';
+import 'app_theme.dart';
 import 'animation_utils.dart';
 
 class HealthReportScreen extends StatefulWidget {
@@ -52,9 +53,9 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F6FF),
+      backgroundColor: AppTheme.bg,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppTheme.cardBg,
         elevation: 0,
         leadingWidth: 16,
         leading: const SizedBox.shrink(),
@@ -74,7 +75,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
             const SizedBox(width: 8),
             Text(
               'Health Reports',
-              style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w700, color: const Color(0xFF202733)),
+              style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w700, color: AppTheme.textPrimary),
             ),
           ],
         ),
@@ -107,7 +108,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
                 const SizedBox(height: 20),
                 Text(
                   'Health Reports',
-                  style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: const Color(0xFF202733)),
+                  style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: AppTheme.textPrimary),
                 ),
                 const SizedBox(height: 4),
                 Container(
@@ -125,7 +126,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
                 Text(
                   'Generate doctor-ready reports from your medication and vitals history.',
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.inter(fontSize: 14, color: const Color(0xFF718096), height: 1.5),
+                  style: GoogleFonts.inter(fontSize: 14, color: AppTheme.textSecondary, height: 1.5),
                 ),
               ],
             ),
@@ -201,13 +202,13 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
               const SizedBox(height: 16),
               Text(
                 'No reports yet',
-                style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: const Color(0xFF202733)),
+                style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: AppTheme.textPrimary),
               ),
               const SizedBox(height: 6),
               Text(
                 'Generate your first health report to share with your doctor.',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.inter(fontSize: 13, color: const Color(0xFF718096)),
+                style: GoogleFonts.inter(fontSize: 13, color: AppTheme.textSecondary),
               ),
             ],
           ),
@@ -253,7 +254,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 8, offset: const Offset(0, 2))],
       ),
@@ -273,9 +274,9 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(profileName, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: const Color(0xFF202733))),
+                Text(profileName, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: AppTheme.textPrimary)),
                 if (dateRange.isNotEmpty)
-                  Text(dateRange, style: GoogleFonts.inter(fontSize: 12, color: const Color(0xFF718096))),
+                  Text(dateRange, style: GoogleFonts.inter(fontSize: 12, color: AppTheme.textSecondary)),
               ],
             ),
           ),
