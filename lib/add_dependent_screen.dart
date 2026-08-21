@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'app_theme.dart';
 import 'database_helper.dart';
 import 'models.dart';
 import 'premium_screen.dart';
@@ -103,14 +104,14 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
     final isEdit = widget.dependentToEdit != null;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F6FF),
+      backgroundColor: AppTheme.bg,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: Container(
           margin: const EdgeInsets.only(left: 16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppTheme.cardBg,
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
@@ -121,10 +122,10 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
             ],
           ),
           child: IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_back_ios_new,
               size: 16,
-              color: Color(0xFF202733),
+              color: AppTheme.textPrimary,
             ),
             onPressed: () => Navigator.pop(context),
           ),
@@ -132,7 +133,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
         title: Text(
           isEdit ? AppLocalizations.of(context)!.editDependentTitle : AppLocalizations.of(context)!.addDependentTitle,
           style: GoogleFonts.inter(
-            color: const Color(0xFF202733),
+            color: AppTheme.textPrimary,
             fontWeight: FontWeight.w800,
             fontSize: 20,
           ),
@@ -152,7 +153,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
                     width: 100,
                     height: 100,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppTheme.cardBg,
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
@@ -184,14 +185,14 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
                   TextFormField(
                     controller: _nameController,
                     textCapitalization: TextCapitalization.words,
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF202733),
-                    ),
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.textPrimary,
+                        ),
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.enterNameHint,
                       hintStyle: GoogleFonts.inter(
-                        color: const Color(0xFF718096).withValues(alpha: 0.6),
+                        color: AppTheme.textSecondary.withValues(alpha: 0.6),
                       ),
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(
@@ -213,14 +214,14 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
                   DropdownButtonFormField<String>(
                     initialValue: _selectedRelation,
                     isExpanded: true,
-                    dropdownColor: Colors.white,
-                    icon: const Icon(
+                    dropdownColor: AppTheme.cardBg,
+                    icon: Icon(
                       Icons.keyboard_arrow_down_rounded,
-                      color: Color(0xFF718096),
+                      color: AppTheme.textSecondary,
                     ),
                     style: GoogleFonts.inter(
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF202733),
+                      color: AppTheme.textPrimary,
                     ),
                     decoration: const InputDecoration(
                       border: InputBorder.none,
@@ -253,7 +254,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
                               keyboardType: TextInputType.number,
                               style: GoogleFonts.inter(
                                 fontWeight: FontWeight.w600,
-                                color: const Color(0xFF202733),
+                                color: AppTheme.textPrimary,
                               ),
                               textAlign: TextAlign.center,
                               decoration: const InputDecoration(
@@ -275,14 +276,14 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
                             DropdownButtonFormField<String>(
                               initialValue: _selectedGender,
                               isExpanded: true,
-                              dropdownColor: Colors.white,
-                              icon: const Icon(
+                              dropdownColor: AppTheme.cardBg,
+                              icon: Icon(
                                 Icons.keyboard_arrow_down_rounded,
-                                color: Color(0xFF718096),
+                                color: AppTheme.textSecondary,
                               ),
                               style: GoogleFonts.inter(
                                 fontWeight: FontWeight.w600,
-                                color: const Color(0xFF202733),
+                                color: AppTheme.textPrimary,
                               ),
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -315,7 +316,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
                             AppLocalizations.of(context)!.cardiacDesc,
                             style: GoogleFonts.inter(
                               fontSize: 12,
-                              color: const Color(0xFF718096),
+                              color: AppTheme.textSecondary,
                             ),
                           ),
                         ),
@@ -378,7 +379,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
         style: GoogleFonts.inter(
           fontSize: 14,
           fontWeight: FontWeight.w700,
-          color: const Color(0xFF718096),
+          color: AppTheme.textSecondary,
         ),
       ),
     );
@@ -412,7 +413,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
   Widget _buildCard(Widget child) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
