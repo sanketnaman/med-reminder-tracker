@@ -6,6 +6,7 @@ import 'models.dart';
 import 'today_plan_screen.dart';
 import 'add_edit_medicine_screen.dart';
 import 'animation_utils.dart';
+import 'medicine_icon.dart';
 
 class ProgressScreen extends StatefulWidget {
   final String patientId;
@@ -411,13 +412,22 @@ class _ProgressScreenState extends State<ProgressScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                medName,
-                style: GoogleFonts.inter(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: AppTheme.textPrimary,
-                ),
+              Row(
+                children: [
+                  MedicineIcon(
+                    medicineType: list.first.medicineType,
+                    size: 32,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    medName,
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.textPrimary,
+                    ),
+                  ),
+                ],
               ),
               Text(
                 '$completion% Complete',
