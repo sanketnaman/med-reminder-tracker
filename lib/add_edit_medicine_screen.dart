@@ -9,6 +9,7 @@ import 'medicine_icon.dart';
 import 'medicine_catalog_service.dart';
 import 'premium_screen.dart';
 import 'l10n/generated/app_localizations.dart';
+import 'app_theme.dart';
 
 class AddEditMedicineScreen extends StatefulWidget {
   final Medicine? medicineToEdit;
@@ -388,7 +389,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
     final isEdit = widget.medicineToEdit != null;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F6FF),
+      backgroundColor: AppTheme.bg,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -411,7 +412,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
             Text(
               isEdit ? AppLocalizations.of(context)!.editMedicineTitle : AppLocalizations.of(context)!.addMedicineTitle,
               style: GoogleFonts.inter(
-                color: const Color(0xFF202733),
+                color: AppTheme.textPrimary,
                 fontWeight: FontWeight.w800,
                 fontSize: 20,
               ),
@@ -433,7 +434,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                     width: 110,
                     height: 110,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppTheme.cardBg,
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
@@ -489,12 +490,12 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                         controller: _nameController,
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w600,
-                          color: const Color(0xFF202733),
+                          color: AppTheme.textPrimary,
                         ),
                         decoration: InputDecoration(
                           hintText: AppLocalizations.of(context)!.searchMedicine,
                           hintStyle: GoogleFonts.inter(
-                            color: const Color(0xFF718096).withOpacity(0.6),
+                            color: AppTheme.textSecondary.withOpacity(0.6),
                           ),
                           border: InputBorder.none,
                           contentPadding: const EdgeInsets.symmetric(
@@ -519,7 +520,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                             : null,
                       ),
                       if (_catalogResults.isNotEmpty) ...[
-                        const Divider(height: 1, thickness: 1),
+                        Divider(height: 1, thickness: 1, color: AppTheme.divider),
                         ConstrainedBox(
                           constraints: const BoxConstraints(maxHeight: 240),
                           child: ListView.builder(
@@ -561,7 +562,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                                               style: GoogleFonts.inter(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w700,
-                                                color: const Color(0xFF202733),
+                                                color: AppTheme.textPrimary,
                                               ),
                                             ),
                                             const SizedBox(height: 2),
@@ -569,7 +570,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                                               '${med.strength} • ${med.dosageForm}',
                                               style: GoogleFonts.inter(
                                                 fontSize: 12,
-                                                color: const Color(0xFF718096),
+                                                color: AppTheme.textSecondary,
                                                 fontWeight: FontWeight.w500,
                                               ),
                                             ),
@@ -633,7 +634,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                               keyboardType: TextInputType.number,
                               style: GoogleFonts.inter(
                                 fontWeight: FontWeight.w600,
-                                color: const Color(0xFF202733),
+                                color: AppTheme.textPrimary,
                               ),
                               textAlign: TextAlign.center,
                               decoration: const InputDecoration(
@@ -659,7 +660,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                               keyboardType: TextInputType.number,
                               style: GoogleFonts.inter(
                                 fontWeight: FontWeight.w600,
-                                color: const Color(0xFF202733),
+                                color: AppTheme.textPrimary,
                               ),
                               textAlign: TextAlign.center,
                               decoration: const InputDecoration(
@@ -701,12 +702,12 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                                       DateFormat('dd/MM/yy').format(_startDate),
                                       style: GoogleFonts.inter(
                                         fontWeight: FontWeight.w600,
-                                        color: const Color(0xFF202733),
+                                        color: AppTheme.textPrimary,
                                       ),
                                     ),
-                                    const Icon(
+                                    Icon(
                                       Icons.calendar_month,
-                                      color: Color(0xFF718096),
+                                      color: AppTheme.textSecondary,
                                       size: 18,
                                     ),
                                   ],
@@ -745,12 +746,12 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                                                 : AppLocalizations.of(context)!.select),
                                       style: GoogleFonts.inter(
                                         fontWeight: FontWeight.w600,
-                                        color: const Color(0xFF202733),
+                                        color: AppTheme.textPrimary,
                                       ),
                                     ),
-                                    const Icon(
+                                    Icon(
                                       Icons.calendar_month,
-                                      color: Color(0xFF718096),
+                                      color: AppTheme.textSecondary,
                                       size: 18,
                                     ),
                                   ],
@@ -834,7 +835,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                       child: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppTheme.cardBg,
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
@@ -871,7 +872,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                           decoration: BoxDecoration(
                             color: isSel
                                 ? const Color(0xFF5B8DEF)
-                                : Colors.white,
+                                : AppTheme.cardBg,
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
@@ -887,7 +888,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                               style: GoogleFonts.inter(
                                 color: isSel
                                     ? Colors.white
-                                    : const Color(0xFF718096),
+                                    : AppTheme.textSecondary,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 13,
                               ),
@@ -906,12 +907,12 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                     controller: _notesController,
                     style: GoogleFonts.inter(
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF202733),
+                      color: AppTheme.textPrimary,
                     ),
                     decoration: InputDecoration(
                       hintText: 'e.g., Take with warm water',
                       hintStyle: GoogleFonts.inter(
-                        color: const Color(0xFF718096).withOpacity(0.6),
+                        color: AppTheme.textSecondary.withOpacity(0.6),
                       ),
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(
@@ -988,7 +989,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
         style: GoogleFonts.inter(
           fontSize: 14,
           fontWeight: FontWeight.w700,
-          color: const Color(0xFF718096),
+          color: AppTheme.textSecondary,
         ),
       ),
     );
@@ -997,7 +998,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
   Widget _buildCardContainer(Widget child) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
@@ -1024,12 +1025,12 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
           child: DropdownButton<String>(
             value: value,
             isExpanded: true,
-            icon: const Icon(
+            icon: Icon(
               Icons.keyboard_arrow_down,
-              color: Color(0xFF718096),
+              color: AppTheme.textSecondary,
             ),
             style: GoogleFonts.inter(
-              color: const Color(0xFF202733),
+              color: AppTheme.textPrimary,
               fontSize: 15,
               fontWeight: FontWeight.w600,
             ),
@@ -1067,13 +1068,13 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
           child: DropdownButton<String>(
             value: _selectedType,
             isExpanded: true,
-            icon: const Icon(
+            icon: Icon(
               Icons.keyboard_arrow_down,
-              color: Color(0xFF718096),
+              color: AppTheme.textSecondary,
               size: 20,
             ),
             style: GoogleFonts.inter(
-              color: const Color(0xFF202733),
+              color: AppTheme.textPrimary,
               fontSize: 15,
               fontWeight: FontWeight.w600,
             ),
@@ -1150,7 +1151,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: isSel ? const Color(0xFF5B8DEF) : Colors.white,
+              color: isSel ? const Color(0xFF5B8DEF) : AppTheme.cardBg,
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
@@ -1164,7 +1165,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
               child: Text(
                 weekdays[index],
                 style: GoogleFonts.inter(
-                  color: isSel ? Colors.white : const Color(0xFF718096),
+                  color: isSel ? Colors.white : AppTheme.textSecondary,
                   fontWeight: FontWeight.w800,
                   fontSize: 14,
                 ),
