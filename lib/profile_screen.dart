@@ -80,9 +80,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             24,
             MediaQuery.of(context).viewInsets.bottom + 24,
           ),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          decoration: BoxDecoration(
+            color: AppTheme.cardBg,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
           ),
           child: Form(
             key: formKey,
@@ -124,7 +124,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style: GoogleFonts.inter(
                             fontSize: 20,
                             fontWeight: FontWeight.w800,
-                            color: const Color(0xFF202733),
+                            color: AppTheme.textPrimary,
                           ),
                         ),
                       ],
@@ -138,7 +138,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: GoogleFonts.inter(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF718096),
+                      color: AppTheme.textSecondary,
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -147,13 +147,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: GoogleFonts.inter(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF202733),
+                      color: AppTheme.textPrimary,
                     ),
                     decoration: InputDecoration(
                       hintText: 'Enter your name',
-                      hintStyle: GoogleFonts.inter(color: const Color(0xFFA0AEC0)),
+                      hintStyle: GoogleFonts.inter(color: AppTheme.textMuted),
                       filled: true,
-                      fillColor: const Color(0xFFF3F6FF),
+                      fillColor: AppTheme.chipBg,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -177,7 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: GoogleFonts.inter(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF718096),
+                      color: AppTheme.textSecondary,
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -187,15 +187,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: GoogleFonts.inter(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF202733),
+                      color: AppTheme.textPrimary,
                     ),
                     decoration: InputDecoration(
                       hintText: 'Enter your email',
-                      hintStyle: GoogleFonts.inter(color: const Color(0xFFA0AEC0)),
+                      hintStyle: GoogleFonts.inter(color: AppTheme.textMuted),
                       filled: true,
-                      fillColor: const Color(0xFFF3F6FF),
+                      fillColor: AppTheme.chipBg,
                       prefixIcon: AuthService.currentUser != null
-                          ? const Icon(Icons.lock_outline, size: 18, color: Color(0xFFA0AEC0))
+                          ? Icon(Icons.lock_outline, size: 18, color: AppTheme.textMuted)
                           : null,
                       suffixText: AuthService.currentUser != null ? 'Google' : null,
                       suffixStyle: GoogleFonts.inter(
@@ -231,7 +231,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: GoogleFonts.inter(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF718096),
+                      color: AppTheme.textSecondary,
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -260,7 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 style: GoogleFonts.inter(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
-                                  color: const Color(0xFF202733),
+                                  color: AppTheme.textPrimary,
                                 ),
                               ),
                               const SizedBox(height: 2),
@@ -326,13 +326,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
-                      child: Text(
-                        'Save Changes',
-                        style: GoogleFonts.inter(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
+                    child: Text(
+                      'Preferences',
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.textSecondary,
+                      ),
                       ),
                     ),
                   ),
@@ -367,7 +367,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: GoogleFonts.inter(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF202733),
+                      color: AppTheme.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -438,7 +438,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             style: GoogleFonts.inter(
               fontWeight: FontWeight.w600,
               fontSize: 15,
-              color: const Color(0xFF202733),
+              color: AppTheme.textPrimary,
             ),
           ),
           Switch(
@@ -504,7 +504,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Text(
                 'Are you sure you want to log out? Your progress will be saved.',
                 style: GoogleFonts.inter(
-                  color: Color(0xFF718096),
+                  color: AppTheme.textSecondary,
                 ),
               ),
             ],
@@ -547,7 +547,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final s = _settings!;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F6FF),
+      backgroundColor: AppTheme.bg,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -569,7 +569,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style: GoogleFonts.inter(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF718096),
+                        color: AppTheme.textSecondary,
                       ),
                     ),
                   ),
@@ -612,7 +612,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     offset: 8,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppTheme.cardBg,
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
@@ -639,7 +639,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               style: GoogleFonts.inter(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
-                                color: const Color(0xFF202733),
+                                color: AppTheme.textPrimary,
                               ),
                             ),
                             trailing: Switch(
@@ -668,7 +668,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style: GoogleFonts.inter(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF718096),
+                        color: AppTheme.textSecondary,
                       ),
                     ),
                   ),
@@ -681,7 +681,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       decoration: BoxDecoration(
                         color: _isPremium
                             ? const Color(0xFF5B8DEF).withOpacity(0.1)
-                            : Colors.white,
+                            : AppTheme.cardBg,
                         borderRadius: BorderRadius.circular(16),
                         border: _isPremium
                             ? Border.all(color: const Color(0xFF5B8DEF).withOpacity(0.3))
@@ -709,7 +709,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 child: Icon(
                                   _isPremium ? Icons.workspace_premium : Icons.lock_outline,
-                                  color: _isPremium ? const Color(0xFF5B8DEF) : const Color(0xFF718096),
+                                  color: _isPremium ? const Color(0xFF5B8DEF) : AppTheme.textSecondary,
                                   size: 20,
                                 ),
                               ),
@@ -723,7 +723,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       style: GoogleFonts.inter(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w700,
-                                        color: const Color(0xFF202733),
+                                        color: AppTheme.textPrimary,
                                       ),
                                     ),
                                     const SizedBox(height: 2),
@@ -733,7 +733,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           : '$_medicineCount of ${DatabaseHelper.freeMedicineLimit} medicines used',
                                       style: GoogleFonts.inter(
                                         fontSize: 12,
-                                        color: const Color(0xFF718096),
+                                        color: AppTheme.textSecondary,
                                       ),
                                     ),
                                   ],
@@ -777,7 +777,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               style: GoogleFonts.inter(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
-                                color: const Color(0xFF718096),
+                                color: AppTheme.textSecondary,
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -800,7 +800,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style: GoogleFonts.inter(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF718096),
+                        color: AppTheme.textSecondary,
                       ),
                     ),
                   ),
@@ -825,11 +825,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     delay: const Duration(milliseconds: 420),
                     offset: 8,
                     child: Text(
-                      'Preferences',
+                      'Subscription',
                       style: GoogleFonts.inter(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF718096),
+                        color: AppTheme.textSecondary,
                       ),
                     ),
                   ),
@@ -966,7 +966,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildSettingsContainer(List<Widget> children) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
@@ -985,19 +985,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         ListTile(
           onTap: onTap,
-          leading: Icon(icon, color: const Color(0xFF718096), size: 22),
+          leading: Icon(icon, color: AppTheme.textSecondary, size: 22),
           title: Text(
             title,
             style: GoogleFonts.inter(
               fontSize: 15,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF202733),
+              color: AppTheme.textPrimary,
             ),
           ),
-          trailing: const Icon(
+          trailing: Icon(
             Icons.arrow_forward_ios,
             size: 14,
-            color: Color(0xFF718096),
+            color: AppTheme.textSecondary,
           ),
         ),
         // Divider
@@ -1026,7 +1026,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF718096),
+                    color: AppTheme.textSecondary,
                   ),
                 ),
                 const Spacer(),
@@ -1036,7 +1036,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: GoogleFonts.inter(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF718096),
+                      color: AppTheme.textSecondary,
                     ),
                   ),
               ],
@@ -1044,7 +1044,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 10),
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppTheme.cardBg,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
@@ -1065,14 +1065,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Icon(
                               Icons.people_outline,
                               size: 40,
-                              color: const Color(0xFF718096).withValues(alpha: 0.4),
+                              color: AppTheme.textSecondary.withValues(alpha: 0.4),
                             ),
                             const SizedBox(height: 8),
                             Text(
                               'No dependents added yet',
                               style: GoogleFonts.inter(
                                 fontSize: 14,
-                                color: const Color(0xFF718096),
+                                color: AppTheme.textSecondary,
                               ),
                             ),
                           ],
@@ -1100,20 +1100,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               dep.name,
                               style: GoogleFonts.inter(
                                 fontWeight: FontWeight.w700,
-                                color: const Color(0xFF202733),
+                                color: AppTheme.textPrimary,
                               ),
                             ),
                             subtitle: Text(
                               dep.displayLabel,
                               style: GoogleFonts.inter(
                                 fontSize: 12,
-                                color: const Color(0xFF718096),
+                                color: AppTheme.textSecondary,
                               ),
                             ),
-                            trailing: const Icon(
+                            trailing: Icon(
                               Icons.arrow_forward_ios,
                               size: 14,
-                              color: Color(0xFF718096),
+                              color: AppTheme.textSecondary,
                             ),
                             onTap: () async {
                               final result = await Navigator.push(
@@ -1206,7 +1206,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Text(
             'This application is a local medication reminder assistant. It does not provide medical diagnostics, medical advice, or therapeutic decisions. All user records are stored strictly offline on your physical device. In case of doubts, consult a certified healthcare professional before making any dosage changes.',
             style: GoogleFonts.inter(
-              color: const Color(0xFF718096),
+              color: AppTheme.textSecondary,
               height: 1.4,
             ),
           ),
@@ -1236,7 +1236,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             text,
             style: GoogleFonts.inter(
               fontSize: 13,
-              color: const Color(0xFF718096),
+              color: AppTheme.textSecondary,
             ),
           ),
         ],
