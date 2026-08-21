@@ -3,37 +3,62 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'splash_screen.dart';
 import 'alarm_service.dart';
+import 'app_theme.dart';
+import 'database_helper.dart';
+
+final ValueNotifier<bool> darkModeNotifier = ValueNotifier(false);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await AlarmService.initialise();
+
+  // Load dark mode setting
+  final settings = await DatabaseHelper.instance.getUserSettings();
+  AppTheme.isDark = settings.isDarkMode;
+  darkModeNotifier.value = settings.isDarkMode;
+
   runApp(const MediaroApp());
 }
 
-class MediaroApp extends StatelessWidget {
+class MediaroApp extends StatefulWidget {
   const MediaroApp({super.key});
 
   @override
+  State<MediaroApp> createState() => _MediaroAppState();
+}
+
+class _MediaroAppState extends State<MediaroApp> {
+  @override
+  void initState() {
+    super.initState();
+    darkModeNotifier.addListener(_onThemeChanged);
+  }
+
+  @override
+  void dispose() {
+    darkModeNotifier.removeListener(_onThemeChanged);
+    super.dispose();
+  }
+
+  void _onThemeChanged() {
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Mediaro',
-      debugShowCheckedModeBanner: false,
-      navigatorKey: appNavigatorKey,
-      theme: ThemeData(
-        useMaterial3: true,
-        primaryColor: const Color(0xFF5B8DEF),
-        scaffoldBackgroundColor: const Color(0xFFF3F6FF),
-        textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF5B8DEF),
-          primary: const Color(0xFF5B8DEF),
-          secondary: const Color(0xFF7BA7F7),
-          tertiary: const Color(0xFF20C9D8),
-          background: const Color(0xFFF3F6FF),
-        ),
-      ),
-      home: const SplashScreen(),
+    return ValueListenableBuilder<bool>(
+      valueListenable: darkModeNotifier,
+      builder: (context, isDark, _) {
+        AppTheme.isDark = isDark;
+        return MaterialApp(
+          title: 'Mediaro',
+          debugShowCheckedModeBanner: false,
+          navigatorKey: appNavigatorKey,
+          theme: AppTheme.theme,
+          home: const SplashScreen(),
+        );
+      },
     );
   }
 }

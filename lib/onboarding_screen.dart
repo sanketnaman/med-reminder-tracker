@@ -5,6 +5,7 @@ import 'home_screen.dart';
 import 'database_helper.dart';
 import 'models.dart';
 import 'auth_service.dart';
+import 'app_theme.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -206,7 +207,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final percent = _calculateCompletionPercent();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F6FF),
+      backgroundColor: AppTheme.bg,
       body: SafeArea(
         child: Column(
           children: [
@@ -252,7 +253,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           style: GoogleFonts.inter(
             fontSize: 28,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF202733),
+            color: AppTheme.textPrimary,
             letterSpacing: -0.5,
           ),
         ),
@@ -261,7 +262,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           "Let's personalize your Mediaro experience.",
           style: GoogleFonts.inter(
             fontSize: 15,
-            color: const Color(0xFF718096),
+            color: AppTheme.textSecondary,
             height: 1.4,
           ),
         ),
@@ -712,7 +713,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           style: GoogleFonts.inter(
             fontSize: 16,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF202733),
+            color: AppTheme.textPrimary,
           ),
         ),
         const SizedBox(height: 14),
@@ -729,7 +730,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         style: GoogleFonts.inter(
           fontSize: 13,
           fontWeight: FontWeight.w600,
-          color: const Color(0xFF718096),
+          color: AppTheme.textSecondary,
         ),
       ),
     );
@@ -846,7 +847,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.04),
@@ -865,7 +866,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   borderRadius: BorderRadius.circular(4),
                   child: LinearProgressIndicator(
                     value: percent / 100,
-                    backgroundColor: const Color(0xFFE2E8F0),
+                    backgroundColor: AppTheme.divider,
                     valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF5B8DEF)),
                     minHeight: 6,
                   ),
@@ -877,7 +878,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 style: GoogleFonts.inter(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: const Color(0xFF718096),
+                  color: AppTheme.textSecondary,
                 ),
               ),
             ],

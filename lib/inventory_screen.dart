@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'app_theme.dart';
 import 'database_helper.dart';
 import 'models.dart';
 import 'add_edit_medicine_screen.dart';
@@ -88,7 +89,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE2E8F0),
+                    color: AppTheme.divider,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -99,7 +100,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 style: GoogleFonts.inter(
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF202733),
+                  color: AppTheme.textPrimary,
                 ),
               ),
               const SizedBox(height: 16),
@@ -107,7 +108,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF3F6FF),
+                  color: AppTheme.chipBg,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -115,14 +116,14 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     Icon(
                       Icons.inventory_2_outlined,
                       size: 20,
-                      color: const Color(0xFF718096),
+                      color: AppTheme.textSecondary,
                     ),
                     const SizedBox(width: 8),
                     Text(
                       'Current stock: ${medicine.remainingQuantity.toInt()} ${medicine.dosageUnit}',
                       style: GoogleFonts.inter(
                         fontSize: 14,
-                        color: const Color(0xFF718096),
+                        color: AppTheme.textSecondary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -135,13 +136,13 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 style: GoogleFonts.inter(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: const Color(0xFF718096),
+                  color: AppTheme.textSecondary,
                 ),
               ),
               const SizedBox(height: 8),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppTheme.cardBg,
                   borderRadius: BorderRadius.circular(14),
                   boxShadow: [
                     BoxShadow(
@@ -157,12 +158,12 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   style: GoogleFonts.inter(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
-                    color: const Color(0xFF202733),
+                    color: AppTheme.textPrimary,
                   ),
                   decoration: InputDecoration(
                     hintText: 'Enter quantity',
                     hintStyle: GoogleFonts.inter(
-                      color: const Color(0xFF718096).withOpacity(0.6),
+                      color: AppTheme.textSecondary.withOpacity(0.6),
                     ),
                     border: InputBorder.none,
                     contentPadding: const EdgeInsets.symmetric(
@@ -171,7 +172,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     ),
                     suffixText: medicine.dosageUnit,
                     suffixStyle: GoogleFonts.inter(
-                      color: const Color(0xFF718096),
+                      color: AppTheme.textSecondary,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -236,7 +237,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         'Cancel',
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFF718096),
+                          color: AppTheme.textSecondary,
                         ),
                       ),
                     ),
@@ -296,7 +297,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F6FF),
+      backgroundColor: AppTheme.bg,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -330,7 +331,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     style: GoogleFonts.inter(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF202733),
+                      color: AppTheme.textPrimary,
                     ),
                   ),
                 ],
@@ -425,13 +426,13 @@ class _InventoryScreenState extends State<InventoryScreen> {
             style: GoogleFonts.inter(
               fontSize: 18,
               fontWeight: FontWeight.w700,
-              color: const Color(0xFF202733),
+              color: AppTheme.textPrimary,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'Add medicines from the Home dashboard to track stock.',
-            style: GoogleFonts.inter(color: const Color(0xFF718096)),
+            style: GoogleFonts.inter(color: AppTheme.textSecondary),
           ),
           const SizedBox(height: 24),
           ElevatedButton.icon(
@@ -543,7 +544,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
         margin: const EdgeInsets.only(bottom: 12.0),
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.cardBg,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -572,7 +573,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     style: GoogleFonts.inter(
                       fontSize: 17,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF202733),
+                      color: AppTheme.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -626,14 +627,14 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       Icon(
                         Icons.inventory,
                         size: 14,
-                        color: const Color(0xFF718096).withOpacity(0.8),
+                        color: AppTheme.textSecondary.withOpacity(0.8),
                       ),
                       const SizedBox(width: 4),
                       Text(
                         '${med.remainingQuantity.toInt()} ${med.dosageUnit} remaining',
                         style: GoogleFonts.inter(
                           fontSize: 13,
-                          color: const Color(0xFF718096),
+                          color: AppTheme.textSecondary,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -645,7 +646,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       Icon(
                         Icons.schedule,
                         size: 14,
-                        color: const Color(0xFF718096).withOpacity(0.8),
+                        color: AppTheme.textSecondary.withOpacity(0.8),
                       ),
                       const SizedBox(width: 4),
                       Text(
@@ -666,16 +667,16 @@ class _InventoryScreenState extends State<InventoryScreen> {
               children: [
                 TextButton.icon(
                   onPressed: () => _editMedicine(med),
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.edit_outlined,
                     size: 14,
-                    color: Color(0xFF718096),
+                    color: AppTheme.textSecondary,
                   ),
                   label: Text(
                     'Edit',
                     style: GoogleFonts.inter(
                       fontSize: 12,
-                      color: const Color(0xFF718096),
+                      color: AppTheme.textSecondary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

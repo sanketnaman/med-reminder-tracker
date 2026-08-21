@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'app_theme.dart';
 import 'database_helper.dart';
 import 'models.dart';
 import 'alarm_service.dart';
@@ -38,7 +39,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F6FF),
+      backgroundColor: AppTheme.bg,
       body: SafeArea(
         child: _isLoading
             ? const Center(child: CircularProgressIndicator())
@@ -101,7 +102,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                 style: GoogleFonts.inter(
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF202733),
+                  color: AppTheme.textPrimary,
                 ),
               ),
             ],
@@ -145,13 +146,13 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
               style: GoogleFonts.inter(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFF202733),
+                color: AppTheme.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               'Tap "New Appointment" to schedule your first doctor visit.',
-              style: GoogleFonts.inter(color: const Color(0xFF718096)),
+              style: GoogleFonts.inter(color: AppTheme.textSecondary),
               textAlign: TextAlign.center,
             ),
           ],
@@ -169,7 +170,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.cardBg,
           borderRadius: BorderRadius.circular(16),
           border: isToday
               ? Border.all(color: const Color(0xFF5B8DEF), width: 2)
@@ -192,7 +193,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                   width: 36,
                   height: 36,
                   colorFilter: ColorFilter.mode(
-                    isPast ? const Color(0xFF718096) : const Color(0xFF5B8DEF),
+                    isPast ? AppTheme.textSecondary : const Color(0xFF5B8DEF),
                     BlendMode.srcIn,
                   ),
                 ),
@@ -207,8 +208,8 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: isPast
-                              ? const Color(0xFF718096)
-                              : const Color(0xFF202733),
+                              ? AppTheme.textSecondary
+                              : AppTheme.textPrimary,
                         ),
                       ),
                       if (appointment.specialization.isNotEmpty)
@@ -216,7 +217,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                           appointment.specialization,
                           style: GoogleFonts.inter(
                             fontSize: 13,
-                            color: const Color(0xFF718096),
+                            color: AppTheme.textSecondary,
                           ),
                         ),
                     ],
@@ -244,7 +245,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                   child: Icon(
                     Icons.delete_outline,
                     size: 20,
-                    color: const Color(0xFF718096).withOpacity(0.5),
+                    color: AppTheme.textSecondary.withOpacity(0.5),
                   ),
                 ),
               ],
@@ -253,7 +254,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFFF3F6FF),
+                color: AppTheme.chipBg,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
@@ -272,7 +273,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                 appointment.notes!,
                 style: GoogleFonts.inter(
                   fontSize: 13,
-                  color: const Color(0xFF718096),
+                  color: AppTheme.textSecondary,
                   fontStyle: FontStyle.italic,
                 ),
               ),
@@ -294,7 +295,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
             style: GoogleFonts.inter(
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF202733),
+              color: AppTheme.textPrimary,
             ),
           ),
         ),

@@ -273,6 +273,7 @@ class UserSettings {
   bool sound;
   bool vibration;
   bool isPremium;
+  bool isDarkMode;
   int reminderAdvanceMinutes; // 0, 5, or 10
   int snoozeDurationMinutes; // 5, 10, or 15
   String profileFor; // Myself, My Parent, My Spouse, My Child, Someone else
@@ -293,6 +294,7 @@ class UserSettings {
     required this.sound,
     required this.vibration,
     this.isPremium = false,
+    this.isDarkMode = false,
     this.reminderAdvanceMinutes = 0,
     this.snoozeDurationMinutes = 10,
     this.profileFor = 'Myself',
@@ -317,6 +319,7 @@ class UserSettings {
       'sound': sound,
       'vibration': vibration,
       'isPremium': isPremium,
+      'isDarkMode': isDarkMode,
       'reminderAdvanceMinutes': reminderAdvanceMinutes,
       'snoozeDurationMinutes': snoozeDurationMinutes,
       'profileFor': profileFor,
@@ -340,6 +343,7 @@ class UserSettings {
       sound: map['sound'] ?? true,
       vibration: map['vibration'] ?? true,
       isPremium: map['isPremium'] ?? false,
+      isDarkMode: map['isDarkMode'] ?? false,
       reminderAdvanceMinutes: map['reminderAdvanceMinutes'] ?? 0,
       snoozeDurationMinutes: map['snoozeDurationMinutes'] ?? 10,
       profileFor: map['profileFor'] ?? 'Myself',

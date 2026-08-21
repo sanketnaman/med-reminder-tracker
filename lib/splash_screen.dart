@@ -7,6 +7,7 @@ import 'database_helper.dart';
 import 'alarm_service.dart';
 import 'auth_service.dart';
 import 'animation_utils.dart';
+import 'app_theme.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -66,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F6FF),
+      backgroundColor: AppTheme.bg,
       body: Stack(
         children: [
           // Graphic Pill Shapes in Background
@@ -112,7 +113,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       width: 100,
                       height: 100,
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppTheme.cardBg,
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
@@ -142,12 +143,12 @@ class _SplashScreenState extends State<SplashScreen> {
                 FadeSlideIn(
                   delay: const Duration(milliseconds: 200),
                   offset: 8,
-                  child: const Text(
+                  child: Text(
                     'Mediaro',
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF202733),
+                      color: AppTheme.textPrimary,
                       letterSpacing: -0.5,
                     ),
                   ),
@@ -157,11 +158,11 @@ class _SplashScreenState extends State<SplashScreen> {
                 FadeSlideIn(
                   delay: const Duration(milliseconds: 350),
                   offset: 8,
-                  child: const Text(
+                  child: Text(
                     'Never miss a dose.',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Color(0xFF718096),
+                      color: AppTheme.textSecondary,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

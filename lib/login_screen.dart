@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'auth_service.dart';
 import 'onboarding_screen.dart';
 import 'database_helper.dart';
+import 'app_theme.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -45,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F6FF),
+      backgroundColor: AppTheme.bg,
       body: Stack(
         children: [
           // Background pill decorations
@@ -93,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: 100,
                     height: 100,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppTheme.cardBg,
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
@@ -125,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: GoogleFonts.inter(
                       fontSize: 34,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF202733),
+                      color: AppTheme.textPrimary,
                       letterSpacing: -0.5,
                     ),
                   ),
@@ -134,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     'Never miss a dose.',
                     style: GoogleFonts.inter(
                       fontSize: 16,
-                      color: const Color(0xFF718096),
+                       color: AppTheme.textSecondary,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -148,8 +149,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: ElevatedButton(
                       onPressed: _isLoading ? null : _signInWithGoogle,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: const Color(0xFF202733),
+                        backgroundColor: AppTheme.cardBg,
+                        foregroundColor: AppTheme.textPrimary,
                         elevation: 2,
                         shadowColor: Colors.black.withValues(alpha: 0.08),
                         shape: RoundedRectangleBorder(
@@ -238,7 +239,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     textAlign: TextAlign.center,
                     style: GoogleFonts.inter(
                       fontSize: 12,
-                      color: const Color(0xFF718096),
+                      color: AppTheme.textSecondary,
                       height: 1.5,
                     ),
                   ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'app_theme.dart';
 import 'database_helper.dart';
 import 'models.dart';
 import 'animation_utils.dart';
@@ -54,7 +55,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F6FF),
+      backgroundColor: AppTheme.bg,
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SafeArea(
@@ -124,7 +125,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                 style: GoogleFonts.inter(
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF202733),
+                  color: AppTheme.textPrimary,
                 ),
               ),
             ],
@@ -134,7 +135,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
             DateFormat('EEEE, MMMM d').format(DateTime.now()),
             style: GoogleFonts.inter(
               fontSize: 13,
-              color: const Color(0xFF718096),
+              color: AppTheme.textSecondary,
             ),
           ),
           const SizedBox(height: 16),
@@ -230,7 +231,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -265,7 +266,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF718096),
+                    color: AppTheme.textSecondary,
                   ),
                 ),
               ],
@@ -278,7 +279,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
               style: GoogleFonts.inter(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: const Color(0xFF718096),
+                color: AppTheme.textSecondary,
               ),
             ),
           ],
@@ -292,7 +293,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                 style: GoogleFonts.inter(
                   fontSize: fullWidth ? 28 : 24,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF202733),
+                  color: AppTheme.textPrimary,
                 ),
               ),
               const SizedBox(width: 4),
@@ -303,7 +304,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                   style: GoogleFonts.inter(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
-                    color: const Color(0xFF718096),
+                    color: AppTheme.textSecondary,
                   ),
                 ),
               ),
@@ -315,7 +316,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
               'Last: ${DateFormat('hh:mm a').format(_latestVitals[title.toLowerCase().replaceAll(' ', '_')]!.recordedAt)}',
               style: GoogleFonts.inter(
                 fontSize: 11,
-                color: const Color(0xFFA0AEC0),
+                color: AppTheme.textMuted,
               ),
             ),
           ],
@@ -332,7 +333,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
         style: GoogleFonts.inter(
           fontSize: 20,
           fontWeight: FontWeight.w800,
-          color: const Color(0xFF202733),
+          color: AppTheme.textPrimary,
         ),
       ),
     );
@@ -355,13 +356,13 @@ class _VitalsScreenState extends State<VitalsScreen> {
               style: GoogleFonts.inter(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFF202733),
+                color: AppTheme.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               'Tap "Log Reading" to record your first vital.',
-              style: GoogleFonts.inter(color: const Color(0xFF718096)),
+              style: GoogleFonts.inter(color: AppTheme.textSecondary),
               textAlign: TextAlign.center,
             ),
           ],
@@ -389,7 +390,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
               style: GoogleFonts.inter(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFF718096),
+                color: AppTheme.textSecondary,
               ),
             ),
           ),
@@ -437,7 +438,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
@@ -471,7 +472,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF202733),
+                    color: AppTheme.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -479,7 +480,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                   DateFormat('hh:mm a').format(reading.recordedAt),
                   style: GoogleFonts.inter(
                     fontSize: 12,
-                    color: const Color(0xFF718096),
+                    color: AppTheme.textSecondary,
                   ),
                 ),
               ],
@@ -499,7 +500,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
             child: Icon(
               Icons.delete_outline,
               size: 18,
-              color: const Color(0xFF718096).withOpacity(0.5),
+              color: AppTheme.textSecondary.withOpacity(0.5),
             ),
           ),
         ],
@@ -551,8 +552,8 @@ class _VitalsScreenState extends State<VitalsScreen> {
       builder: (context) => StatefulBuilder(
         builder: (context, setSheetState) => Container(
           height: MediaQuery.of(context).size.height * 0.75,
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(
+            color: AppTheme.cardBg,
             borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
           ),
           child: Column(
@@ -562,7 +563,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE2E8F0),
+                  color: AppTheme.divider,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -573,7 +574,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                   style: GoogleFonts.inter(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF202733),
+                    color: AppTheme.textPrimary,
                   ),
                 ),
               ),
@@ -588,7 +589,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                         style: GoogleFonts.inter(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFF202733),
+                          color: AppTheme.textPrimary,
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -633,7 +634,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                       Container(
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF3F6FF),
+                          color: AppTheme.chipBg,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
@@ -645,7 +646,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                               style: GoogleFonts.inter(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: const Color(0xFF202733),
+                                color: AppTheme.textPrimary,
                               ),
                             ),
                             const Spacer(),
@@ -656,7 +657,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                               style: GoogleFonts.inter(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: const Color(0xFF202733),
+                                color: AppTheme.textPrimary,
                               ),
                             ),
                           ],
@@ -670,7 +671,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            color: const Color(0xFF202733),
+                            color: AppTheme.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -681,7 +682,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            color: const Color(0xFF202733),
+                            color: AppTheme.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -693,7 +694,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            color: const Color(0xFF202733),
+                            color: AppTheme.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -714,7 +715,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            color: const Color(0xFF202733),
+                            color: AppTheme.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -726,7 +727,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            color: const Color(0xFF202733),
+                            color: AppTheme.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -738,7 +739,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            color: const Color(0xFF202733),
+                            color: AppTheme.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -750,7 +751,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            color: const Color(0xFF202733),
+                            color: AppTheme.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -762,7 +763,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            color: const Color(0xFF202733),
+                            color: AppTheme.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -839,7 +840,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: isSelected ? chipColor.withOpacity(0.1) : const Color(0xFFF3F6FF),
+            color: isSelected ? chipColor.withOpacity(0.1) : AppTheme.chipBg,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: isSelected ? chipColor : Colors.transparent,
@@ -852,7 +853,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
               style: GoogleFonts.inter(
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
-                color: isSelected ? chipColor : const Color(0xFF718096),
+                color: isSelected ? chipColor : AppTheme.textSecondary,
               ),
             ),
           ),
@@ -864,7 +865,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
   Widget _buildInputField(TextEditingController controller, String hint, TextInputType type) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFF3F6FF),
+        color: AppTheme.chipBg,
         borderRadius: BorderRadius.circular(12),
       ),
       child: TextField(
@@ -873,12 +874,12 @@ class _VitalsScreenState extends State<VitalsScreen> {
         style: GoogleFonts.inter(
           fontSize: 16,
           fontWeight: FontWeight.w600,
-          color: const Color(0xFF202733),
+          color: AppTheme.textPrimary,
         ),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: GoogleFonts.inter(
-            color: const Color(0xFFA0AEC0),
+            color: AppTheme.textMuted,
             fontWeight: FontWeight.w500,
           ),
           border: InputBorder.none,

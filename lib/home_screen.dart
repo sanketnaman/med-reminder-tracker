@@ -18,6 +18,7 @@ import 'appointments_screen.dart';
 import 'next_medicine_helper.dart';
 import 'add_dependent_screen.dart';
 import 'animation_utils.dart';
+import 'app_theme.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -177,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 style: GoogleFonts.inter(
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF202733),
+                  color: AppTheme.textPrimary,
                 ),
               ),
               const SizedBox(height: 16),
@@ -256,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               radius: 18,
               backgroundColor: isActive
                   ? const Color(0xFF5B8DEF)
-                  : const Color(0xFF718096),
+                  : AppTheme.textSecondary,
               child: Text(
                 initial,
                 style: GoogleFonts.inter(
@@ -276,7 +277,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     style: GoogleFonts.inter(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF202733),
+                      color: AppTheme.textPrimary,
                     ),
                   ),
                   if (patient.relation != 'Self')
@@ -284,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       patient.relationLabel,
                       style: GoogleFonts.inter(
                         fontSize: 12,
-                        color: const Color(0xFF718096),
+                        color: AppTheme.textSecondary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -351,7 +352,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               text,
               style: GoogleFonts.inter(
                 fontSize: 13,
-                color: const Color(0xFF202733),
+                color: AppTheme.textPrimary,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -365,7 +366,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     // Scaffold matching current active tab
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F6FF),
+      backgroundColor: AppTheme.bg,
       body: _buildCurrentTabBody(),
       bottomNavigationBar: _buildBottomTabBar(),
       floatingActionButton: _currentTab == 0 ? _buildFloatingAddButton() : null,
@@ -448,16 +449,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                   style: GoogleFonts.inter(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w800,
-                                    color: const Color(0xFF202733),
+                                    color: AppTheme.textPrimary,
                                     letterSpacing: -0.5,
                                   ),
                                 ),
                               ),
                             ),
                             const SizedBox(width: 4),
-                            const Icon(
+                            Icon(
                               Icons.keyboard_arrow_down_rounded,
-                              color: Color(0xFF718096),
+                              color: AppTheme.textSecondary,
                               size: 20,
                             ),
                           ],
@@ -468,7 +469,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.inter(
                             fontSize: 13,
-                            color: const Color(0xFF718096),
+                            color: AppTheme.textSecondary,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -483,7 +484,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppTheme.cardBg,
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
@@ -493,9 +494,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             ),
                           ],
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.notifications_none_outlined,
-                          color: Color(0xFF202733),
+                          color: AppTheme.textPrimary,
                         ),
                       ),
                     ),
@@ -566,7 +567,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               style: GoogleFonts.inter(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w800,
-                                color: const Color(0xFF202733),
+                                color: AppTheme.textPrimary,
                               ),
                             ),
                           ],
@@ -575,7 +576,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           '${records.length} Medicine${records.length > 1 ? 's' : ''}',
                           style: GoogleFonts.inter(
                             fontSize: 12,
-                            color: const Color(0xFF718096),
+                            color: AppTheme.textSecondary,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -620,7 +621,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 40),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Center(
@@ -636,7 +637,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               'No medicines added yet',
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.bold,
-                color: const Color(0xFF202733),
+                color: AppTheme.textPrimary,
                 fontSize: 16,
               ),
             ),
@@ -644,7 +645,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             Text(
               'Add your first medicine and we\'ll remind you.',
               style: GoogleFonts.inter(
-                color: const Color(0xFF718096),
+                color: AppTheme.textSecondary,
                 fontSize: 13,
               ),
             ),
@@ -695,9 +696,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF5B8DEF).withOpacity(0.18),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            color: const Color(0xFF5B8DEF).withOpacity(0.35),
+            blurRadius: 28,
+            spreadRadius: -4,
+            offset: const Offset(0, 12),
+          ),
+          BoxShadow(
+            color: const Color(0xFF5B8DEF).withOpacity(0.12),
+            blurRadius: 48,
+            spreadRadius: -8,
+            offset: const Offset(0, 20),
           ),
         ],
       ),
@@ -821,7 +829,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             width: 44,
             padding: const EdgeInsets.symmetric(vertical: 12),
             decoration: BoxDecoration(
-              color: isSelected ? const Color(0xFF5B8DEF) : Colors.white,
+              color: isSelected ? const Color(0xFF5B8DEF) : AppTheme.cardBg,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
@@ -838,7 +846,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   style: GoogleFonts.inter(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
-                    color: isSelected ? Colors.white : const Color(0xFF718096),
+                    color: isSelected ? Colors.white : AppTheme.textSecondary,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -847,7 +855,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
-                    color: isSelected ? Colors.white : const Color(0xFF202733),
+                    color: isSelected ? Colors.white : AppTheme.textPrimary,
                   ),
                 ),
               ],
@@ -867,13 +875,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.01),
-            blurRadius: 10,
+            color: Colors.black.withOpacity(0.06),
+            blurRadius: 16,
             offset: const Offset(0, 4),
+          ),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 4,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -916,7 +929,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   style: GoogleFonts.inter(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF202733),
+                    color: AppTheme.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -926,7 +939,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       '${record.dosage.toInt()} ${record.dosageUnit}',
                       style: GoogleFonts.inter(
                         fontSize: 12,
-                        color: const Color(0xFF718096),
+                        color: AppTheme.textSecondary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -934,8 +947,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     Container(
                       width: 3,
                       height: 3,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF718096),
+                      decoration: BoxDecoration(
+                        color: AppTheme.textSecondary,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -944,7 +957,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       timeStr,
                       style: GoogleFonts.inter(
                         fontSize: 12,
-                        color: const Color(0xFF718096),
+                        color: AppTheme.textSecondary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -972,7 +985,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     ? const Color(0xFF35B779)
                     : isUpcoming
                         ? const Color(0xFF5B8DEF)
-                        : const Color(0xFF718096),
+                        : AppTheme.textSecondary,
                 fontWeight: FontWeight.w700,
                 fontSize: 13,
               ),
@@ -986,7 +999,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Widget _buildBottomTabBar() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(24),
           topRight: Radius.circular(24),
@@ -1040,9 +1053,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               children: [
                 Icon(
                   icon,
-                  color: isSelected
+                  color:                   isSelected
                       ? const Color(0xFF5B8DEF)
-                      : const Color(0xFF718096),
+                      : AppTheme.textSecondary,
                   size: 24,
                 ),
                 if (index == 3 && !_isPremium)
@@ -1070,7 +1083,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               style: GoogleFonts.inter(
                 color: isSelected
                     ? const Color(0xFF5B8DEF)
-                    : const Color(0xFF718096),
+                    : AppTheme.textSecondary,
                 fontSize: 12,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
               ),
@@ -1191,38 +1204,38 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         width: double.infinity,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.03),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+        color: AppTheme.cardBg,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          const Text(
+            '🎉',
+            style: TextStyle(fontSize: 32),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'All medicines completed!',
+            style: GoogleFonts.inter(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: AppTheme.textPrimary,
             ),
-          ],
-        ),
-        child: Column(
-          children: [
-            const Text(
-              '🎉',
-              style: TextStyle(fontSize: 32),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'All medicines completed!',
-              style: GoogleFonts.inter(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: const Color(0xFF202733),
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'You\'ve completed all your scheduled medicines for today.',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.inter(
-                fontSize: 13,
-                color: const Color(0xFF718096),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'You\'ve completed all your scheduled medicines for today.',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.inter(
+              fontSize: 13,
+              color: AppTheme.textSecondary,
               ),
             ),
           ],
@@ -1234,13 +1247,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
+            color: Colors.black.withOpacity(0.06),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          ),
+          BoxShadow(
             color: Colors.black.withOpacity(0.03),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+            blurRadius: 4,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -1274,7 +1292,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 style: GoogleFonts.inter(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
-                  color: isDue ? const Color(0xFFF5A623) : const Color(0xFF202733),
+                  color: isDue ? const Color(0xFFF5A623) : AppTheme.textPrimary,
                 ),
               ),
             ],
@@ -1299,7 +1317,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF202733),
+                        color: AppTheme.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -1307,7 +1325,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       '${record.dosage.toInt()} ${record.dosageUnit}',
                       style: GoogleFonts.inter(
                         fontSize: 13,
-                        color: const Color(0xFF718096),
+                        color: AppTheme.textSecondary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -1345,7 +1363,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   style: GoogleFonts.inter(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: isDue ? const Color(0xFFF5A623) : const Color(0xFF718096),
+                    color: isDue ? const Color(0xFFF5A623) : AppTheme.textSecondary,
                   ),
                 ),
             ],
@@ -1396,12 +1414,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.snooze, color: Color(0xFF718096), size: 16),
+                      Icon(Icons.snooze, color: AppTheme.textSecondary, size: 16),
                       const SizedBox(width: 4),
                       Text(
                         'Snooze',
                         style: GoogleFonts.inter(
-                          color: const Color(0xFF718096),
+                          color: AppTheme.textSecondary,
                           fontWeight: FontWeight.w700,
                           fontSize: 13,
                         ),
@@ -1486,7 +1504,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             style: GoogleFonts.inter(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
-                              color: const Color(0xFF202733),
+                              color: AppTheme.textPrimary,
                             ),
                           ),
                           const SizedBox(height: 1),
@@ -1494,7 +1512,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             '${r.dosage.toInt()} ${r.dosageUnit}',
                             style: GoogleFonts.inter(
                               fontSize: 11,
-                              color: const Color(0xFF718096),
+                              color: AppTheme.textSecondary,
                             ),
                           ),
                         ],
@@ -1546,20 +1564,20 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         width: double.infinity,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.03),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            SvgPicture.asset(
-              'assets/icons/doctor_appointment.svg',
+        color: AppTheme.cardBg,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            'assets/icons/doctor_appointment.svg',
               width: 36,
               height: 36,
             ),
@@ -1575,7 +1593,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         style: GoogleFonts.inter(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFF202733),
+                          color: AppTheme.textPrimary,
                         ),
                       ),
                       if (!_isPremium) ...[
@@ -1605,7 +1623,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         : 'Upgrade to Premium to access',
                     style: GoogleFonts.inter(
                       fontSize: 12,
-                      color: const Color(0xFF718096),
+                      color: AppTheme.textSecondary,
                     ),
                   ),
                 ],
@@ -1614,7 +1632,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             Icon(
               _isPremium ? Icons.arrow_forward_ios : Icons.lock_outline,
               size: 16,
-              color: const Color(0xFF718096),
+              color: AppTheme.textSecondary,
             ),
           ],
         ),

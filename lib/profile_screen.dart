@@ -10,6 +10,7 @@ import 'add_dependent_screen.dart';
 import 'premium_screen.dart';
 import 'health_report_screen.dart';
 import 'animation_utils.dart';
+import 'main.dart';
 
 class ProfileScreen extends StatefulWidget {
   final VoidCallback onProfileUpdated;
@@ -556,9 +557,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             // Settings List Groups
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
-child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   FadeSlideIn(
                     delay: const Duration(milliseconds: 100),
                     offset: 8,
@@ -604,6 +605,55 @@ child: Column(
                       ),
                     ]),
                   ),
+                  const SizedBox(height: 6),
+                  FadeSlideIn(
+                    delay: const Duration(milliseconds: 180),
+                    offset: 8,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.03),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            leading: Icon(
+                              _settings?.isDarkMode == true
+                                  ? Icons.dark_mode
+                                  : Icons.light_mode,
+                              color: _settings?.isDarkMode == true
+                                  ? const Color(0xFFF5A623)
+                                  : const Color(0xFF5B8DEF),
+                              size: 22,
+                            ),
+                            title: Text(
+                              'Dark Mode',
+                              style: GoogleFonts.inter(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF202733),
+                              ),
+                            ),
+                            trailing: Switch(
+                              value: _settings?.isDarkMode ?? false,
+                              onChanged: (val) {
+                                _updateSetting((s) => s.isDarkMode = val);
+                                darkModeNotifier.value = val;
+                              },
+                              activeColor: const Color(0xFF5B8DEF),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 24),
 
                   FadeSlideIn(delay: const Duration(milliseconds: 200), offset: 8, child: _buildDependentsSection()),
@@ -626,119 +676,117 @@ child: Column(
                     delay: const Duration(milliseconds: 300),
                     offset: 8,
                     child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: _isPremium
-                          ? const Color(0xFF5B8DEF).withOpacity(0.1)
-                          : Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      border: _isPremium
-                          ? Border.all(color: const Color(0xFF5B8DEF).withOpacity(0.3))
-                          : null,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.03),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: _isPremium
-                                    ? const Color(0xFF5B8DEF).withOpacity(0.15)
-                                    : const Color(0xFFF3F6FF),
-                                borderRadius: BorderRadius.circular(10),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: _isPremium
+                            ? const Color(0xFF5B8DEF).withOpacity(0.1)
+                            : Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: _isPremium
+                            ? Border.all(color: const Color(0xFF5B8DEF).withOpacity(0.3))
+                            : null,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.03),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: _isPremium
+                                      ? const Color(0xFF5B8DEF).withOpacity(0.15)
+                                      : const Color(0xFFF3F6FF),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Icon(
+                                  _isPremium ? Icons.workspace_premium : Icons.lock_outline,
+                                  color: _isPremium ? const Color(0xFF5B8DEF) : const Color(0xFF718096),
+                                  size: 20,
+                                ),
                               ),
-                              child: Icon(
-                                _isPremium ? Icons.workspace_premium : Icons.lock_outline,
-                                color: _isPremium ? const Color(0xFF5B8DEF) : const Color(0xFF718096),
-                                size: 20,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    _isPremium ? 'Mediaro Premium' : 'Free Plan',
-                                    style: GoogleFonts.inter(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      color: const Color(0xFF202733),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      _isPremium ? 'Mediaro Premium' : 'Free Plan',
+                                      style: GoogleFonts.inter(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: const Color(0xFF202733),
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    _isPremium
-                                        ? 'Unlimited medicines & vitals'
-                                        : '$_medicineCount of ${DatabaseHelper.freeMedicineLimit} medicines used',
-                                    style: GoogleFonts.inter(
-                                      fontSize: 12,
-                                      color: const Color(0xFF718096),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      _isPremium
+                                          ? 'Unlimited medicines & vitals'
+                                          : '$_medicineCount of ${DatabaseHelper.freeMedicineLimit} medicines used',
+                                      style: GoogleFonts.inter(
+                                        fontSize: 12,
+                                        color: const Color(0xFF718096),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            Switch(
-                              value: _isPremium,
-                              activeColor: const Color(0xFF5B8DEF),
-                              onChanged: (value) async {
-                                if (value) {
-                                  // Opening premium screen to upgrade
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (_) => const PremiumScreen()),
-                                  ).then((_) {
+                              Switch(
+                                value: _isPremium,
+                                activeColor: const Color(0xFF5B8DEF),
+                                onChanged: (value) async {
+                                  if (value) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (_) => const PremiumScreen()),
+                                    ).then((_) {
+                                      _loadSettings();
+                                      widget.onProfileUpdated();
+                                    });
+                                  } else {
+                                    await DatabaseHelper.instance.setPremium(false);
                                     _loadSettings();
                                     widget.onProfileUpdated();
-                                  });
-                                } else {
-                                  // Downgrade to free
-                                  await DatabaseHelper.instance.setPremium(false);
-                                  _loadSettings();
-                                  widget.onProfileUpdated();
-                                  if (mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Switched to Free plan'),
-                                        backgroundColor: Color(0xFF35B779),
-                                      ),
-                                    );
+                                    if (mounted) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Switched to Free plan'),
+                                          backgroundColor: Color(0xFF35B779),
+                                        ),
+                                      );
+                                    }
                                   }
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                        if (!_isPremium) ...[
-                          const SizedBox(height: 12),
-                          const Divider(height: 1),
-                          const SizedBox(height: 12),
-                          Text(
-                            'Upgrade to Premium:',
-                            style: GoogleFonts.inter(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xFF718096),
-                            ),
+                                },
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 8),
-                          _buildPremiumFeature('Unlimited medicines'),
-                          _buildPremiumFeature('Daily vitals tracking'),
-                          _buildPremiumFeature('Advanced analytics'),
+                          if (!_isPremium) ...[
+                            const SizedBox(height: 12),
+                            const Divider(height: 1),
+                            const SizedBox(height: 12),
+                            Text(
+                              'Upgrade to Premium:',
+                              style: GoogleFonts.inter(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF718096),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            _buildPremiumFeature('Unlimited medicines'),
+                            _buildPremiumFeature('Daily vitals tracking'),
+                            _buildPremiumFeature('Advanced analytics'),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
-                  ),
                   ),
                   const SizedBox(height: 24),
 

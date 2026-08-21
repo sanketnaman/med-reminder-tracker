@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'app_theme.dart';
 import 'database_helper.dart';
 import 'models.dart';
 import 'today_plan_screen.dart';
@@ -78,7 +79,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F6FF),
+      backgroundColor: AppTheme.bg,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,7 +110,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                     style: GoogleFonts.inter(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF202733),
+                      color: AppTheme.textPrimary,
                     ),
                   ),
                   const Spacer(),
@@ -120,7 +121,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppTheme.cardBg,
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
@@ -186,7 +187,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                               style: GoogleFonts.inter(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w800,
-                                color: const Color(0xFF202733),
+                                color: AppTheme.textPrimary,
                               ),
                             ),
                           ),
@@ -221,7 +222,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Center(
@@ -237,7 +238,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
               'Your progress will appear here',
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.bold,
-                color: const Color(0xFF202733),
+                color: AppTheme.textPrimary,
               ),
             ),
             const SizedBox(height: 4),
@@ -246,7 +247,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
               textAlign: TextAlign.center,
               style: GoogleFonts.inter(
                 fontSize: 13,
-                color: const Color(0xFF718096),
+                color: AppTheme.textSecondary,
               ),
             ),
             const SizedBox(height: 24),
@@ -394,7 +395,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
       margin: const EdgeInsets.only(bottom: 12.0),
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -415,7 +416,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                 style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: const Color(0xFF202733),
+                  color: AppTheme.textPrimary,
                 ),
               ),
               Text(
@@ -423,7 +424,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                 style: GoogleFonts.inter(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
-                  color: const Color(0xFF718096),
+                  color: AppTheme.textSecondary,
                 ),
               ),
             ],
@@ -433,7 +434,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
             '$taken/$total Doses',
             style: GoogleFonts.inter(
               fontSize: 12,
-              color: const Color(0xFF718096),
+              color: AppTheme.textSecondary,
               fontWeight: FontWeight.w500,
             ),
           ),

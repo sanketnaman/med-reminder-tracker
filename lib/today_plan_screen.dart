@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'app_theme.dart';
 import 'database_helper.dart';
 import 'models.dart';
 import 'alarm_service.dart';
@@ -140,7 +141,7 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
     final completionPercent = total > 0 ? ((taken / total) * 100).round() : 0;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F6FF),
+      backgroundColor: AppTheme.bg,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,14 +175,14 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
                         style: GoogleFonts.inter(
                           fontSize: 22,
                           fontWeight: FontWeight.w800,
-                          color: const Color(0xFF202733),
+                          color: AppTheme.textPrimary,
                         ),
                       ),
                       Text(
                         DateFormat('EEEE, MMMM dd').format(DateTime.now()),
                         style: GoogleFonts.inter(
                           fontSize: 13,
-                          color: const Color(0xFF718096),
+                          color: AppTheme.textSecondary,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -237,7 +238,7 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
       padding: const EdgeInsets.all(24),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Center(
@@ -253,7 +254,7 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
               'No medication scheduled for today.',
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.bold,
-                color: const Color(0xFF202733),
+                color: AppTheme.textPrimary,
               ),
             ),
             const SizedBox(height: 4),
@@ -261,7 +262,7 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
               'Add medicines with scheduled times to see them here.',
               textAlign: TextAlign.center,
               style: GoogleFonts.inter(
-                color: const Color(0xFF718096),
+                color: AppTheme.textSecondary,
                 fontSize: 13,
               ),
             ),
@@ -438,7 +439,7 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.cardBg,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -499,7 +500,7 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
                   style: GoogleFonts.inter(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF202733),
+                    color: AppTheme.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -509,7 +510,7 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
                       '${record.dosage.toInt()} ${record.dosageUnit}',
                       style: GoogleFonts.inter(
                         fontSize: 12,
-                        color: const Color(0xFF718096),
+                        color: AppTheme.textSecondary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -517,8 +518,8 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
                     Container(
                       width: 4,
                       height: 4,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF718096),
+                      decoration: BoxDecoration(
+                        color: AppTheme.textSecondary,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -527,7 +528,7 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
                       timeStr,
                       style: GoogleFonts.inter(
                         fontSize: 12,
-                        color: const Color(0xFF718096),
+                        color: AppTheme.textSecondary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -620,17 +621,17 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.snooze,
                         size: 12,
-                        color: Color(0xFF718096),
+                        color: AppTheme.textSecondary,
                       ),
                       const SizedBox(width: 4),
                       Text(
                         'Snooze',
                         style: GoogleFonts.inter(
                           fontSize: 12,
-                          color: const Color(0xFF718096),
+                          color: AppTheme.textSecondary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
