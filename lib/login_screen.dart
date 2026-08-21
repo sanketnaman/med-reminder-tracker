@@ -5,6 +5,7 @@ import 'auth_service.dart';
 import 'onboarding_screen.dart';
 import 'database_helper.dart';
 import 'app_theme.dart';
+import 'l10n/generated/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -122,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // App name
                   Text(
-                    'Mediaro',
+                    AppLocalizations.of(context)!.appTitle,
                     style: GoogleFonts.inter(
                       fontSize: 34,
                       fontWeight: FontWeight.w800,
@@ -132,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Never miss a dose.',
+                    AppLocalizations.of(context)!.neverMissDose,
                     style: GoogleFonts.inter(
                       fontSize: 16,
                        color: AppTheme.textSecondary,
@@ -182,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 const SizedBox(width: 12),
                                 Text(
-                                  'Continue with Google',
+                                  AppLocalizations.of(context)!.continueGoogle,
                                   style: GoogleFonts.inter(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
@@ -220,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(width: 12),
                           Text(
-                            'Continue as Guest',
+                            AppLocalizations.of(context)!.continueGuest,
                             style: GoogleFonts.inter(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,

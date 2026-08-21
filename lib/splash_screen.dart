@@ -8,6 +8,7 @@ import 'alarm_service.dart';
 import 'auth_service.dart';
 import 'animation_utils.dart';
 import 'app_theme.dart';
+import 'l10n/generated/app_localizations.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -144,7 +145,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   delay: const Duration(milliseconds: 200),
                   offset: 8,
                   child: Text(
-                    'Mediaro',
+                    AppLocalizations.of(context)!.appTitle,
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w800,
@@ -159,7 +160,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   delay: const Duration(milliseconds: 350),
                   offset: 8,
                   child: Text(
-                    'Never miss a dose.',
+                    AppLocalizations.of(context)!.neverMissDose,
                     style: TextStyle(
                       fontSize: 16,
                       color: AppTheme.textSecondary,

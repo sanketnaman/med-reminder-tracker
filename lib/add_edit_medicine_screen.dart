@@ -8,6 +8,7 @@ import 'alarm_service.dart';
 import 'medicine_icon.dart';
 import 'medicine_catalog_service.dart';
 import 'premium_screen.dart';
+import 'l10n/generated/app_localizations.dart';
 
 class AddEditMedicineScreen extends StatefulWidget {
   final Medicine? medicineToEdit;
@@ -287,7 +288,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
 
     if (_timings.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please add at least one alert time')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.errorAlertTime)),
       );
       return;
     }
@@ -346,7 +347,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'Delete Medicine',
+          AppLocalizations.of(context)!.deleteMedicineLabel,
           style: GoogleFonts.inter(fontWeight: FontWeight.bold),
         ),
         content: Text(
@@ -355,7 +356,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
@@ -408,7 +409,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-              isEdit ? 'Edit Medicine' : 'Add Medicine',
+              isEdit ? AppLocalizations.of(context)!.editMedicineTitle : AppLocalizations.of(context)!.addMedicineTitle,
               style: GoogleFonts.inter(
                 color: const Color(0xFF202733),
                 fontWeight: FontWeight.w800,
@@ -480,7 +481,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                 ),
                 const SizedBox(height: 24),
 
-                _buildLabel('Medicine Name'),
+                _buildLabel(AppLocalizations.of(context)!.medicineName),
                 _buildCardContainer(
                   Column(
                     children: [
@@ -491,7 +492,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                           color: const Color(0xFF202733),
                         ),
                         decoration: InputDecoration(
-                          hintText: 'Search medicine...',
+                          hintText: AppLocalizations.of(context)!.searchMedicine,
                           hintStyle: GoogleFonts.inter(
                             color: const Color(0xFF718096).withOpacity(0.6),
                           ),
@@ -514,7 +515,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                         ),
                         onChanged: _onSearchChanged,
                         validator: (val) => val == null || val.trim().isEmpty
-                            ? 'Please enter a name'
+                            ? AppLocalizations.of(context)!.pleaseEnterName
                             : null,
                       ),
                       if (_catalogResults.isNotEmpty) ...[
@@ -615,7 +616,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildLabel('Type of Medicine'),
+                          _buildLabel(AppLocalizations.of(context)!.typeOfMedicine),
                           _buildMedicineTypeDropdown(),
                         ],
                       ),
@@ -625,7 +626,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildLabel('Dose (daily)'),
+                          _buildLabel(AppLocalizations.of(context)!.doseDaily),
                           _buildCardContainer(
                             TextFormField(
                               controller: _dosageController,
@@ -683,7 +684,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildLabel('Start Date'),
+                          _buildLabel(AppLocalizations.of(context)!.startDate),
                           GestureDetector(
                             onTap: () => _selectDate(context, true),
                             child: _buildCardContainer(
@@ -721,7 +722,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildLabel('End Date'),
+                          _buildLabel(AppLocalizations.of(context)!.endDate),
                           GestureDetector(
                             onTap: () => _selectDate(context, false),
                             child: _buildCardContainer(
@@ -736,12 +737,12 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                                   children: [
                                     Text(
                                       _isOngoing
-                                          ? 'Ongoing'
+                                          ? AppLocalizations.of(context)!.ongoing
                                           : (_endDate != null
                                                 ? DateFormat(
                                                     'dd/MM/yy',
                                                   ).format(_endDate!)
-                                                : 'Select'),
+                                                : AppLocalizations.of(context)!.select),
                                       style: GoogleFonts.inter(
                                         fontWeight: FontWeight.w600,
                                         color: const Color(0xFF202733),
@@ -764,23 +765,29 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                 ),
                 const SizedBox(height: 20),
 
-                _buildLabel('Set Reminder'),
+                _buildLabel(AppLocalizations.of(context)!.setReminder),
                 _buildDropdownCard(_frequencyType, _frequencies, (val) {
                   setState(() {
                     _frequencyType = val!;
                   });
+                }, labelMapper: (val) {
+                  switch (val) {
+                    case 'Every day': return AppLocalizations.of(context)!.everyDay;
+                    case 'Specific days': return AppLocalizations.of(context)!.specificDays;
+                    default: return val;
+                  }
                 }),
                 const SizedBox(height: 20),
 
                 // Specific Days Selection (If "Specific days" is selected)
                 if (_frequencyType == 'Specific days') ...[
-                  _buildLabel('Select Days'),
+                  _buildLabel(AppLocalizations.of(context)!.selectDays),
                   _buildDaysSelector(),
                   const SizedBox(height: 20),
                 ],
 
                 // Time Timings List
-                _buildLabel('Time'),
+                _buildLabel(AppLocalizations.of(context)!.time),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
@@ -845,9 +852,9 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                 const SizedBox(height: 24),
 
                 // Meal relation segmented tabs
-                _buildLabel('Meal Relation'),
+                _buildLabel(AppLocalizations.of(context)!.mealRelation),
                 Row(
-                  children: ['Before Meal', 'During Meal', 'After Meal'].map((
+                  children: [AppLocalizations.of(context)!.beforeMeal, AppLocalizations.of(context)!.duringMeal, AppLocalizations.of(context)!.afterMeal].map((
                     relation,
                   ) {
                     final isSel = _mealRelation == relation;
@@ -893,7 +900,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                 ),
                 const SizedBox(height: 24),
 
-                _buildLabel('Instructions / Notes (Optional)'),
+                _buildLabel(AppLocalizations.of(context)!.instructionsNotes),
                 _buildCardContainer(
                   TextFormField(
                     controller: _notesController,
@@ -931,7 +938,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                             padding: const EdgeInsets.symmetric(vertical: 16),
                           ),
                           child: Text(
-                            'Delete Medicine',
+                            AppLocalizations.of(context)!.deleteMedicineLabel,
                             style: GoogleFonts.inter(
                               color: const Color(0xFFE85D75),
                               fontWeight: FontWeight.w700,
@@ -954,7 +961,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 16),
                         ),
                         child: Text(
-                          isEdit ? 'Save Changes' : 'Save Medicine',
+                          isEdit ? AppLocalizations.of(context)!.saveChanges : AppLocalizations.of(context)!.saveMedicine,
                           style: GoogleFonts.inter(
                             fontSize: 15,
                             fontWeight: FontWeight.w800,
@@ -1007,8 +1014,9 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
   Widget _buildDropdownCard(
     String value,
     List<String> list,
-    Function(String?) onChanged,
-  ) {
+    Function(String?) onChanged, {
+    String Function(String)? labelMapper,
+  }) {
     return _buildCardContainer(
       Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -1027,7 +1035,10 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
             ),
             onChanged: onChanged,
             items: list.map((String val) {
-              return DropdownMenuItem<String>(value: val, child: Text(val));
+              return DropdownMenuItem<String>(
+                value: val,
+                child: Text(labelMapper != null ? labelMapper(val) : val),
+              );
             }).toList(),
           ),
         ),
@@ -1036,6 +1047,19 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
   }
 
   Widget _buildMedicineTypeDropdown() {
+    String localizeType(String type) {
+      switch (type) {
+        case 'Tablet': return AppLocalizations.of(context)!.tablet;
+        case 'Capsule': return AppLocalizations.of(context)!.capsule;
+        case 'Syrup': return AppLocalizations.of(context)!.syrup;
+        case 'Injection': return AppLocalizations.of(context)!.injection;
+        case 'Drops': return AppLocalizations.of(context)!.drops;
+        case 'Cream': return AppLocalizations.of(context)!.cream;
+        case 'Powder': return AppLocalizations.of(context)!.powder;
+        case 'Other': return AppLocalizations.of(context)!.otherType;
+        default: return type;
+      }
+    }
     return _buildCardContainer(
       Container(
         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -1069,7 +1093,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                     const SizedBox(width: 8),
                     Flexible(
                       child: Text(
-                        type,
+                        localizeType(type),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -1089,7 +1113,7 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
                     const SizedBox(width: 10),
                     Flexible(
                       child: Text(
-                        type,
+                        localizeType(type),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),

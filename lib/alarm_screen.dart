@@ -7,6 +7,7 @@ import 'database_helper.dart';
 import 'models.dart';
 import 'alarm_service.dart';
 import 'medicine_icon.dart';
+import 'l10n/generated/app_localizations.dart';
 
 class AlarmScreen extends StatefulWidget {
   final DoseRecord record;
@@ -122,7 +123,7 @@ class _AlarmScreenState extends State<AlarmScreen>
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'Skip Dose',
+          AppLocalizations.of(context)!.skipDose,
           style: GoogleFonts.inter(fontWeight: FontWeight.bold),
         ),
         content: Text(
@@ -131,14 +132,14 @@ class _AlarmScreenState extends State<AlarmScreen>
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFE85D75),
             ),
-            child: const Text('Skip', style: TextStyle(color: Colors.white)),
+            child: Text(AppLocalizations.of(context)!.alarmSkip, style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -276,7 +277,7 @@ class _AlarmScreenState extends State<AlarmScreen>
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                'Mediaro',
+                                AppLocalizations.of(context)!.appTitle,
                                 style: GoogleFonts.poppins(
                                   color: Colors.white,
                                   fontSize: 18,
@@ -364,7 +365,7 @@ class _AlarmScreenState extends State<AlarmScreen>
 
                     // Headline
                     Text(
-                      'Time to Take Your Medicine!',
+                      AppLocalizations.of(context)!.timeToTake,
                       textAlign: TextAlign.center,
                       style: GoogleFonts.inter(
                         color: Colors.white,
@@ -375,7 +376,7 @@ class _AlarmScreenState extends State<AlarmScreen>
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "Don't forget to take your medicine on time.",
+                      AppLocalizations.of(context)!.dontForget,
                       textAlign: TextAlign.center,
                       style: GoogleFonts.inter(
                         color: Colors.white.withOpacity(0.75),
@@ -527,7 +528,7 @@ class _AlarmScreenState extends State<AlarmScreen>
                                   ),
                                   const SizedBox(width: 6),
                                   Text(
-                                    'Stay Consistent',
+                                    AppLocalizations.of(context)!.stayConsistent,
                                     style: GoogleFonts.inter(
                                       color: Colors.white.withOpacity(0.6),
                                       fontSize: 12,
@@ -586,7 +587,7 @@ class _AlarmScreenState extends State<AlarmScreen>
                                 ),
                                 const SizedBox(width: 10),
                                 Text(
-                                  'I Take It',
+                                  AppLocalizations.of(context)!.iTakeIt,
                                   style: GoogleFonts.inter(
                                     color: const Color(0xFFD92F4F),
                                     fontSize: 18,
@@ -630,7 +631,7 @@ class _AlarmScreenState extends State<AlarmScreen>
                                     ),
                                     const SizedBox(width: 6),
                                     Text(
-                                      'Skip',
+                                      AppLocalizations.of(context)!.alarmSkip,
                                       style: GoogleFonts.inter(
                                         color: Colors.white,
                                         fontSize: 15,
@@ -666,7 +667,7 @@ class _AlarmScreenState extends State<AlarmScreen>
                                     ),
                                     const SizedBox(width: 6),
                                     Text(
-                                      'Snooze (10m)',
+                                      AppLocalizations.of(context)!.snooze10m,
                                       style: GoogleFonts.inter(
                                         color: Colors.white,
                                         fontSize: 15,

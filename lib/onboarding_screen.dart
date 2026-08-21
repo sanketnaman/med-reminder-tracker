@@ -6,6 +6,7 @@ import 'database_helper.dart';
 import 'models.dart';
 import 'auth_service.dart';
 import 'app_theme.dart';
+import 'l10n/generated/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -249,7 +250,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Welcome$greeting \u{1F44B}',
+          '${AppLocalizations.of(context)!.welcome}$greeting \u{1F44B}',
           style: GoogleFonts.inter(
             fontSize: 28,
             fontWeight: FontWeight.w800,
@@ -259,7 +260,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ),
         const SizedBox(height: 8),
         Text(
-          "Let's personalize your Mediaro experience.",
+          AppLocalizations.of(context)!.personalizeExperience,
           style: GoogleFonts.inter(
             fontSize: 15,
             color: AppTheme.textSecondary,
@@ -370,7 +371,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Profile Photo',
+              AppLocalizations.of(context)!.profilePhoto,
               style: GoogleFonts.inter(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -380,18 +381,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             const SizedBox(height: 8),
             ListTile(
               leading: const Icon(Icons.photo_camera_rounded, color: Color(0xFF5B8DEF)),
-              title: Text('Take photo', style: GoogleFonts.inter()),
+              title: Text(AppLocalizations.of(context)!.takePhoto, style: GoogleFonts.inter()),
               onTap: () => Navigator.pop(ctx),
             ),
             ListTile(
               leading: const Icon(Icons.photo_library_rounded, color: Color(0xFF5B8DEF)),
-              title: Text('Choose from gallery', style: GoogleFonts.inter()),
+              title: Text(AppLocalizations.of(context)!.chooseGallery, style: GoogleFonts.inter()),
               onTap: () => Navigator.pop(ctx),
             ),
             if (_googlePhotoUrl != null)
               ListTile(
                 leading: const Icon(Icons.account_circle_rounded, color: Color(0xFF5B8DEF)),
-                title: Text('Use Google photo', style: GoogleFonts.inter()),
+                title: Text(AppLocalizations.of(context)!.useGooglePhoto, style: GoogleFonts.inter()),
                 onTap: () {
                   setState(() {
                     _profilePhotoPath = null;
@@ -408,10 +409,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Widget _buildPersonalInfoSection() {
     return _buildSection(
-      title: 'Personal Information',
+      title: AppLocalizations.of(context)!.personalInfo,
       child: Column(
         children: [
-          _buildFieldLabel('Full Name'),
+          _buildFieldLabel(AppLocalizations.of(context)!.fullName),
           _buildTextField(
             controller: _nameController,
             hint: 'Enter your full name',
@@ -419,7 +420,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             onChanged: (_) => setState(() {}),
           ),
           const SizedBox(height: 16),
-          _buildFieldLabel('Email'),
+          _buildFieldLabel(AppLocalizations.of(context)!.email),
           _buildEmailField(),
           const SizedBox(height: 16),
           Row(
@@ -428,7 +429,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildFieldLabel('Age'),
+                    _buildFieldLabel(AppLocalizations.of(context)!.age),
                     _buildTextField(
                       controller: _ageController,
                       hint: 'e.g., 28',
@@ -444,14 +445,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildFieldLabel('Gender'),
+                    _buildFieldLabel(AppLocalizations.of(context)!.gender),
                     _buildDropdown<String>(
                       value: _selectedGender.isEmpty ? null : _selectedGender,
-                      hint: 'Select',
+                      hint: AppLocalizations.of(context)!.select,
                       items: _genderOptions,
                       onChanged: (val) {
                         setState(() => _selectedGender = val ?? '');
                       },
+                      labelMapper: (item) => _localizeGender(item),
                     ),
                   ],
                 ),
@@ -518,7 +520,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Widget _buildProfileForSection() {
     return _buildSection(
-      title: 'Who is this profile for?',
+      title: AppLocalizations.of(context)!.profileFor,
       child: Wrap(
         spacing: 10,
         runSpacing: 10,
@@ -542,7 +544,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               ),
               child: Text(
-                option,
+                _localizeProfileFor(option),
                 style: GoogleFonts.inter(
                   fontSize: 14,
                   fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
@@ -564,7 +566,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildFieldLabel('Language'),
+          _buildFieldLabel(AppLocalizations.of(context)!.language),
           _buildDropdown<String>(
             value: _selectedLanguage,
             hint: 'Select language',
@@ -574,7 +576,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             },
           ),
           const SizedBox(height: 16),
-          _buildFieldLabel('Timezone'),
+          _buildFieldLabel(AppLocalizations.of(context)!.timezone),
           Container(
             decoration: _cardDecoration(),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -583,7 +585,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 const Icon(Icons.access_time_rounded, color: Color(0xFF718096), size: 20),
                 const SizedBox(width: 12),
                 Text(
-                  _selectedTimezone.isNotEmpty ? _selectedTimezone : 'Detecting...',
+                  _selectedTimezone.isNotEmpty ? _selectedTimezone : AppLocalizations.of(context)!.detecting,
                   style: GoogleFonts.inter(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -610,7 +612,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          _buildFieldLabel('Reminders'),
+          _buildFieldLabel(AppLocalizations.of(context)!.reminders),
           _buildToggleRow(
             icon: Icons.notifications_active_outlined,
             title: 'Reminder sound',
@@ -772,6 +774,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     required String hint,
     required List<T> items,
     required ValueChanged<T?> onChanged,
+    String Function(T)? labelMapper,
   }) {
     return Container(
       decoration: _cardDecoration(),
@@ -797,7 +800,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           items: items.map((item) {
             return DropdownMenuItem<T>(
               value: item,
-              child: Text('$item'),
+              child: Text(labelMapper != null ? labelMapper(item) : '$item'),
             );
           }).toList(),
         ),
@@ -908,7 +911,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     )
                   : Text(
-                      'Continue to Mediaro',
+                      AppLocalizations.of(context)!.continueToMediaro,
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -919,6 +922,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ],
       ),
     );
+  }
+
+  String _localizeProfileFor(String value) {
+    switch (value) {
+      case 'Myself': return AppLocalizations.of(context)!.myself;
+      case 'My Parent': return AppLocalizations.of(context)!.myParent;
+      case 'My Spouse': return AppLocalizations.of(context)!.mySpouse;
+      case 'My Child': return AppLocalizations.of(context)!.myChild;
+      case 'Someone else': return AppLocalizations.of(context)!.someoneElse;
+      default: return value;
+    }
+  }
+
+  String _localizeGender(String value) {
+    switch (value) {
+      case 'Male': return AppLocalizations.of(context)!.male;
+      case 'Female': return AppLocalizations.of(context)!.female;
+      case 'Other': return AppLocalizations.of(context)!.other;
+      default: return value;
+    }
   }
 
   BoxDecoration _cardDecoration() {

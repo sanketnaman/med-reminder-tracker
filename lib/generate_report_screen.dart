@@ -5,6 +5,7 @@ import 'database_helper.dart';
 import 'models.dart';
 import 'report_preview_screen.dart';
 import 'app_theme.dart';
+import 'l10n/generated/app_localizations.dart';
 
 class GenerateReportScreen extends StatefulWidget {
   const GenerateReportScreen({super.key});
@@ -77,7 +78,7 @@ class _GenerateReportScreenState extends State<GenerateReportScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-              'Generate Health Report',
+              AppLocalizations.of(context)!.generateHealthReport,
               style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w700, color: AppTheme.textPrimary),
             ),
           ],
@@ -106,7 +107,7 @@ class _GenerateReportScreenState extends State<GenerateReportScreen> {
 
   Widget _buildProfileSelector() {
     return _buildCard(
-      title: 'Profile',
+      title: AppLocalizations.of(context)!.profileLabel,
       child: Column(
         children: _patients.map((p) => RadioListTile<String>(
           value: p.id,
@@ -123,21 +124,21 @@ class _GenerateReportScreenState extends State<GenerateReportScreen> {
 
   Widget _buildDateRangeSection() {
     return _buildCard(
-      title: 'Date Range',
+      title: AppLocalizations.of(context)!.dateRange,
       child: Column(
         children: [
-          _buildQuickRangeOption('Last 7 Days', 7),
-          _buildQuickRangeOption('Last 14 Days', 14),
-          _buildQuickRangeOption('Last 30 Days', 30),
+          _buildQuickRangeOption(AppLocalizations.of(context)!.last7Days, 7),
+          _buildQuickRangeOption(AppLocalizations.of(context)!.last14Days, 14),
+          _buildQuickRangeOption(AppLocalizations.of(context)!.last30Days, 30),
           const SizedBox(height: 8),
-          _buildQuickRangeOption('Custom Range', -1, isCustom: true),
+          _buildQuickRangeOption(AppLocalizations.of(context)!.customRange, -1, isCustom: true),
           if (_useCustomRange) ...[
             const SizedBox(height: 12),
             Row(
               children: [
-                Expanded(child: _buildDateButton('From', _customFrom, (d) => setState(() => _customFrom = d))),
+                Expanded(child: _buildDateButton(AppLocalizations.of(context)!.from, _customFrom, (d) => setState(() => _customFrom = d))),
                 const SizedBox(width: 12),
-                Expanded(child: _buildDateButton('To', _customTo, (d) => setState(() => _customTo = d))),
+                Expanded(child: _buildDateButton(AppLocalizations.of(context)!.to, _customTo, (d) => setState(() => _customTo = d))),
               ],
             ),
           ],
@@ -221,7 +222,7 @@ class _GenerateReportScreenState extends State<GenerateReportScreen> {
             Text(label, style: GoogleFonts.inter(fontSize: 11, color: AppTheme.textSecondary)),
             const SizedBox(height: 4),
             Text(
-              date != null ? DateFormat('dd/MM/yyyy').format(date) : 'Select',
+              date != null ? DateFormat('dd/MM/yyyy').format(date) : AppLocalizations.of(context)!.select,
               style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textPrimary),
             ),
           ],
@@ -232,13 +233,13 @@ class _GenerateReportScreenState extends State<GenerateReportScreen> {
 
   Widget _buildContentOptions() {
     return _buildCard(
-      title: 'Include in Report',
+      title: AppLocalizations.of(context)!.includeInReport,
       child: Column(
         children: [
-          _buildToggle('Medication Summary', _includeMedicationSummary, (v) => setState(() => _includeMedicationSummary = v)),
-          _buildToggle('Medication Adherence', _includeAdherence, (v) => setState(() => _includeAdherence = v)),
-          _buildToggle('Vital Signs', _includeVitals, (v) => setState(() => _includeVitals = v)),
-          _buildToggle('Doctor Appointments', _includeAppointments, (v) => setState(() => _includeAppointments = v)),
+          _buildToggle(AppLocalizations.of(context)!.medicationSummary, _includeMedicationSummary, (v) => setState(() => _includeMedicationSummary = v)),
+          _buildToggle(AppLocalizations.of(context)!.medicationAdherence, _includeAdherence, (v) => setState(() => _includeAdherence = v)),
+          _buildToggle(AppLocalizations.of(context)!.vitalSigns, _includeVitals, (v) => setState(() => _includeVitals = v)),
+          _buildToggle(AppLocalizations.of(context)!.doctorAppointmentsLabel, _includeAppointments, (v) => setState(() => _includeAppointments = v)),
         ],
       ),
     );
@@ -302,7 +303,7 @@ class _GenerateReportScreenState extends State<GenerateReportScreen> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         ),
         child: Text(
-          'Preview Report',
+          AppLocalizations.of(context)!.previewReport,
           style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),
         ),
       ),

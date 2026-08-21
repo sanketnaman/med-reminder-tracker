@@ -470,6 +470,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   : null,
               onTap: () {
                 _updateSetting((s) => s.language = 'English');
+                localeNotifier.value = const Locale('en');
                 Navigator.pop(context);
               },
             ),
@@ -480,6 +481,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   : null,
               onTap: () {
                 _updateSetting((s) => s.language = 'Hindi');
+                localeNotifier.value = const Locale('hi');
                 Navigator.pop(context);
               },
             ),

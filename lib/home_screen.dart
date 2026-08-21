@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'l10n/generated/app_localizations.dart';
 import 'database_helper.dart';
 import 'models.dart';
 import 'add_edit_medicine_screen.dart';
@@ -109,10 +110,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   String _getTimeGreeting() {
     final hour = DateTime.now().hour;
-    if (hour < 12) return 'Morning';
-    if (hour < 17) return 'Afternoon';
-    if (hour < 21) return 'Evening';
-    return 'Night';
+    if (hour < 12) return '${AppLocalizations.of(context)!.goodMorning} ${AppLocalizations.of(context)!.morning}';
+    if (hour < 17) return '${AppLocalizations.of(context)!.goodAfternoon} ${AppLocalizations.of(context)!.afternoon}';
+    if (hour < 21) return '${AppLocalizations.of(context)!.goodEvening} ${AppLocalizations.of(context)!.evening}';
+    return '${AppLocalizations.of(context)!.goodNight} ${AppLocalizations.of(context)!.night}';
   }
 
   void _onDateSelected(DateTime date) {
@@ -173,9 +174,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
               ),
               const SizedBox(height: 16),
-              Text(
-                'Switch Profile',
-                style: GoogleFonts.inter(
+                Text(
+                  AppLocalizations.of(context)!.switchProfile,
+                  style: GoogleFonts.inter(
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
                   color: AppTheme.textPrimary,
@@ -218,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        'Add Dependent',
+                        AppLocalizations.of(context)!.addDependent,
                         style: GoogleFonts.inter(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
@@ -314,7 +315,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             const Icon(Icons.notifications_active, color: Color(0xFF5B8DEF)),
             const SizedBox(width: 8),
             Text(
-              'Notifications',
+              AppLocalizations.of(context)!.notifications,
               style: GoogleFonts.inter(fontWeight: FontWeight.bold),
             ),
           ],
@@ -332,7 +333,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
+            child: Text(AppLocalizations.of(context)!.close),
           ),
         ],
       ),
@@ -444,7 +445,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               child: SmoothSwitch(
                                 key: ValueKey(_activePatientId),
                                 child: Text(
-                                  'Good ${_getTimeGreeting()}, $name',
+                                  '${_getTimeGreeting()}, $name',
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.inter(
                                     fontSize: 20,
@@ -465,7 +466,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          '${_activePatient?.isSelf == true ? "Self" : _activePatient?.relation ?? "Self"} • $formattedDate',
+                          '${_activePatient?.isSelf == true ? AppLocalizations.of(context)!.self : _activePatient?.relation ?? AppLocalizations.of(context)!.self} • $formattedDate',
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.inter(
                             fontSize: 13,
@@ -634,7 +635,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             ),
             const SizedBox(height: 12),
             Text(
-              'No medicines added yet',
+              AppLocalizations.of(context)!.noMedicinesYet,
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.bold,
                 color: AppTheme.textPrimary,
@@ -643,7 +644,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             ),
             const SizedBox(height: 4),
             Text(
-              'Add your first medicine and we\'ll remind you.',
+              AppLocalizations.of(context)!.addFirstMedicineSubtitle,
               style: GoogleFonts.inter(
                 color: AppTheme.textSecondary,
                 fontSize: 13,
@@ -668,7 +669,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               },
               icon: const Icon(Icons.add),
               label: Text(
-                'Add First Medicine',
+                AppLocalizations.of(context)!.addFirstMedicine,
                 style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 14),
               ),
               style: ElevatedButton.styleFrom(
@@ -714,7 +715,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Today\'s Medication Progress',
+            AppLocalizations.of(context)!.todaysMedicationProgress,
             style: GoogleFonts.inter(
               fontSize: 16,
               fontWeight: FontWeight.w700,
@@ -724,9 +725,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           const SizedBox(height: 16),
           Row(
             children: [
-              _buildProgressStat('Total Dose', '$total'),
+              _buildProgressStat(AppLocalizations.of(context)!.totalDose, '$total'),
               const SizedBox(width: 32),
-              _buildProgressStat('Taken', '$taken'),
+              _buildProgressStat(AppLocalizations.of(context)!.taken, '$taken'),
               const Spacer(),
               AnimatedCount(
                 value: percent,
@@ -770,7 +771,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 vertical: 8,
               ),
               child: Text(
-                'View Today\'s Plan',
+                AppLocalizations.of(context)!.viewTodaysPlan,
                 style: GoogleFonts.inter(
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
@@ -979,7 +980,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              isTaken ? 'Taken ✓' : isUpcoming ? 'Upcoming' : 'Missed',
+              isTaken ? AppLocalizations.of(context)!.takenStatus : isUpcoming ? AppLocalizations.of(context)!.upcoming : AppLocalizations.of(context)!.missed,
               style: GoogleFonts.inter(
                 color: isTaken
                     ? const Color(0xFF35B779)
@@ -1018,11 +1019,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildTabItem(0, Icons.home_filled, 'Home'),
-              _buildTabItem(1, Icons.inventory_2_outlined, 'Inventory'),
-              _buildTabItem(2, Icons.bar_chart_outlined, 'Progress'),
-              _buildTabItem(3, Icons.favorite_outline, 'Vitals'),
-              _buildTabItem(4, Icons.person_outline, 'Profile'),
+              _buildTabItem(0, Icons.home_filled, AppLocalizations.of(context)!.home),
+              _buildTabItem(1, Icons.inventory_2_outlined, AppLocalizations.of(context)!.inventory),
+              _buildTabItem(2, Icons.bar_chart_outlined, AppLocalizations.of(context)!.progress),
+              _buildTabItem(3, Icons.favorite_outline, AppLocalizations.of(context)!.vitals),
+              _buildTabItem(4, Icons.person_outline, AppLocalizations.of(context)!.profile),
             ],
           ),
         ),
@@ -1122,7 +1123,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         icon: const Icon(Icons.add, size: 20),
         label: Text(
-          'Add Medicine',
+          AppLocalizations.of(context)!.addMedicine,
           style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 14),
         ),
       ),
@@ -1143,22 +1144,22 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'Snooze Dose',
+          AppLocalizations.of(context)!.snoozeDose,
           style: GoogleFonts.inter(fontWeight: FontWeight.bold),
         ),
-        content: const Text('How long would you like to snooze this reminder?'),
+        content: Text(AppLocalizations.of(context)!.howLongSnooze),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, 10),
-            child: const Text('10 Min'),
+            child: Text(AppLocalizations.of(context)!.min10),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, 30),
-            child: const Text('30 Min'),
+            child: Text(AppLocalizations.of(context)!.min30),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, 60),
-            child: const Text('1 Hour'),
+            child: Text(AppLocalizations.of(context)!.hour1),
           ),
         ],
       ),
@@ -1186,7 +1187,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       _loadDashboardData();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Snoozed for $minutes minutes.')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.snoozedFor(minutes))),
         );
       }
     }
@@ -1222,7 +1223,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           ),
           const SizedBox(height: 8),
           Text(
-            'All medicines completed!',
+            AppLocalizations.of(context)!.allMedicinesCompleted,
             style: GoogleFonts.inter(
               fontSize: 16,
               fontWeight: FontWeight.w700,
@@ -1231,7 +1232,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           ),
           const SizedBox(height: 4),
           Text(
-            'You\'ve completed all your scheduled medicines for today.',
+            AppLocalizations.of(context)!.allCompletedSub,
             textAlign: TextAlign.center,
             style: GoogleFonts.inter(
               fontSize: 13,
@@ -1277,7 +1278,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
-                  'NEXT MEDICINE',
+                  AppLocalizations.of(context)!.nextMedicine,
                   style: GoogleFonts.inter(
                     fontSize: 10,
                     fontWeight: FontWeight.w800,
@@ -1390,7 +1391,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         const Icon(Icons.check, color: Colors.white, size: 16),
                         const SizedBox(width: 4),
                         Text(
-                          isDue ? 'Take Now' : 'Mark as Taken',
+                          isDue ? AppLocalizations.of(context)!.takeNow : AppLocalizations.of(context)!.markAsTaken,
                           style: GoogleFonts.inter(
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
@@ -1417,7 +1418,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       Icon(Icons.snooze, color: AppTheme.textSecondary, size: 16),
                       const SizedBox(width: 4),
                       Text(
-                        'Snooze',
+                        AppLocalizations.of(context)!.snooze,
                         style: GoogleFonts.inter(
                           color: AppTheme.textSecondary,
                           fontWeight: FontWeight.w700,
@@ -1446,7 +1447,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  isDue ? 'OVERDUE' : 'ALSO SCHEDULED',
+                  isDue ? AppLocalizations.of(context)!.overdue : AppLocalizations.of(context)!.alsoScheduled,
                   style: GoogleFonts.inter(
                     fontSize: 10,
                     fontWeight: FontWeight.w800,
@@ -1464,7 +1465,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    '${info.groupCount - 1} more',
+                    '${info.groupCount - 1} ${AppLocalizations.of(context)!.more}',
                     style: GoogleFonts.inter(
                       fontSize: 9,
                       fontWeight: FontWeight.w700,
@@ -1527,7 +1528,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          'Take',
+                          AppLocalizations.of(context)!.take,
                           style: GoogleFonts.inter(
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
@@ -1589,7 +1590,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   Row(
                     children: [
                       Text(
-                        'Doctor Appointments',
+                        AppLocalizations.of(context)!.doctorAppointments,
                         style: GoogleFonts.inter(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
@@ -1605,7 +1606,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
-                            'PRO',
+                            AppLocalizations.of(context)!.pro,
                             style: GoogleFonts.inter(
                               fontSize: 9,
                               fontWeight: FontWeight.w800,
@@ -1619,8 +1620,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   const SizedBox(height: 4),
                   Text(
                     _isPremium
-                        ? 'Schedule and manage visits'
-                        : 'Upgrade to Premium to access',
+                        ? AppLocalizations.of(context)!.scheduleManage
+                        : AppLocalizations.of(context)!.upgradeToAccess,
                     style: GoogleFonts.inter(
                       fontSize: 12,
                       color: AppTheme.textSecondary,

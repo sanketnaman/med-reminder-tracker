@@ -7,6 +7,7 @@ import 'database_helper.dart';
 import 'models.dart';
 import 'alarm_service.dart';
 import 'animation_utils.dart';
+import 'l10n/generated/app_localizations.dart';
 
 class AppointmentsScreen extends StatefulWidget {
   final String patientId;
@@ -66,8 +67,8 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
         onPressed: _showAddAppointmentSheet,
         backgroundColor: const Color(0xFF5B8DEF),
         icon: const Icon(Icons.add, color: Colors.white),
-        label: Text(
-          'New Appointment',
+          label: Text(
+          AppLocalizations.of(context)!.newAppointment,
           style: GoogleFonts.inter(
             color: Colors.white,
             fontWeight: FontWeight.w700,
@@ -98,7 +99,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
               ),
               const SizedBox(width: 10),
               Text(
-                'Doctor Appointments',
+                AppLocalizations.of(context)!.doctorAppointmentsTitle,
                 style: GoogleFonts.inter(
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
@@ -142,7 +143,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              'No appointments yet',
+              AppLocalizations.of(context)!.noAppointments,
               style: GoogleFonts.inter(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -151,7 +152,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Tap "New Appointment" to schedule your first doctor visit.',
+              AppLocalizations.of(context)!.noAppointmentsSub,
               style: GoogleFonts.inter(color: AppTheme.textSecondary),
               textAlign: TextAlign.center,
             ),
@@ -231,7 +232,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      'TODAY',
+                      AppLocalizations.of(context)!.todayBadge,
                       style: GoogleFonts.inter(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
@@ -307,17 +308,17 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Delete Appointment', style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+        title: Text(AppLocalizations.of(context)!.deleteAppointment, style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
         content: Text('Delete appointment with ${appointment.doctorName}?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE85D75)),
-            child: const Text('Delete', style: TextStyle(color: Colors.white)),
+            child: Text(AppLocalizations.of(context)!.delete, style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -362,7 +363,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Text(
-                  'New Appointment',
+                  AppLocalizations.of(context)!.newAppointment,
                   style: GoogleFonts.inter(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
@@ -376,15 +377,15 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildLabel('Doctor Name'),
+                      _buildLabel(AppLocalizations.of(context)!.doctorName),
                       const SizedBox(height: 8),
                       _buildTextField(doctorController, 'e.g. Dr. Smith'),
                       const SizedBox(height: 16),
-                      _buildLabel('Specialization'),
+                      _buildLabel(AppLocalizations.of(context)!.specialization),
                       const SizedBox(height: 8),
                       _buildTextField(specializationController, 'e.g. Cardiologist'),
                       const SizedBox(height: 16),
-                      _buildLabel('Appointment Date'),
+                      _buildLabel(AppLocalizations.of(context)!.appointmentDate),
                       const SizedBox(height: 8),
                       GestureDetector(
                         onTap: () async {
@@ -421,7 +422,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      _buildLabel('Appointment Time'),
+                      _buildLabel(AppLocalizations.of(context)!.appointmentTime),
                       const SizedBox(height: 8),
                       GestureDetector(
                         onTap: () async {
@@ -456,11 +457,11 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      _buildLabel('Location'),
+                      _buildLabel(AppLocalizations.of(context)!.location),
                       const SizedBox(height: 8),
                       _buildTextField(locationController, 'e.g. City Hospital, Room 302'),
                       const SizedBox(height: 16),
-                      _buildLabel('Notes (Optional)'),
+                      _buildLabel(AppLocalizations.of(context)!.notesOptional),
                       const SizedBox(height: 8),
                       _buildTextField(notesController, 'Any additional notes...', maxLines: 3),
                       const SizedBox(height: 24),
@@ -483,7 +484,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                             ),
                           ),
                           child: Text(
-                            'Save Appointment',
+                            AppLocalizations.of(context)!.saveAppointment,
                             style: GoogleFonts.inter(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
@@ -552,9 +553,9 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
   ) {
     if (doctorCtrl.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter doctor name'),
-          backgroundColor: Color(0xFFE85D75),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.errorDoctorName),
+          backgroundColor: const Color(0xFFE85D75),
         ),
       );
       return;
@@ -562,9 +563,9 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
 
     if (locationCtrl.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter location'),
-          backgroundColor: Color(0xFFE85D75),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.errorLocation),
+          backgroundColor: const Color(0xFFE85D75),
         ),
       );
       return;
@@ -587,9 +588,9 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
       Navigator.pop(context);
       _loadAppointments();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Appointment saved!'),
-          backgroundColor: Color(0xFF35B779),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.appointmentSaved),
+          backgroundColor: const Color(0xFF35B779),
         ),
       );
     });

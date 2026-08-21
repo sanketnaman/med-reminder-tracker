@@ -9,6 +9,7 @@ import 'premium_screen.dart';
 import 'generate_report_screen.dart';
 import 'app_theme.dart';
 import 'animation_utils.dart';
+import 'l10n/generated/app_localizations.dart';
 
 class HealthReportScreen extends StatefulWidget {
   const HealthReportScreen({super.key});
@@ -74,7 +75,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-              'Health Reports',
+              AppLocalizations.of(context)!.healthReportsTitle,
               style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w700, color: AppTheme.textPrimary),
             ),
           ],
@@ -107,7 +108,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'Health Reports',
+                  AppLocalizations.of(context)!.healthReportsTitle,
                   style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: AppTheme.textPrimary),
                 ),
                 const SizedBox(height: 4),
@@ -118,13 +119,13 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    'PRO',
+                    AppLocalizations.of(context)!.pro,
                     style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w800, color: const Color(0xFFF5A623)),
                   ),
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Generate doctor-ready reports from your medication and vitals history.',
+                  AppLocalizations.of(context)!.healthReportsDesc,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.inter(fontSize: 14, color: AppTheme.textSecondary, height: 1.5),
                 ),
@@ -145,7 +146,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
               ),
               child: Text(
-                'Upgrade to Premium',
+                AppLocalizations.of(context)!.upgradeToPremiumBtn,
                 style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),
               ),
             ),
@@ -174,7 +175,7 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
               },
               icon: const Icon(Icons.add_rounded, color: Colors.white),
               label: Text(
-                'Generate Report',
+                AppLocalizations.of(context)!.generateReport,
                 style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),
               ),
               style: ElevatedButton.styleFrom(
@@ -201,12 +202,12 @@ class _HealthReportScreenState extends State<HealthReportScreen> {
               Icon(Icons.description_outlined, size: 60, color: const Color(0xFF5B8DEF).withOpacity(0.3)),
               const SizedBox(height: 16),
               Text(
-                'No reports yet',
+                AppLocalizations.of(context)!.noReportsYet,
                 style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: AppTheme.textPrimary),
               ),
               const SizedBox(height: 6),
               Text(
-                'Generate your first health report to share with your doctor.',
+                AppLocalizations.of(context)!.noReportsSub,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.inter(fontSize: 13, color: AppTheme.textSecondary),
               ),

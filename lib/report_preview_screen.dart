@@ -7,6 +7,7 @@ import 'database_helper.dart';
 import 'models.dart';
 import 'pdf_report_generator.dart';
 import 'app_theme.dart';
+import 'l10n/generated/app_localizations.dart';
 
 class ReportPreviewScreen extends StatefulWidget {
   final String patientId;
@@ -110,7 +111,7 @@ class _ReportPreviewScreenState extends State<ReportPreviewScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'Health Report',
+          AppLocalizations.of(context)!.healthReport,
           style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w700, color: AppTheme.textPrimary),
         ),
         centerTitle: true,
@@ -159,7 +160,7 @@ class _ReportPreviewScreenState extends State<ReportPreviewScreen> {
           // Adherence card
           if (widget.includeAdherence) ...[
             _buildStatCard(
-              title: 'Medication Adherence',
+              title: AppLocalizations.of(context)!.medicationAdherence,
               value: '$_adherencePercent%',
               subtitle: '$_takenDoses of $_totalDoses doses taken',
               icon: Icons.check_circle_outline,
@@ -171,7 +172,7 @@ class _ReportPreviewScreenState extends State<ReportPreviewScreen> {
           // Medications card
           if (widget.includeMedicationSummary) ...[
             _buildStatCard(
-              title: 'Medications',
+              title: AppLocalizations.of(context)!.medications,
               value: '$_totalMedicines',
               subtitle: 'Active medications in period',
               icon: Icons.medication_outlined,
@@ -183,7 +184,7 @@ class _ReportPreviewScreenState extends State<ReportPreviewScreen> {
           // Vitals card
           if (widget.includeVitals) ...[
             _buildStatCard(
-              title: 'Vital Readings',
+              title: AppLocalizations.of(context)!.vitalReadings,
               value: '${_bpCount + _sugarCount + _spo2Count + _weightCount}',
               subtitle: '$_bpCount BP · $_sugarCount Sugar · $_spo2Count SpO2 · $_weightCount Weight',
               icon: Icons.favorite_outline,
@@ -195,7 +196,7 @@ class _ReportPreviewScreenState extends State<ReportPreviewScreen> {
           // Appointments card
           if (widget.includeAppointments) ...[
             _buildStatCard(
-              title: 'Appointments',
+              title: AppLocalizations.of(context)!.appointments,
               value: '$_appointmentCount',
               subtitle: 'Doctor visits in period',
               icon: Icons.calendar_today_outlined,
@@ -269,7 +270,7 @@ class _ReportPreviewScreenState extends State<ReportPreviewScreen> {
               ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
               : const Icon(Icons.picture_as_pdf_rounded, color: Colors.white),
           label: Text(
-            _isGenerating ? 'Generating...' : 'Generate PDF',
+            _isGenerating ? AppLocalizations.of(context)!.generating : AppLocalizations.of(context)!.generatePdf,
             style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),
           ),
           style: ElevatedButton.styleFrom(
@@ -307,12 +308,12 @@ class _ReportPreviewScreenState extends State<ReportPreviewScreen> {
           context: context,
           builder: (ctx) => AlertDialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            title: Text('Report Generated', style: GoogleFonts.inter(fontWeight: FontWeight.w800)),
-            content: Text('Your health report has been generated successfully.', style: GoogleFonts.inter(fontSize: 14)),
+            title: Text(AppLocalizations.of(context)!.reportGenerated, style: GoogleFonts.inter(fontWeight: FontWeight.w800)),
+            content: Text(AppLocalizations.of(context)!.reportGeneratedSub, style: GoogleFonts.inter(fontSize: 14)),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
-                child: Text('Close', style: GoogleFonts.inter(color: AppTheme.textSecondary)),
+                child: Text(AppLocalizations.of(context)!.close, style: GoogleFonts.inter(color: AppTheme.textSecondary)),
               ),
               ElevatedButton.icon(
                 onPressed: () async {
@@ -323,7 +324,7 @@ class _ReportPreviewScreenState extends State<ReportPreviewScreen> {
                   );
                 },
                 icon: const Icon(Icons.open_in_new_rounded, size: 18, color: Colors.white),
-                label: Text('Open', style: GoogleFonts.inter(fontWeight: FontWeight.w700, color: Colors.white)),
+                label: Text(AppLocalizations.of(context)!.open, style: GoogleFonts.inter(fontWeight: FontWeight.w700, color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF5B8DEF),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -335,7 +336,7 @@ class _ReportPreviewScreenState extends State<ReportPreviewScreen> {
                   await Printing.sharePdf(bytes: await file.readAsBytes(), filename: file.path.split(Platform.pathSeparator).last);
                 },
                 icon: const Icon(Icons.share_rounded, size: 18, color: Colors.white),
-                label: Text('Share', style: GoogleFonts.inter(fontWeight: FontWeight.w700, color: Colors.white)),
+                label: Text(AppLocalizations.of(context)!.share, style: GoogleFonts.inter(fontWeight: FontWeight.w700, color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF35B779),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

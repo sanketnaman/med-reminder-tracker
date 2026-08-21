@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'database_helper.dart';
 import 'models.dart';
 import 'premium_screen.dart';
+import 'l10n/generated/app_localizations.dart';
 
 class AddDependentScreen extends StatefulWidget {
   final Dependent? dependentToEdit;
@@ -129,7 +130,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
           ),
         ),
         title: Text(
-          isEdit ? 'Edit Dependent' : 'Add Dependent',
+          isEdit ? AppLocalizations.of(context)!.editDependentTitle : AppLocalizations.of(context)!.addDependentTitle,
           style: GoogleFonts.inter(
             color: const Color(0xFF202733),
             fontWeight: FontWeight.w800,
@@ -178,7 +179,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
                 const SizedBox(height: 32),
 
                 // Name
-                _buildLabel('Name'),
+                _buildLabel(AppLocalizations.of(context)!.name),
                 _buildCard(
                   TextFormField(
                     controller: _nameController,
@@ -188,7 +189,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
                       color: const Color(0xFF202733),
                     ),
                     decoration: InputDecoration(
-                      hintText: 'Enter name',
+                      hintText: AppLocalizations.of(context)!.enterNameHint,
                       hintStyle: GoogleFonts.inter(
                         color: const Color(0xFF718096).withValues(alpha: 0.6),
                       ),
@@ -200,14 +201,14 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
                     ),
                     onChanged: (_) => setState(() {}),
                     validator: (val) => val == null || val.trim().isEmpty
-                        ? 'Please enter a name'
+                        ? AppLocalizations.of(context)!.pleaseEnterDependentName
                         : null,
                   ),
                 ),
                 const SizedBox(height: 20),
 
                 // Relationship
-                _buildLabel('Relationship'),
+                _buildLabel(AppLocalizations.of(context)!.relationship),
                 _buildCard(
                   DropdownButtonFormField<String>(
                     initialValue: _selectedRelation,
@@ -229,7 +230,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
                       ),
                     ),
                     items: _relations
-                        .map((r) => DropdownMenuItem(value: r, child: Text(r)))
+                        .map((r) => DropdownMenuItem(value: r, child: Text(_localizeRelation(r))))
                         .toList(),
                     onChanged: (val) {
                       if (val != null) setState(() => _selectedRelation = val);
@@ -245,7 +246,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildLabel('Age'),
+                          _buildLabel(AppLocalizations.of(context)!.age),
                           _buildCard(
                             TextFormField(
                               controller: _ageController,
@@ -269,7 +270,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildLabel('Gender'),
+                          _buildLabel(AppLocalizations.of(context)!.gender),
                           _buildCard(
                             DropdownButtonFormField<String>(
                               initialValue: _selectedGender,
@@ -288,7 +289,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
                                 contentPadding: EdgeInsets.symmetric(vertical: 12),
                               ),
                               items: _genders
-                                  .map((g) => DropdownMenuItem(value: g, child: Text(g)))
+                                  .map((g) => DropdownMenuItem(value: g, child: Text(_localizeGender(g))))
                                   .toList(),
                               onChanged: (val) {
                                 if (val != null) setState(() => _selectedGender = val);
@@ -303,7 +304,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
                 const SizedBox(height: 32),
 
                 // Cardiac Post-Surgery question
-                _buildLabel('Cardiac Post-Surgery Patient?'),
+                _buildLabel(AppLocalizations.of(context)!.cardiacQuestion),
                 _buildCard(
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -311,7 +312,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            'This enables Spirometer and Walk Test vitals',
+                            AppLocalizations.of(context)!.cardiacDesc,
                             style: GoogleFonts.inter(
                               fontSize: 12,
                               color: const Color(0xFF718096),
@@ -353,7 +354,7 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
                             ),
                           )
                         : Text(
-                            isEdit ? 'Save Changes' : 'Add Dependent',
+                            isEdit ? AppLocalizations.of(context)!.saveChanges : AppLocalizations.of(context)!.addDependentBtn,
                             style: GoogleFonts.inter(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
@@ -381,6 +382,31 @@ class _AddDependentScreenState extends State<AddDependentScreen> {
         ),
       ),
     );
+  }
+
+  String _localizeRelation(String value) {
+    switch (value) {
+      case 'Father': return AppLocalizations.of(context)!.father;
+      case 'Mother': return AppLocalizations.of(context)!.mother;
+      case 'Spouse': return AppLocalizations.of(context)!.spouse;
+      case 'Son': return AppLocalizations.of(context)!.son;
+      case 'Daughter': return AppLocalizations.of(context)!.daughter;
+      case 'Brother': return AppLocalizations.of(context)!.brother;
+      case 'Sister': return AppLocalizations.of(context)!.sister;
+      case 'Grandfather': return AppLocalizations.of(context)!.grandfather;
+      case 'Grandmother': return AppLocalizations.of(context)!.grandmother;
+      case 'Other': return AppLocalizations.of(context)!.dependentOther;
+      default: return value;
+    }
+  }
+
+  String _localizeGender(String value) {
+    switch (value) {
+      case 'Male': return AppLocalizations.of(context)!.male;
+      case 'Female': return AppLocalizations.of(context)!.female;
+      case 'Other': return AppLocalizations.of(context)!.dependentOther;
+      default: return value;
+    }
   }
 
   Widget _buildCard(Widget child) {

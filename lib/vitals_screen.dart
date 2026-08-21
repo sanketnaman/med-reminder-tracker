@@ -6,6 +6,7 @@ import 'app_theme.dart';
 import 'database_helper.dart';
 import 'models.dart';
 import 'animation_utils.dart';
+import 'l10n/generated/app_localizations.dart';
 
 class VitalsScreen extends StatefulWidget {
   final String patientId;
@@ -90,8 +91,8 @@ class _VitalsScreenState extends State<VitalsScreen> {
         onPressed: _showAddReadingSheet,
         backgroundColor: const Color(0xFF5B8DEF),
         icon: const Icon(Icons.add, color: Colors.white),
-        label: Text(
-          'Log Reading',
+          label: Text(
+            AppLocalizations.of(context)!.logReading,
           style: GoogleFonts.inter(
             color: Colors.white,
             fontWeight: FontWeight.w700,
@@ -121,7 +122,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
               ),
               const SizedBox(width: 8),
               Text(
-                "Today's Vitals",
+                AppLocalizations.of(context)!.todaysVitals,
                 style: GoogleFonts.inter(
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
@@ -143,7 +144,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
             children: [
               Expanded(
                 child: _buildVitalCard(
-                  'Blood Pressure',
+                  AppLocalizations.of(context)!.bloodPressure,
                   _latestVitals['blood_pressure']?.displayValue ?? '--',
                   'mmHg',
                   const Color(0xFFE85D75),
@@ -153,7 +154,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
               const SizedBox(width: 12),
               Expanded(
                 child: _buildVitalCard(
-                  'Blood Sugar',
+                  AppLocalizations.of(context)!.bloodSugar,
                   _latestVitals['blood_sugar']?.displayValue ?? '--',
                   'mg/dL',
                   const Color(0xFFF5A623),
@@ -167,7 +168,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
             children: [
               Expanded(
                 child: _buildVitalCard(
-                  'Weight',
+                  AppLocalizations.of(context)!.weight,
                   _latestVitals['weight']?.displayValue ?? '--',
                   'kg',
                   const Color(0xFF5B8DEF),
@@ -177,7 +178,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
               const SizedBox(width: 12),
               Expanded(
                 child: _buildVitalCard(
-                  'SPO2',
+                  AppLocalizations.of(context)!.spo2,
                   _latestVitals['spo2']?.displayValue ?? '--',
                   '%',
                   const Color(0xFF20C9D8),
@@ -192,7 +193,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
               children: [
                 Expanded(
                   child: _buildVitalCard(
-                    'Spirometer',
+                    AppLocalizations.of(context)!.spirometer,
                     _latestVitals['spirometer']?.displayValue ?? '--',
                     'L',
                     const Color(0xFF35B779),
@@ -203,7 +204,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildVitalCard(
-                    'Walk Test',
+                    AppLocalizations.of(context)!.walkTest,
                     _latestVitals['walk']?.displayValue ?? '--',
                     'steps',
                     const Color(0xFF9B59B6),
@@ -313,7 +314,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
           if (_latestVitals.containsKey(title.toLowerCase().replaceAll(' ', '_'))) ...[
             const SizedBox(height: 4),
             Text(
-              'Last: ${DateFormat('hh:mm a').format(_latestVitals[title.toLowerCase().replaceAll(' ', '_')]!.recordedAt)}',
+              '${AppLocalizations.of(context)!.lastLabel} ${DateFormat('hh:mm a').format(_latestVitals[title.toLowerCase().replaceAll(' ', '_')]!.recordedAt)}',
               style: GoogleFonts.inter(
                 fontSize: 11,
                 color: AppTheme.textMuted,
@@ -329,7 +330,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
       child: Text(
-        'History',
+        AppLocalizations.of(context)!.history,
         style: GoogleFonts.inter(
           fontSize: 20,
           fontWeight: FontWeight.w800,
@@ -352,7 +353,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              'No vitals recorded yet',
+              AppLocalizations.of(context)!.noVitalsRecorded,
               style: GoogleFonts.inter(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -361,7 +362,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Tap "Log Reading" to record your first vital.',
+              AppLocalizations.of(context)!.tapLogReading,
               style: GoogleFonts.inter(color: AppTheme.textSecondary),
               textAlign: TextAlign.center,
             ),
@@ -375,7 +376,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
     final date = DateTime.parse(dateKey);
     final isToday = DateFormat('yyyy-MM-dd').format(DateTime.now()) == dateKey;
     final dateLabel = isToday
-        ? 'Today'
+        ? AppLocalizations.of(context)!.today
         : DateFormat('EEEE, MMMM d').format(date);
 
     return Padding(
@@ -512,17 +513,17 @@ class _VitalsScreenState extends State<VitalsScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Delete Reading', style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+        title: Text(AppLocalizations.of(context)!.deleteReading, style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
         content: Text('Delete this ${reading.displayName} reading?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE85D75)),
-            child: const Text('Delete', style: TextStyle(color: Colors.white)),
+            child: Text(AppLocalizations.of(context)!.delete, style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -570,7 +571,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Text(
-                  'Log Vital Reading',
+                  AppLocalizations.of(context)!.logVitalReading,
                   style: GoogleFonts.inter(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
@@ -585,7 +586,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Vital Type',
+                        AppLocalizations.of(context)!.vitalType,
                         style: GoogleFonts.inter(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
@@ -606,11 +607,11 @@ class _VitalsScreenState extends State<VitalsScreen> {
                             });
                           }),
                           const SizedBox(width: 8),
-                          _buildTypeChip('Weight', 'weight', selectedType, (val) {
+                          _buildTypeChip(AppLocalizations.of(context)!.weight, 'weight', selectedType, (val) {
                             setSheetState(() => selectedType = val);
                           }),
                           const SizedBox(width: 8),
-                          _buildTypeChip('SPO2', 'spo2', selectedType, (val) {
+                          _buildTypeChip(AppLocalizations.of(context)!.spo2, 'spo2', selectedType, (val) {
                             setSheetState(() => selectedType = val);
                           }),
                         ],
@@ -619,11 +620,11 @@ class _VitalsScreenState extends State<VitalsScreen> {
                         const SizedBox(height: 8),
                         Row(
                           children: [
-                            _buildTypeChip('Spirometer', 'spirometer', selectedType, (val) {
+                            _buildTypeChip(AppLocalizations.of(context)!.spirometer, 'spirometer', selectedType, (val) {
                               setSheetState(() => selectedType = val);
                             }),
                             const SizedBox(width: 8),
-                            _buildTypeChip('Walk Test', 'walk', selectedType, (val) {
+                            _buildTypeChip(AppLocalizations.of(context)!.walkTest, 'walk', selectedType, (val) {
                               setSheetState(() => selectedType = val);
                             }),
                           ],
@@ -667,7 +668,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                       // Input fields based on type
                       if (selectedType == 'blood_pressure') ...[
                         Text(
-                          'Systolic (mmHg)',
+                          AppLocalizations.of(context)!.systolic,
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
@@ -675,10 +676,10 @@ class _VitalsScreenState extends State<VitalsScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        _buildInputField(systolicController, 'e.g. 120', TextInputType.number),
+                        _buildInputField(systolicController, '${AppLocalizations.of(context)!.hintEg} 120', TextInputType.number),
                         const SizedBox(height: 16),
                         Text(
-                          'Diastolic (mmHg)',
+                          AppLocalizations.of(context)!.diastolic,
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
@@ -686,11 +687,11 @@ class _VitalsScreenState extends State<VitalsScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        _buildInputField(diastolicController, 'e.g. 80', TextInputType.number),
+                        _buildInputField(diastolicController, '${AppLocalizations.of(context)!.hintEg} 80', TextInputType.number),
                       ],
                       if (selectedType == 'blood_sugar') ...[
                         Text(
-                          'When?',
+                          AppLocalizations.of(context)!.when,
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
@@ -700,18 +701,18 @@ class _VitalsScreenState extends State<VitalsScreen> {
                         const SizedBox(height: 8),
                         Row(
                           children: [
-                            _buildTypeChip('Before Meal', 'before_meal', selectedSugarSubType ?? '', (val) {
+                            _buildTypeChip(AppLocalizations.of(context)!.beforeMeal, 'before_meal', selectedSugarSubType ?? '', (val) {
                               setSheetState(() => selectedSugarSubType = val);
                             }),
                             const SizedBox(width: 8),
-                            _buildTypeChip('After Meal', 'after_meal', selectedSugarSubType ?? '', (val) {
+                            _buildTypeChip(AppLocalizations.of(context)!.afterMeal, 'after_meal', selectedSugarSubType ?? '', (val) {
                               setSheetState(() => selectedSugarSubType = val);
                             }),
                           ],
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'Blood Sugar (mg/dL)',
+                          AppLocalizations.of(context)!.bloodSugarUnit,
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
@@ -719,11 +720,11 @@ class _VitalsScreenState extends State<VitalsScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        _buildInputField(sugarController, 'e.g. 100', TextInputType.number),
+                        _buildInputField(sugarController, '${AppLocalizations.of(context)!.hintEg} 100', TextInputType.number),
                       ],
                       if (selectedType == 'weight') ...[
                         Text(
-                          'Weight (kg)',
+                          AppLocalizations.of(context)!.weightUnit,
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
@@ -731,11 +732,11 @@ class _VitalsScreenState extends State<VitalsScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        _buildInputField(weightController, 'e.g. 70.5', TextInputType.number),
+                        _buildInputField(weightController, '${AppLocalizations.of(context)!.hintEg} 70.5', TextInputType.number),
                       ],
                       if (selectedType == 'spo2') ...[
                         Text(
-                          'SPO2 (%)',
+                          AppLocalizations.of(context)!.spo2Unit,
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
@@ -743,11 +744,11 @@ class _VitalsScreenState extends State<VitalsScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        _buildInputField(spo2Controller, 'e.g. 98', TextInputType.number),
+                        _buildInputField(spo2Controller, '${AppLocalizations.of(context)!.hintEg} 98', TextInputType.number),
                       ],
                       if (selectedType == 'spirometer') ...[
                         Text(
-                          'Spirometer Reading (L)',
+                          AppLocalizations.of(context)!.spirometerUnit,
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
@@ -755,11 +756,11 @@ class _VitalsScreenState extends State<VitalsScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        _buildInputField(spirometerController, 'e.g. 2.5', TextInputType.number),
+                        _buildInputField(spirometerController, '${AppLocalizations.of(context)!.hintEg} 2.5', TextInputType.number),
                       ],
                       if (selectedType == 'walk') ...[
                         Text(
-                          'Walk Test (steps)',
+                          AppLocalizations.of(context)!.walkTestUnit,
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
@@ -767,7 +768,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        _buildInputField(walkController, 'e.g. 500', TextInputType.number),
+                        _buildInputField(walkController, '${AppLocalizations.of(context)!.hintEg} 500', TextInputType.number),
                       ],
                       const SizedBox(height: 24),
                       SizedBox(
@@ -793,7 +794,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
                             ),
                           ),
                           child: Text(
-                            'Save Reading',
+                            AppLocalizations.of(context)!.saveReading,
                             style: GoogleFonts.inter(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,

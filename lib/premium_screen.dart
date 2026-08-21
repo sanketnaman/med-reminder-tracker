@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'database_helper.dart';
 import 'animation_utils.dart';
 import 'app_theme.dart';
+import 'l10n/generated/app_localizations.dart';
 
 class PremiumScreen extends StatefulWidget {
   const PremiumScreen({super.key});
@@ -113,7 +114,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
           ),
           const Spacer(),
           Text(
-            'PREMIUM',
+            AppLocalizations.of(context)!.premiumHeader,
             style: GoogleFonts.inter(
               fontSize: 14,
               fontWeight: FontWeight.w800,
@@ -168,7 +169,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
           ),
           const SizedBox(height: 20),
           Text(
-            'Stay on top of\nevery dose.',
+            AppLocalizations.of(context)!.heroTitle,
             textAlign: TextAlign.center,
             style: GoogleFonts.inter(
               fontSize: 26,
@@ -179,7 +180,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
           ),
           const SizedBox(height: 10),
           Text(
-            'More control. More confidence.\nBetter medication management.',
+            AppLocalizations.of(context)!.heroSub,
             textAlign: TextAlign.center,
             style: GoogleFonts.inter(
               fontSize: 13,
@@ -253,7 +254,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Mediaro Premium',
+                  AppLocalizations.of(context)!.activeBanner,
                   style: GoogleFonts.inter(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -262,7 +263,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Active — All features unlocked',
+                  AppLocalizations.of(context)!.activeSub,
                   style: GoogleFonts.inter(
                     fontSize: 13,
                     color: AppTheme.textSecondary,
@@ -282,41 +283,42 @@ class _PremiumScreenState extends State<PremiumScreen> {
   }
 
   Widget _buildBenefitsSection() {
+    final l10n = AppLocalizations.of(context)!;
     final benefits = [
       {
         'icon': 'assets/icons/tablet.svg',
-        'title': 'Unlimited medicines',
-        'desc': 'Manage all your medications without the Free plan limit.',
+        'title': l10n.benefitUnlimitedMeds,
+        'desc': l10n.benefitUnlimitedMedsDesc,
       },
       {
         'icon': 'assets/icons/Other.svg',
-        'title': 'Unlimited dependents',
-        'desc': 'Manage medication schedules for your entire family.',
+        'title': l10n.benefitUnlimitedDep,
+        'desc': l10n.benefitUnlimitedDepDesc,
       },
       {
         'icon': 'assets/icons/blood_pressure.svg',
-        'title': 'Daily vitals',
-        'desc': 'Track BP, blood sugar, SpO2 and weight.',
+        'title': l10n.benefitDailyVitals,
+        'desc': l10n.benefitDailyVitalsDesc,
       },
       {
         'icon': 'assets/icons/doctor_appointment.svg',
-        'title': 'Doctor appointments',
-        'desc': 'Never forget an upcoming appointment.',
+        'title': l10n.benefitAppointments,
+        'desc': l10n.benefitAppointmentsDesc,
       },
       {
         'icon': 'assets/icons/Other.svg',
-        'title': 'Health reports',
-        'desc': 'Generate doctor-ready PDF reports with vitals and adherence.',
+        'title': l10n.benefitReports,
+        'desc': l10n.benefitReportsDesc,
       },
       {
         'icon': 'assets/icons/morning.svg',
-        'title': 'Advanced insights',
-        'desc': 'Understand your medication adherence over time.',
+        'title': l10n.benefitInsights,
+        'desc': l10n.benefitInsightsDesc,
       },
       {
         'icon': 'assets/icons/night.svg',
-        'title': 'Ad-free experience',
-        'desc': 'Use Mediaro without advertisements.',
+        'title': l10n.benefitAdfree,
+        'desc': l10n.benefitAdfreeDesc,
       },
     ];
 
@@ -326,7 +328,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Why go Premium?',
+            AppLocalizations.of(context)!.whyGoPremium,
             style: GoogleFonts.inter(
               fontSize: 18,
               fontWeight: FontWeight.w800,
@@ -419,7 +421,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Choose your plan',
+            AppLocalizations.of(context)!.chooseYourPlan,
             style: GoogleFonts.inter(
               fontSize: 18,
               fontWeight: FontWeight.w800,
@@ -429,19 +431,19 @@ class _PremiumScreenState extends State<PremiumScreen> {
           const SizedBox(height: 14),
           _buildPlanCard(
             isYearly: true,
-            label: 'YEARLY',
+            label: AppLocalizations.of(context)!.yearly,
             price: '₹${_yearlyPrice.toInt()}',
-            period: '/ year',
+            period: AppLocalizations.of(context)!.perYear,
             subtext: '≈ ₹${_monthlyEquivalent.toInt()} / month',
             saving: '${_yearlySavingPercent.toInt()}%',
-            badge: 'BEST VALUE',
+            badge: AppLocalizations.of(context)!.bestValue,
           ),
           const SizedBox(height: 12),
           _buildPlanCard(
             isYearly: false,
-            label: 'MONTHLY',
+            label: AppLocalizations.of(context)!.monthlyLabel,
             price: '₹${_monthlyPrice.toInt()}',
-            period: '/ month',
+            period: AppLocalizations.of(context)!.perMonth,
             subtext: null,
             saving: null,
             badge: null,
@@ -584,7 +586,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  'SAVE $saving',
+                  '${AppLocalizations.of(context)!.save} $saving',
                   style: GoogleFonts.inter(
                     fontSize: 11,
                     fontWeight: FontWeight.w800,
@@ -604,7 +606,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
       child: Column(
         children: [
           Text(
-            'Cancel anytime. Your subscription is managed securely through Google Play.',
+            AppLocalizations.of(context)!.cancelAnytime,
             textAlign: TextAlign.center,
             style: GoogleFonts.inter(
               fontSize: 12,
@@ -619,7 +621,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               GestureDetector(
                 onTap: () {},
                 child: Text(
-                  'Terms of Service',
+                  AppLocalizations.of(context)!.termsOfService,
                   style: GoogleFonts.inter(
                     fontSize: 11,
                     color: const Color(0xFF5B8DEF),
@@ -637,7 +639,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               GestureDetector(
                 onTap: () {},
                 child: Text(
-                  'Privacy Policy',
+                  AppLocalizations.of(context)!.privacyPolicy,
                   style: GoogleFonts.inter(
                     fontSize: 11,
                     color: const Color(0xFF5B8DEF),
@@ -649,7 +651,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Subscription automatically renews unless auto-renew is turned off at least 24 hours before the end of the current period.',
+            AppLocalizations.of(context)!.renewalText,
             textAlign: TextAlign.center,
             style: GoogleFonts.inter(
               fontSize: 10,
@@ -728,7 +730,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    'No previous purchases found.',
+                    AppLocalizations.of(context)!.noPrevious,
                     style: GoogleFonts.inter(),
                   ),
                   behavior: SnackBarBehavior.floating,
@@ -739,7 +741,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               );
             },
             child: Text(
-              'Restore Purchases',
+              AppLocalizations.of(context)!.restorePurchases,
               style: GoogleFonts.inter(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,

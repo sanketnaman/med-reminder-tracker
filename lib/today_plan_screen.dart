@@ -9,6 +9,7 @@ import 'alarm_service.dart';
 import 'add_edit_medicine_screen.dart';
 import 'premium_screen.dart';
 import 'animation_utils.dart';
+import 'l10n/generated/app_localizations.dart';
 
 class TodayPlanScreen extends StatefulWidget {
   final VoidCallback onRefreshHome;
@@ -84,14 +85,14 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'Snooze Dose',
+          AppLocalizations.of(context)!.snoozeDose,
           style: GoogleFonts.inter(fontWeight: FontWeight.bold),
         ),
-        content: const Text('How long would you like to snooze this reminder?'),
+        content: Text(AppLocalizations.of(context)!.howLongSnooze),
         actions: [
-          _snoozeAction(context, '10 Min', 10),
-          _snoozeAction(context, '30 Min', 30),
-          _snoozeAction(context, '1 Hour', 60),
+          _snoozeAction(context, AppLocalizations.of(context)!.min10, 10),
+          _snoozeAction(context, AppLocalizations.of(context)!.min30, 30),
+          _snoozeAction(context, AppLocalizations.of(context)!.hour1, 60),
         ],
       ),
     );
@@ -120,7 +121,7 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
       widget.onRefreshHome();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Snoozed for $minutes minutes.')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.snoozedFor(minutes))),
         );
       }
     }
@@ -170,8 +171,8 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Today\'s Plan',
+                       Text(
+                        AppLocalizations.of(context)!.todaysPlan,
                         style: GoogleFonts.inter(
                           fontSize: 22,
                           fontWeight: FontWeight.w800,
@@ -251,7 +252,7 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
             ),
             const SizedBox(height: 12),
             Text(
-              'No medication scheduled for today.',
+              AppLocalizations.of(context)!.noMedicationScheduled,
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.bold,
                 color: AppTheme.textPrimary,
@@ -259,7 +260,7 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
             ),
             const SizedBox(height: 4),
             Text(
-              'Add medicines with scheduled times to see them here.',
+              AppLocalizations.of(context)!.addMedicinesWithTimes,
               textAlign: TextAlign.center,
               style: GoogleFonts.inter(
                 color: AppTheme.textSecondary,
@@ -276,7 +277,7 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
                       content: Text('Free plan limited to ${DatabaseHelper.freeMedicineLimit} medicines. Upgrade to Premium.'),
                       backgroundColor: const Color(0xFFE85D75),
                       action: SnackBarAction(
-                        label: 'Upgrade',
+                        label: AppLocalizations.of(context)!.upgrade,
                         textColor: Colors.white,
                         onPressed: () {
                           Navigator.push(
@@ -300,7 +301,7 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
               },
               icon: const Icon(Icons.add),
               label: Text(
-                'Add Medicine',
+                AppLocalizations.of(context)!.addMedicine,
                 style: GoogleFonts.inter(
                   fontWeight: FontWeight.w700,
                   fontSize: 14,
@@ -344,8 +345,8 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Today\'s Medication Progress',
+                 Text(
+                   AppLocalizations.of(context)!.todaysMedicationProgress,
                   style: GoogleFonts.inter(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -366,8 +367,8 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
                             color: Colors.white,
                           ),
                         ),
-                        Text(
-                          'Total Dose',
+                         Text(
+                           AppLocalizations.of(context)!.totalDose,
                           style: GoogleFonts.inter(
                             fontSize: 12,
                             color: Colors.white.withOpacity(0.85),
@@ -388,8 +389,8 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
                             color: Colors.white,
                           ),
                         ),
-                        Text(
-                          'Taken',
+                         Text(
+                           AppLocalizations.of(context)!.taken,
                           style: GoogleFonts.inter(
                             fontSize: 12,
                             color: Colors.white.withOpacity(0.85),
@@ -569,7 +570,7 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
                       ] else
                         const SizedBox(width: 4),
                       Text(
-                        'Taken',
+                        AppLocalizations.of(context)!.taken,
                         style: GoogleFonts.inter(
                           color: const Color(0xFF35B779),
                           fontWeight: FontWeight.w700,
@@ -597,7 +598,7 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
                       ),
                     ),
                     child: Text(
-                      'Taken',
+                      AppLocalizations.of(context)!.taken,
                       style: GoogleFonts.inter(
                         fontWeight: FontWeight.w700,
                         fontSize: 13,
@@ -628,7 +629,7 @@ class _TodayPlanScreenState extends State<TodayPlanScreen> {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        'Snooze',
+                        AppLocalizations.of(context)!.snooze,
                         style: GoogleFonts.inter(
                           fontSize: 12,
                           color: AppTheme.textSecondary,

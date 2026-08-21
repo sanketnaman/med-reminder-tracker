@@ -7,6 +7,7 @@ import 'today_plan_screen.dart';
 import 'add_edit_medicine_screen.dart';
 import 'animation_utils.dart';
 import 'medicine_icon.dart';
+import 'l10n/generated/app_localizations.dart';
 
 class ProgressScreen extends StatefulWidget {
   final String patientId;
@@ -107,7 +108,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    'Your Progress',
+                    AppLocalizations.of(context)!.yourProgress,
                     style: GoogleFonts.inter(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
@@ -184,7 +185,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                             delay: const Duration(milliseconds: 120),
                             offset: 10,
                             child: Text(
-                              'Medication Performance',
+                              AppLocalizations.of(context)!.medicationPerformance,
                               style: GoogleFonts.inter(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w800,
@@ -236,7 +237,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
             ),
             const SizedBox(height: 12),
             Text(
-              'Your progress will appear here',
+              AppLocalizations.of(context)!.progressEmpty,
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.bold,
                 color: AppTheme.textPrimary,
@@ -244,7 +245,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
             ),
             const SizedBox(height: 4),
             Text(
-              'Take your medicines regularly to start building history.',
+              AppLocalizations.of(context)!.progressEmptySub,
               textAlign: TextAlign.center,
               style: GoogleFonts.inter(
                 fontSize: 13,
@@ -266,7 +267,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
               },
               icon: const Icon(Icons.calendar_today),
               label: Text(
-                'Set Today\'s Medications',
+                AppLocalizations.of(context)!.setTodaysMedications,
                 style: GoogleFonts.inter(
                   fontWeight: FontWeight.w700,
                   fontSize: 14,
@@ -311,7 +312,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Your Progress',
+                  AppLocalizations.of(context)!.yourProgress,
                   style: GoogleFonts.inter(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
@@ -322,9 +323,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildStatCol('$_totalDoses', 'Total Doses'),
-                    _buildStatCol('$_takenDoses', 'Taken'),
-                    _buildStatCol('$_missedDoses', 'Missed'),
+                    _buildStatCol('$_totalDoses', AppLocalizations.of(context)!.totalDoses),
+                    _buildStatCol('$_takenDoses', AppLocalizations.of(context)!.taken),
+                    _buildStatCol('$_missedDoses', AppLocalizations.of(context)!.missed),
                   ],
                 ),
               ],
@@ -430,7 +431,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                 ],
               ),
               Text(
-                '$completion% Complete',
+                '$completion${AppLocalizations.of(context)!.percentComplete}',
                 style: GoogleFonts.inter(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
@@ -441,7 +442,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
           ),
           const SizedBox(height: 6),
           Text(
-            '$taken/$total Doses',
+            '$taken/$total ${AppLocalizations.of(context)!.doses}',
             style: GoogleFonts.inter(
               fontSize: 12,
               color: AppTheme.textSecondary,

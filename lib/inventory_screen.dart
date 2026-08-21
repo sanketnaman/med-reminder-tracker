@@ -7,6 +7,7 @@ import 'add_edit_medicine_screen.dart';
 import 'medicine_icon.dart';
 import 'premium_screen.dart';
 import 'animation_utils.dart';
+import 'l10n/generated/app_localizations.dart';
 
 class InventoryScreen extends StatefulWidget {
   final VoidCallback onRefreshHome;
@@ -132,7 +133,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Add quantity',
+                AppLocalizations.of(context)!.addQuantity,
                 style: GoogleFonts.inter(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
@@ -161,7 +162,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     color: AppTheme.textPrimary,
                   ),
                   decoration: InputDecoration(
-                    hintText: 'Enter quantity',
+                    hintText: AppLocalizations.of(context)!.enterQuantity,
                     hintStyle: GoogleFonts.inter(
                       color: AppTheme.textSecondary.withOpacity(0.6),
                     ),
@@ -178,11 +179,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ),
                   validator: (val) {
                     if (val == null || val.trim().isEmpty) {
-                      return 'Please enter a quantity';
+                      return AppLocalizations.of(context)!.pleaseEnterQuantity;
                     }
                     final qty = double.tryParse(val);
                     if (qty == null || qty <= 0) {
-                      return 'Please enter a valid quantity';
+                      return AppLocalizations.of(context)!.pleaseEnterValidQuantity;
                     }
                     return null;
                   },
@@ -234,7 +235,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
                       child: Text(
-                        'Cancel',
+                        AppLocalizations.of(context)!.cancel,
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w700,
                           color: AppTheme.textSecondary,
@@ -278,7 +279,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
                       child: Text(
-                        'Add Stock',
+                        AppLocalizations.of(context)!.addStock,
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w700,
                         ),
@@ -327,7 +328,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    'Inventory Details',
+                    AppLocalizations.of(context)!.inventoryDetails,
                     style: GoogleFonts.inter(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
@@ -368,7 +369,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'Set Reminder To Alert You When It\'s Time To Refill',
+                        AppLocalizations.of(context)!.refillReminderBanner,
                         style: GoogleFonts.inter(
                           color: Colors.white,
                           fontSize: 13,
@@ -422,7 +423,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Your medicine cabinet is empty',
+            AppLocalizations.of(context)!.emptyCabinet,
             style: GoogleFonts.inter(
               fontSize: 18,
               fontWeight: FontWeight.w700,
@@ -431,7 +432,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Add medicines from the Home dashboard to track stock.',
+            AppLocalizations.of(context)!.emptyCabinetSub,
             style: GoogleFonts.inter(color: AppTheme.textSecondary),
           ),
           const SizedBox(height: 24),
@@ -444,7 +445,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     content: Text('Free plan limited to ${DatabaseHelper.freeMedicineLimit} medicines. Upgrade to Premium.'),
                     backgroundColor: const Color(0xFFE85D75),
                     action: SnackBarAction(
-                      label: 'Upgrade',
+                      label: AppLocalizations.of(context)!.upgrade,
                       textColor: Colors.white,
                       onPressed: () {
                         Navigator.push(
@@ -473,8 +474,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
               });
             },
             icon: const Icon(Icons.add),
-            label: Text(
-              'Add First Medicine',
+              label: Text(
+              AppLocalizations.of(context)!.addFirstMedicine,
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.w700,
                 fontSize: 14,
@@ -504,22 +505,22 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
     switch (stockStatus) {
       case 'out_of_stock':
-        statusLabel = 'Out Of Stock';
+        statusLabel = AppLocalizations.of(context)!.outOfStock;
         statusColor = const Color(0xFFE85D75);
         statusBgColor = const Color(0xFFE85D75).withOpacity(0.1);
         break;
       case 'critical':
-        statusLabel = 'Critical';
+        statusLabel = AppLocalizations.of(context)!.critical;
         statusColor = const Color(0xFFE85D75);
         statusBgColor = const Color(0xFFE85D75).withOpacity(0.1);
         break;
       case 'low':
-        statusLabel = 'Low Stock';
+        statusLabel = AppLocalizations.of(context)!.lowStock;
         statusColor = const Color(0xFFF5A623);
         statusBgColor = const Color(0xFFF5A623).withOpacity(0.1);
         break;
       default:
-        statusLabel = 'In Stock';
+        statusLabel = AppLocalizations.of(context)!.inStock;
         statusColor = const Color(0xFF35B779);
         statusBgColor = const Color(0xFF35B779).withOpacity(0.1);
     }
@@ -527,7 +528,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     // Format days remaining text
     String daysText;
     if (daysRemaining <= 0) {
-      daysText = 'No stock remaining';
+      daysText = AppLocalizations.of(context)!.noStockRemaining;
     } else if (daysRemaining < 1) {
       final hours = (daysRemaining * 24).round();
       daysText = '~$hours hours left';
@@ -631,7 +632,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        '${med.remainingQuantity.toInt()} ${med.dosageUnit} remaining',
+                        '${med.remainingQuantity.toInt()} ${med.dosageUnit} ${AppLocalizations.of(context)!.remaining}',
                         style: GoogleFonts.inter(
                           fontSize: 13,
                           color: AppTheme.textSecondary,
@@ -673,7 +674,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     color: AppTheme.textSecondary,
                   ),
                   label: Text(
-                    'Edit',
+                    AppLocalizations.of(context)!.edit,
                     style: GoogleFonts.inter(
                       fontSize: 12,
                       color: AppTheme.textSecondary,
@@ -696,7 +697,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     ),
                   ),
                   child: Text(
-                    'Refill Now',
+                    AppLocalizations.of(context)!.refillNow,
                     style: GoogleFonts.inter(
                       fontWeight: FontWeight.w700,
                       fontSize: 13,
