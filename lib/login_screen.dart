@@ -117,8 +117,9 @@ class _LoginScreenState extends State<LoginScreen> {
         await DatabaseHelper.instance.initializeDataIfNeeded();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Verification email sent! Please check your inbox.'),
+            content: Text('Account created! Please check your email for verification link.'),
             backgroundColor: Colors.green,
+            duration: Duration(seconds: 4),
           ),
         );
         Navigator.of(context).pushReplacement(

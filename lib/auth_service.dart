@@ -53,8 +53,16 @@ class AuthService {
         // Update display name
         await result.user!.updateDisplayName(name);
 
+        // Small delay to ensure user is fully created
+        await Future.delayed(const Duration(seconds: 1));
+
         // Send email verification
-        await result.user!.sendEmailVerification();
+        try {
+          await result.user!.sendEmailVerification();
+        } catch (e) {
+          print('Failed to send verification email: $e');
+          // Don't fail signup if email fails
+        }
 
         // Pull data from cloud after signup
         await DatabaseHelper.instance.pullFromCloud();

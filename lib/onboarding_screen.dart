@@ -52,6 +52,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       _nameController.text = user.displayName ?? '';
       _googlePhotoUrl = user.photoURL;
       _emailVerified = user.emailVerified;
+      // For Google users, email is always verified
+      if (_isGoogleUser) _emailVerified = true;
     }
   }
 
@@ -70,6 +72,110 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _nameController.dispose();
     _ageController.dispose();
     super.dispose();
+  }
+
+  void _showEmailVerificationDialog() {
+    final user = AuthService.currentUser;
+    final email = user?.email ?? '';
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Row(
+          children: [
+            const Icon(Icons.email_outlined, color: Color(0xFF5B8DEF)),
+            const SizedBox(width: 10),
+            Text(
+              'Verify Email',
+              style: GoogleFonts.inter(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'We sent a verification link to:',
+              style: GoogleFonts.inter(
+                color: AppTheme.textSecondary,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              email,
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w700,
+                fontSize: 15,
+                color: AppTheme.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Please check your inbox and click the verification link. Profile creation requires a verified email.',
+              style: GoogleFonts.inter(
+                color: AppTheme.textSecondary,
+                fontSize: 13,
+                height: 1.4,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await AuthService.sendEmailVerification();
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Verification email resent!'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              }
+            },
+            child: Text(
+              'Resend Email',
+              style: GoogleFonts.inter(color: const Color(0xFF5B8DEF)),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              await AuthService.reloadUser();
+              final user = AuthService.currentUser;
+              if (user != null && user.emailVerified) {
+                if (mounted) {
+                  Navigator.pop(context);
+                  setState(() => _emailVerified = true);
+                  _saveProfileAndContinue();
+                }
+              } else {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Email not verified yet. Please check your inbox.'),
+                      backgroundColor: Color(0xFFE85D75),
+                    ),
+                  );
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF5B8DEF),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: Text(
+              "I've Verified",
+              style: GoogleFonts.inter(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   int _calculateCompletionPercent() {
@@ -102,6 +208,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Future<void> _saveProfileAndContinue() async {
+    // Check email verification for email users
+    if (!_isGoogleUser) {
+      await AuthService.reloadUser();
+      final user = AuthService.currentUser;
+      if (user != null && !user.emailVerified) {
+        if (mounted) {
+          _showEmailVerificationDialog();
+        }
+        return;
+      }
+    }
+
     if (_nameController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter your name')),
