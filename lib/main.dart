@@ -16,6 +16,9 @@ Future<void> main() async {
   await Firebase.initializeApp();
   await AlarmService.initialise();
 
+  // Pull data from cloud if user is logged in
+  await DatabaseHelper.instance.pullFromCloud();
+
   // Load dark mode and language settings
   final settings = await DatabaseHelper.instance.getUserSettings();
   AppTheme.isDark = settings.isDarkMode;

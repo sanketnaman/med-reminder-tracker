@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'models.dart';
 import 'auth_service.dart';
+import 'firestore_service.dart';
 
 class DatabaseHelper {
   static const String _keyMedicines = 'doseza_medicines';
@@ -92,6 +93,7 @@ class DatabaseHelper {
       _storageKey(_keyPatients),
       json.encode(patients.map((patient) => patient.toMap()).toList()),
     );
+    FirestoreService.instance.syncPatients(patients);
   }
 
   Future<void> addPatient(Dependent patient) async {
@@ -179,6 +181,7 @@ class DatabaseHelper {
     final prefs = await SharedPreferences.getInstance();
     final jsonStr = json.encode(medicines.map((m) => m.toMap()).toList());
     await prefs.setString(_storageKey(_keyMedicines), jsonStr);
+    FirestoreService.instance.syncMedicines(medicines);
   }
 
   Future<void> addMedicine(Medicine medicine) async {
@@ -243,6 +246,7 @@ class DatabaseHelper {
     final prefs = await SharedPreferences.getInstance();
     final jsonStr = json.encode(records.map((r) => r.toMap()).toList());
     await prefs.setString(_storageKey(_keyRecords), jsonStr);
+    FirestoreService.instance.syncDoseRecords(records);
   }
 
   Future<void> addDoseRecord(DoseRecord record) async {
@@ -294,6 +298,7 @@ class DatabaseHelper {
   Future<void> saveUserSettings(UserSettings settings) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_storageKey(_keySettings), settings.toJson());
+    FirestoreService.instance.syncUserSettings(settings);
   }
 
   // Generates dose records for the given date if they do not exist
@@ -519,6 +524,7 @@ class DatabaseHelper {
     final prefs = await SharedPreferences.getInstance();
     final jsonStr = json.encode(transactions.map((t) => t.toMap()).toList());
     await prefs.setString(_storageKey(_keyInventoryTransactions), jsonStr);
+    FirestoreService.instance.syncInventoryTransactions(transactions);
   }
 
   Future<void> addInventoryTransaction(InventoryTransaction transaction) async {
@@ -632,6 +638,7 @@ class DatabaseHelper {
     final prefs = await SharedPreferences.getInstance();
     final jsonStr = json.encode(readings.map((r) => r.toMap()).toList());
     await prefs.setString(_storageKey(_keyVitals), jsonStr);
+    FirestoreService.instance.syncVitals(readings);
   }
 
   Future<void> addVitalReading(VitalReading reading) async {
@@ -716,6 +723,7 @@ class DatabaseHelper {
     final prefs = await SharedPreferences.getInstance();
     final jsonStr = json.encode(appointments.map((a) => a.toMap()).toList());
     await prefs.setString(_storageKey(_keyAppointments), jsonStr);
+    FirestoreService.instance.syncAppointments(appointments);
   }
 
   Future<void> addAppointment(Appointment appointment) async {
@@ -757,6 +765,90 @@ class DatabaseHelper {
   Future<Appointment?> getNextAppointment({String? patientId}) async {
     final upcoming = await getUpcomingAppointments(patientId: patientId);
     return upcoming.isNotEmpty ? upcoming.first : null;
+  }
+
+  // ==================== Cloud Sync ====================
+
+  Future<void> pullFromCloud() async {
+    final uid = AuthService.currentUser?.uid;
+    if (uid == null || uid.isEmpty) return;
+
+    try {
+      final cloudData = await FirestoreService.instance.pullAllData();
+      if (cloudData.isEmpty) return;
+
+      final prefs = await SharedPreferences.getInstance();
+
+      // Merge cloud settings (cloud wins if newer)
+      if (cloudData['settings'] != null) {
+        final cloudSettings = cloudData['settings'] as UserSettings;
+        final localSettings = await getUserSettings();
+        // Cloud settings take priority for premium status
+        cloudSettings.isPremium = cloudSettings.isPremium || localSettings.isPremium;
+        await prefs.setString(
+          _storageKey(_keySettings),
+          cloudSettings.toJson(),
+        );
+      }
+
+      // Merge medicines (cloud wins)
+      if (cloudData['medicines'] != null) {
+        final cloudMeds = cloudData['medicines'] as List<Medicine>;
+        await prefs.setString(
+          _storageKey(_keyMedicines),
+          json.encode(cloudMeds.map((m) => m.toMap()).toList()),
+        );
+      }
+
+      // Merge patients (cloud wins)
+      if (cloudData['patients'] != null) {
+        final cloudPatients = cloudData['patients'] as List<Dependent>;
+        await prefs.setString(
+          _storageKey(_keyPatients),
+          json.encode(cloudPatients.map((p) => p.toMap()).toList()),
+        );
+      }
+
+      // Merge vitals (cloud wins)
+      if (cloudData['vitals'] != null) {
+        final cloudVitals = cloudData['vitals'] as List<VitalReading>;
+        await prefs.setString(
+          _storageKey(_keyVitals),
+          json.encode(cloudVitals.map((v) => v.toMap()).toList()),
+        );
+      }
+
+      // Merge appointments (cloud wins)
+      if (cloudData['appointments'] != null) {
+        final cloudAppts = cloudData['appointments'] as List<Appointment>;
+        await prefs.setString(
+          _storageKey(_keyAppointments),
+          json.encode(cloudAppts.map((a) => a.toMap()).toList()),
+        );
+      }
+
+      // Merge inventory (cloud wins)
+      if (cloudData['inventory'] != null) {
+        final cloudInv = cloudData['inventory'] as List<InventoryTransaction>;
+        await prefs.setString(
+          _storageKey(_keyInventoryTransactions),
+          json.encode(cloudInv.map((t) => t.toMap()).toList()),
+        );
+      }
+
+      // Merge dose records (cloud wins)
+      if (cloudData['doseRecords'] != null) {
+        final cloudRecords = cloudData['doseRecords'] as List<DoseRecord>;
+        await prefs.setString(
+          _storageKey(_keyRecords),
+          json.encode(cloudRecords.map((r) => r.toMap()).toList()),
+        );
+      }
+
+      print('Firestore: Successfully pulled all data from cloud');
+    } catch (e) {
+      print('Firestore: Failed to pull from cloud: $e');
+    }
   }
 
   // ==================== Migration ====================
