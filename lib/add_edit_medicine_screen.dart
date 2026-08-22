@@ -46,6 +46,17 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
   List<String> _timings = ['07:00 AM'];
   List<int> _daysOfWeek = [1, 2, 3, 4, 5, 6, 7]; // 1=Mon, 7=Sun
 
+  // Quick timing presets
+  final Map<String, List<String>> _timingPresets = {
+    'Morning': ['08:00 AM'],
+    'Afternoon': ['02:00 PM'],
+    'Night': ['09:00 PM'],
+    'Morning + Night': ['08:00 AM', '09:00 PM'],
+    'Morning + Afternoon + Night': ['08:00 AM', '02:00 PM', '09:00 PM'],
+    'Every 8 hours': ['08:00 AM', '04:00 PM', '12:00 AM'],
+    'Every 6 hours': ['08:00 AM', '02:00 PM', '08:00 PM', '02:00 AM'],
+  };
+
   // Catalog autocomplete
   List<CatalogMedicine> _catalogResults = [];
   Timer? _searchDebounce;
@@ -789,6 +800,74 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
 
                 // Time Timings List
                 _buildLabel(AppLocalizations.of(context)!.time),
+
+                // Quick Presets
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppTheme.chipBg,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Quick Select',
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: _timingPresets.entries.map((entry) {
+                          final isSelected = _listEquals(_timings, entry.value);
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _timings = List.from(entry.value);
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? const Color(0xFF5B8DEF)
+                                    : AppTheme.cardBg,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: isSelected
+                                      ? const Color(0xFF5B8DEF)
+                                      : AppTheme.divider,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Text(
+                                entry.key,
+                                style: GoogleFonts.inter(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: isSelected
+                                      ? Colors.white
+                                      : AppTheme.textPrimary,
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // Current timings display
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
@@ -1175,5 +1254,13 @@ class _AddEditMedicineScreenState extends State<AddEditMedicineScreen> {
         );
       }),
     );
+  }
+
+  bool _listEquals(List<String> a, List<String> b) {
+    if (a.length != b.length) return false;
+    for (int i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
   }
 }
